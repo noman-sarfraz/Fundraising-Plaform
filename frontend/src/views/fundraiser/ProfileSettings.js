@@ -12,6 +12,9 @@ import {
 import React from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
+import { useGetDetailsQuery, useUpdateDetailsMutation } from "../../features/fundraiser/fundraiserApiSlice";
+import CircularLoader from "../../components/general/CircularLoader";
+import { toast } from "react-toastify";
 
 const StyledTextField = styled(TextField).attrs((props) => ({
   fullWidth: true,
@@ -84,9 +87,21 @@ function ProfileSettings() {
     formState: { errors },
   } = useForm();
 
-  const saveDetails = (data) => {
-    console.log(data);
+  const {data: details, isLoading: areDetailsLoading} = useGetDetailsQuery()
+  const [updateDetails, {isLoading}] = useUpdateDetailsMutation()
+
+  const saveDetails = async (data) => {
+    try {
+      const res = await updateDetails(data)
+      console.log(res)
+    } catch (error) {
+      toast.error("Something went wrong!")
+      console.log(error)
+    }
   };
+
+  if (areDetailsLoading) return <CircularLoader />;
+  if(!areDetailsLoading && !details?.fundraiser) return <Typography>Something went wrong!</Typography>
 
   return (
     <>
@@ -95,7 +110,10 @@ function ProfileSettings() {
         sx={{
           fontSize: "28px",
           fontWeight: "bold",
-          px: 6,
+          px: {
+            xs: 2,
+            md: 6,
+          },
           pt: 2,
           mb: 3,
         }}
@@ -118,24 +136,22 @@ function ProfileSettings() {
         <form onSubmit={handleSubmit((data) => saveDetails(data))}>
           <Box sx={{ mb: 5 }}>
             <StyledHead>Personal Details</StyledHead>
-            <StyledLabel>First Name</StyledLabel>
+            <StyledLabel>Name</StyledLabel>
             <StyledTextField
-              {...register("firstName", { required: true })}
-              placeholder="Enter First Name"
-            />
-            <StyledLabel>Last Name</StyledLabel>
-            <StyledTextField
-              {...register("lastName")}
-              placeholder="Enter Last Name"
+              defaultValue={details.fundraiser.name}
+              {...register("name", { required: true })}
+              placeholder="Enter Name"
             />
             <StyledLabel>Email</StyledLabel>
             <StyledTextField
+              defaultValue={details.fundraiser.email}
               {...register("email", { required: true })}
               placeholder="Enter Email"
             />
             <StyledLabel>About Me</StyledLabel>
             <StyledTextField
-              {...register("aboutMe", { required: true })}
+              defaultValue={details.fundraiser.aboutMe}
+              {...register("aboutMe")}
               placeholder="Enter Details"
               multiline
               rows={4}
@@ -145,12 +161,14 @@ function ProfileSettings() {
             <StyledHead>Location</StyledHead>
             <StyledLabel>City</StyledLabel>
             <StyledTextField
-              {...register("city", { required: true })}
+              defaultValue={details.fundraiser.city}
+              {...register("city")}
               placeholder="Enter City"
             />
             <StyledLabel>Country</StyledLabel>
             <StyledTextField
-              {...register("country", { required: true })}
+              defaultValue={details.fundraiser.country}
+              {...register("country")}
               placeholder="Enter Country"
             />
           </Box>

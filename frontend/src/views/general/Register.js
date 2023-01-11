@@ -1,163 +1,219 @@
-import { Box, Button, FormControl, FormHelperText, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  TextField,
+  Typography,
+} from "@mui/material";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../../features/auth/authSlice";
+import LoadingButton from "@mui/lab/LoadingButton";
+import styled from "styled-components";
+import { useForm } from "react-hook-form";
+import { useRegisterMutation } from "../../features/auth/authApiSlice";
 
-function Signup() {
+const StyledTextField = styled(TextField).attrs((props) => ({
+  fullWidth: true,
+  size: "small",
+  inputProps: {
+    style: {
+      fontSize: 14,
+    },
+  },
+  sx: {
+    mb: 1,
+  },
+}))``;
+
+const StyledSelect = styled(Select).attrs((props) => ({
+  fullWidth: true,
+  size: "small",
+  sx: {
+    fontSize: 14,
+    mb: 1,
+  },
+}))``;
+
+const StyledLabel = styled(Typography).attrs((props) => ({
+  color: "#2F435A",
+  sx: {
+    fontSize: "14px",
+    fontWeight: "500",
+    mb: 0.5,
+  },
+}))``;
+
+function Register() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [role, setRole] = useState("");
-  const [isError, setIsError] = useState(false);
 
-  const handleChange = (event) => {
-    setRole(event.target.value);
-  };
+  const [registerUser, { isLoading, isError, error }] = useRegisterMutation();
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    if (role === "fundraiser") {
-      setRole("");
-      setIsError(false);
-      navigate("/fr_account/");
-    } else if (role === "donor") {
-      setRole("");
-      setIsError(false);
-      navigate("/don_account/");
-    } else {
-      setRole("");
-      setIsError(false);
-      navigate("/don_account/");
-      // setIsError(true);
+  const onSubmit = async (data) => {
+    if (data.role === "none") {
+      toast.error("Please select a role");
+      return;
     }
+    if(data.password !== data.confirmPassword){
+      toast.error("Passwords do not match!");
+      return;
+    }
+    try {
+      const { token } = await registerUser(data).unwrap();
+      if (!token) {
+        toast.error("Could not login user!");
+        return;
+      } else {
+        dispatch(setCredentials({ token }));
+        if (data.role === "Fundraiser") {
+          navigate("/fr_account");
+        } else {
+          navigate("/don_account");
+        }
+      }
+    } catch (err) {
+      toast.error("Could not login user!");
+      return;
+    }
+    
   };
-
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        bgcolor: "#eee",
-      }}
-    >
+    <form onSubmit={handleSubmit((data) => onSubmit(data))}>
       <Box
         sx={{
-          bgcolor: "white",
           display: "flex",
-
-          width: {
-            xs: "80%",
-            sm: "60%",
-            md: "45%",
-            lg: "30%",
-          },
-          my: 1,
-          flexDirection: "column",
           justifyContent: "center",
-          border: "0.5px solid #ccc",
-          borderRadius: 5,
-          p: {
-            xs: 1,
-            sm: 2,
-            md: 2,
-            lg: 3,
-          },
+          alignItems: "center",
+          height: "100vh",
+          bgcolor: "#eee",
         }}
       >
-        <Typography
+        <Box
           sx={{
-            fontWeight: 300,
-            textAlign: "center",
-            fontSize: "24px",
-            textDecoration: "underline",
-            textUnderlineOffset: "5px",
-            mb: 5,
-          }}
-        >
-          FUND<b>RAISING</b>
-        </Typography>
-        <Typography
-          sx={{ fontWeight: 400, textAlign: "center", mb: 2, fontSize: "20px" }}
-        >
-          Register Now
-        </Typography>
-        <TextField
-          label="Name"
-          sx={{
-            my: 0.5,
-          }}
-          type="text"
-          required
-        />
-        <TextField
-          label="Email"
-          sx={{
-            my: 0.5,
-          }}
-          type="email"
-          required
-        />
+            bgcolor: "white",
+            display: "flex",
 
-        <TextField
-          label="Password"
-          sx={{
-            my: 0.5,
-          }}
-          type="password"
-          required
-        />
-        <TextField
-          label="Confirm Password"
-          sx={{
-            my: 0.5,
-          }}
-          type="password"
-          required
-        />
-
-        <FormControl
-          fullWidth
-          error={isError}
-          sx={{
-            my: 0.5,
-          }}
-        >
-          <InputLabel id="select-role">Role</InputLabel>
-          <Select
-            labelId="select-role"
-            id="simple-role-select"
-            value={role}
-            label="Role"
-            onChange={handleChange}
-          >
-            <MenuItem value={"fundraiser"}>Fundraiser</MenuItem>
-            <MenuItem value={"donor"}>Donor</MenuItem>
-          </Select>
-          {isError && <FormHelperText>This is required!</FormHelperText>}
-        </FormControl>
-
-        <Button
-          sx={{
-            color: "black",
-            my: 1,
+            width: {
+              xs: "80%",
+              sm: "60%",
+              md: "45%",
+              lg: "30%",
+            },
+            my: 3,
+            flexDirection: "column",
+            justifyContent: "center",
             border: "0.5px solid #ccc",
-          }}
-          onClick={onSubmit}
-        >
-          Register
-        </Button>
-        <Typography
-          variant="body2"
-          sx={{
-            textAlign: "center",
-            my: 2,
+            borderRadius: 5,
+            p: {
+              xs: 2,
+              sm: 3,
+              md: 4,
+              lg: 5,
+            },
           }}
         >
-          Already have an account? <Link to="/login">login now</Link>
-        </Typography>
+          <Typography
+            sx={{
+              fontWeight: 300,
+              textAlign: "center",
+              fontSize: "24px",
+              textDecoration: "underline",
+              textUnderlineOffset: "5px",
+              mb: 5,
+            }}
+          >
+            FUND<b>RAISING</b>
+          </Typography>
+          <Typography
+            sx={{
+              fontWeight: 400,
+              textAlign: "center",
+              mb: 2,
+              fontSize: "20px",
+            }}
+          >
+            Register Now
+          </Typography>
+
+          <StyledTextField
+            placeholder="Enter Name"
+            type="text"
+            required
+            {...register("name", { required: true })}
+          />
+
+          <StyledTextField
+            placeholder="Enter Email"
+            type="email"
+            required
+            {...register("email", { required: true })}
+          />
+
+          <StyledTextField
+            placeholder="Enter Password"
+            type="password"
+            required
+            {...register("password", { required: true })}
+          />
+
+          <StyledTextField
+            placeholder="Confirm Password"
+            type="password"
+            required
+            {...register("confirmPassword", { required: true })}
+          />
+
+          <StyledSelect
+            {...register("role", { required: true })}
+            defaultValue="none"
+          >
+            <MenuItem value={"none"} disabled>
+              Login As
+            </MenuItem>
+            <MenuItem value={"Fundraiser"}>Fundraiser</MenuItem>
+            <MenuItem value={"Donor"}>Donor</MenuItem>
+          </StyledSelect>
+
+          <LoadingButton
+            sx={{
+              color: "black",
+              my: 1,
+              border: "0.5px solid #ccc",
+            }}
+            type="submit"
+            loading={isLoading}
+          >
+            Register
+          </LoadingButton>
+
+          <Typography
+            variant="body2"
+            sx={{
+              textAlign: "center",
+              my: 2,
+            }}
+          >
+            Already have an account? <Link to="/login">login now</Link>
+          </Typography>
+        </Box>
       </Box>
-    </Box>
+    </form>
   );
 }
 
-export default Signup;
+export default Register;

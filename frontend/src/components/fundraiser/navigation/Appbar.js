@@ -21,6 +21,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import AppsIcon from "@mui/icons-material/Apps";
+import { logOut, selectCurrentToken } from "../../../features/auth/authSlice";
 import {
   Avatar,
   Button,
@@ -49,6 +50,8 @@ import {
   faMoneyCheckAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import jwtDecode from 'jwt-decode'
 
 const drawerWidth = 250;
 
@@ -75,11 +78,16 @@ function AppbarComponent({ open, toggleDrawer }) {
   const theme = useTheme();
   const { primary } = theme.pallete;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  // const [open, setOpen] = React.useState(true);
-  // const toggleDrawer = () => {
-  //   setOpen(!open);
-  // };
+  const token = useSelector(selectCurrentToken);
+  const { name, role } = jwtDecode(token);
+
+  const onLogout = () => {
+    dispatch(logOut());
+    navigate("/login");
+  };
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const profileOpen = Boolean(anchorEl);
   const handleProfileClick = (event) => {
@@ -143,18 +151,9 @@ function AppbarComponent({ open, toggleDrawer }) {
               }}
             />
             <Typography variant="body2" sx={{}}>
-              ALP Foundation
+              {name}
             </Typography>
           </Button>
-          {/* <Button
-              id="profile-button"
-              aria-controls={profileOpen ? "profile-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={profileOpen ? "true" : undefined}
-              onClick={handleProfileClick}
-            >
-              Dashboard
-            </Button> */}
           <Menu
             id="profile-menu"
             anchorEl={anchorEl}
@@ -235,9 +234,9 @@ function AppbarComponent({ open, toggleDrawer }) {
                       />
                     </Box>
                     <Typography sx={{ fontSize: 18 }}>
-                      ALP Flood Relief
+                      {name}
                     </Typography>
-                    <Typography>Fundraiser</Typography>
+                    <Typography>{role}</Typography>
                   </Box>
                 </Box>
                 {/* </Box> */}
@@ -263,7 +262,7 @@ function AppbarComponent({ open, toggleDrawer }) {
                   }}
                   onClick={() => {
                     navigate("/fr_account/profile-settings");
-                    handleProfileClose()
+                    handleProfileClose();
                   }}
                 >
                   Profile
@@ -278,7 +277,7 @@ function AppbarComponent({ open, toggleDrawer }) {
                     textTransform: "none",
                     borderRadius: 0,
                   }}
-                  onClick={() => navigate("/login")}
+                  onClick={onLogout}
                 >
                   Sign out
                 </Button>
