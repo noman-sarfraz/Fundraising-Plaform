@@ -116,19 +116,22 @@ function Step1() {
             <StyledLabel label="Compaign Title" />
             <StyledTextField placeholder="Enter Compaign Title" />
             <StyledLabel label="Compaign Category" />
-            <StyledSelect text="Category" />
+            <StyledTextField placeholder="Category" />
+            {/* <StyledSelect text="Category" /> */}
           </Box>
           <Box sx={{ mb: 5 }}>
             <StyledHead heading="Fundraise Location" />
             <StyledLabel label="Country" />
-            <StyledSelect text="Country" />
+            <StyledTextField placeholder="Country" />
+            {/* <StyledSelect text="Country" /> */}
             <StyledLabel label="City" />
             <StyledTextField placeholder="Enter City" />
           </Box>
           <Box sx={{ mb: 5 }}>
             <StyledHead heading="Donation Informaion" />
             <StyledLabel label="Donation Type" />
-            <StyledSelect text="Type" />
+            <StyledTextField placeholder="Type" />
+            {/* <StyledSelect text="Type" /> */}
             <StyledLabel label="Target Amount" />
             <StyledTextField placeholder="Enter Target Amount" />
           </Box>
@@ -145,7 +148,8 @@ function Step1() {
             sx={{
               width: "100%",
               py: 1,
-              borderRadius: 2,
+              borderRadius: 10,
+              textTransform: 'none'
             }}
           >
             Continue

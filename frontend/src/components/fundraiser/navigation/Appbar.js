@@ -38,6 +38,7 @@ import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import SettingsIcon from "@mui/icons-material/Settings";
 import dp from "../../../../src/assets/images/dp.jpg";
+import default_DP from "../../../../src/assets/images/default_DP.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faDashboard,
@@ -134,7 +135,7 @@ function AppbarComponent({ open, toggleDrawer }) {
             <Avatar
               size="large"
               alt="Profile Picture"
-              src={dp}
+              src={default_DP}
               sx={{
                 height: "24px",
                 width: "24px",
@@ -225,7 +226,7 @@ function AppbarComponent({ open, toggleDrawer }) {
                       <Avatar
                         // size="large"
                         alt="Profile Picture"
-                        src={dp}
+                        src={default_DP}
                         sx={{
                           height: "80px",
                           width: "80px",
@@ -259,6 +260,10 @@ function AppbarComponent({ open, toggleDrawer }) {
                     fontSize: 12,
                     textTransform: "none",
                     borderRadius: 0,
+                  }}
+                  onClick={() => {
+                    navigate("/fr_account/profile-settings");
+                    handleProfileClose()
                   }}
                 >
                   Profile

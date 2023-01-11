@@ -172,7 +172,7 @@ function DrawerComponent({ open, toggleDrawer }) {
       >
         <List sx={{ flexGrow: 1 }}>
           {navItems.map((item, index) => (
-            <div>
+            <div key={index}>
               <ListItem
                 key={item.name}
                 disablePadding
