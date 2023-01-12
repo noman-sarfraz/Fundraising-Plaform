@@ -73,12 +73,13 @@ function Register() {
       return;
     }
     try {
-      const { token } = await registerUser(data).unwrap();
-      if (!token) {
+      const res = await registerUser(data).unwrap();
+      if (!res?.token) {
         toast.error("Could not login user!");
+        console.log(res)
         return;
       } else {
-        dispatch(setCredentials({ token }));
+        dispatch(setCredentials({ token:res.token }));
         if (data.role === "Fundraiser") {
           navigate("/fr_account");
         } else {
@@ -86,7 +87,8 @@ function Register() {
         }
       }
     } catch (err) {
-      toast.error("Could not login user!");
+      toast.error(err.data?.msg ? err.data.msg : "Could not login user!");
+      console.log(err)
       return;
     }
     

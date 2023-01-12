@@ -29,35 +29,44 @@ import VisualStatistics from "../views/fundraiser/VisualStatistics";
 import FundraiserProfileSettings from "../views/fundraiser/ProfileSettings";
 import FundraiserFAQs from "../views/fundraiser/FAQs";
 import FundraiserHowItWorks from "../views/fundraiser/HowItWorks";
+import FundraiserAuth from '../layouts/auths/FundraiserAuth'
+import DonorAuth from "../layouts/auths/DonorAuth";
 
 function MainRoutes() {
   return (
     <Router>
       <Routes>
-        <Route path="fr_account" element={<FundraiserLayout />}>
-          <Route index element={<Compaigns />} />
-          <Route path="compaigns" element={<Compaigns />} />
-          <Route path="new-compaign" element={<NewCompaign />} />
-          <Route path="fundings" element={<Fundings />} />
-          <Route path="visual-statistics" element={<VisualStatistics />} />
-          <Route
-            path="profile-settings"
-            element={<FundraiserProfileSettings />}
-          />
-          <Route path="faqs" element={<FundraiserFAQs />} />
-          <Route path="how-it-works" element={<FundraiserHowItWorks />} />
+        <Route element={<FundraiserAuth />}>
+          <Route path="fr_account" element={<FundraiserLayout />}>
+            <Route index element={<Compaigns />} />
+            <Route path="compaigns" element={<Compaigns />} />
+            <Route path="new-compaign" element={<NewCompaign />} />
+            <Route path="fundings" element={<Fundings />} />
+            <Route path="visual-statistics" element={<VisualStatistics />} />
+            <Route
+              path="profile-settings"
+              element={<FundraiserProfileSettings />}
+            />
+            <Route path="faqs" element={<FundraiserFAQs />} />
+            <Route path="how-it-works" element={<FundraiserHowItWorks />} />
+          </Route>
         </Route>
 
-        <Route path="/don_account" element={<DonorLayout />}>
-          <Route index element={<DonationHistory />} />
-          <Route path="donation-history" element={<DonationHistory />} />
-          <Route path="new-donation" element={<NewDonation />} />
-          <Route path="search-fundraisers" element={<SearchFundraisers />} />
-          <Route path="saved-fundraisers" element={<SavedFundraisers />} />
-          <Route path="recurring-donations" element={<RecurringDonations />} />
-          <Route path="profile-settings" element={<DonorProfileSettings />} />
-          <Route path="faqs" element={<DonorFAQs />} />
-          <Route path="how-it-works" element={<DonorHowItWorks />} />
+        <Route element={<DonorAuth />}>
+          <Route path="/don_account" element={<DonorLayout />}>
+            <Route index element={<DonationHistory />} />
+            <Route path="donation-history" element={<DonationHistory />} />
+            <Route path="new-donation" element={<NewDonation />} />
+            <Route path="search-fundraisers" element={<SearchFundraisers />} />
+            <Route path="saved-fundraisers" element={<SavedFundraisers />} />
+            <Route
+              path="recurring-donations"
+              element={<RecurringDonations />}
+            />
+            <Route path="profile-settings" element={<DonorProfileSettings />} />
+            <Route path="faqs" element={<DonorFAQs />} />
+            <Route path="how-it-works" element={<DonorHowItWorks />} />
+          </Route>
         </Route>
 
         <Route path="/" element={<DefaultLayout />}>

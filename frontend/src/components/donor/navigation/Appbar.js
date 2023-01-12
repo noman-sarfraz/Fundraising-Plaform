@@ -48,6 +48,9 @@ import {
   faMoneyCheckAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logOut, selectCurrentToken } from "../../../features/auth/authSlice";
+import jwtDecode from "jwt-decode";
 
 const drawerWidth = 250;
 
@@ -74,6 +77,16 @@ function AppbarComponent({ open, toggleDrawer }) {
   const theme = useTheme();
   const { primary } = theme.pallete;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  
+  const token = useSelector(selectCurrentToken);
+  const { name, role } = jwtDecode(token);
+
+  const onLogout = () => {
+    dispatch(logOut());
+    navigate("/login");
+  };
 
   // const [open, setOpen] = React.useState(true);
   // const toggleDrawer = () => {
@@ -142,7 +155,7 @@ function AppbarComponent({ open, toggleDrawer }) {
               }}
             />
             <Typography variant="body2" sx={{}}>
-              John Doe
+              {name}
             </Typography>
           </Button>
           {/* <Button
@@ -153,7 +166,7 @@ function AppbarComponent({ open, toggleDrawer }) {
               onClick={handleProfileClick}
             >
               Dashboard
-            </Button> */} 
+            </Button> */}
           <Menu
             id="profile-menu"
             anchorEl={anchorEl}
@@ -233,8 +246,8 @@ function AppbarComponent({ open, toggleDrawer }) {
                         }}
                       />
                     </Box>
-                    <Typography sx={{ fontSize: 18 }}>John Doe</Typography>
-                    <Typography>Donor</Typography>
+                    <Typography sx={{ fontSize: 18 }}>{name}</Typography>
+                    <Typography>{role}</Typography>
                   </Box>
                 </Box>
                 {/* </Box> */}
@@ -258,6 +271,10 @@ function AppbarComponent({ open, toggleDrawer }) {
                     textTransform: "none",
                     borderRadius: 0,
                   }}
+                  onClick={() => {
+                    navigate("/don_account/profile-settings");
+                    handleProfileClose();
+                  }}
                 >
                   Profile
                 </Button>
@@ -271,9 +288,9 @@ function AppbarComponent({ open, toggleDrawer }) {
                     textTransform: "none",
                     borderRadius: 0,
                   }}
-                  onClick={() => navigate("/login")}
+                  onClick={onLogout}
                 >
-                  Sign out
+                  Logout
                 </Button>
               </Box>
             </Box>

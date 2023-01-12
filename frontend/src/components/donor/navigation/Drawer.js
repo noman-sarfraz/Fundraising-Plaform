@@ -47,12 +47,14 @@ import {
   faChalkboardTeacher,
   faMoneyCheckAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 // import { isContentEditable } from "@testing-library/user-event/dist/utils";
 
 import AddIcon from "@mui/icons-material/Add";
 
 import { IoIosAddCircleOutline } from "react-icons/io";
+import { useDispatch } from "react-redux";
+import { logOut } from "../../../features/auth/authSlice";
 
 // drawer width
 const drawerWidth = 250;
@@ -119,7 +121,6 @@ var navItems2 = [
   {
     name: "logout",
     text: "Logout",
-    link: "/login",
     icon: <FontAwesomeIcon icon={faDashboard} />,
     children: null,
   },
@@ -131,6 +132,13 @@ function DrawerComponent({ open, toggleDrawer }) {
 
   const location = useLocation();
   const [isMobile, setIsMobile] = React.useState(window.innerWidth < 900);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const onLogout = () => {
+    dispatch(logOut());
+    navigate("/login");
+  };
 
   const handleToggleDrawer = () => {
     toggleDrawer();
@@ -251,7 +259,9 @@ function DrawerComponent({ open, toggleDrawer }) {
                 sx={{ bgcolor: primary, color: "#b8c7ce" }}
               >
                 <ListItemButton
-                  href={item.link}
+                  {...(item.name === "logout"
+                    ? { onClick: onLogout }
+                    : { href: item.link })}
                   disabled={item.disable}
                   selected={item.link === location.pathname ? true : false}
                   // // onLoad={item.children ? checkOpenedParent(item) : undefined}

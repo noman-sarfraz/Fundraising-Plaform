@@ -2,29 +2,29 @@ import { apiSlice } from "../../app/api/apiSlice";
 
 export const studentsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getFundraiserDetails: builder.query({
+    getDetails: builder.query({
       query: () => ({
-        url: "/fundraisers",
+        url: "/donors",
         method: "GET",
       }),
     }),
-    updateFundraiserDetails: builder.mutation({
+    updateDetails: builder.mutation({
       query: (body) => ({
-        url: "/fundraisers",
+        url: "/donors",
         method: "PATCH",
         body,
       }),
     }),
-    changeFundraiserPassword: builder.mutation({
+    changePassword: builder.mutation({
       query: (body) => ({
-        url: "/fundraisers/change-password",
+        url: "/donors/change-password",
         method: "PATCH",
         body,
       }),
     }),
-    deleteFundraiserAccont: builder.mutation({
+    deleteAccont: builder.mutation({
       query: () => ({
-        url: "/fundraisers",
+        url: "/donors",
         method: "DELETE",
       }),
     }),
@@ -32,8 +32,9 @@ export const studentsApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-  useGetFundraiserDetailsQuery,
-  useChangeFundraiserPasswordMutation,
-  useDeleteFundraiserAccontMutation,
-  useUpdateFundraiserDetailsMutation
+  useGetDetailsQuery,
+  useUpdateDetailsMutation,
+  useChangePasswordMutation,
+  useDeleteAccontMutation
+
 } = studentsApiSlice;

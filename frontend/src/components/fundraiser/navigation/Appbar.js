@@ -279,7 +279,7 @@ function AppbarComponent({ open, toggleDrawer }) {
                   }}
                   onClick={onLogout}
                 >
-                  Sign out
+                  Logout
                 </Button>
               </Box>
             </Box>
