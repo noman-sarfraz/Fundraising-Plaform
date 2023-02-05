@@ -1,6 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const Donor = require("../models/Donor");
 const Fundraiser = require("../models/Fundraiser");
+const Admin = require("../models/Admin");
 const {
   CustomAPIError,
   UnauthenticatedError,
@@ -36,7 +37,11 @@ const login = async (req, res) => {
     user = await Donor.findOne({ email });
   } else if(role === 'Fundraiser') {
     user = await Fundraiser.findOne({ email });
-  } else {
+  } 
+  else if(role === 'Admin'){
+    user = await Admin.findOne({email});
+  }
+  else {
     throw new BadRequestError("Please provide a valid role.");
   }
 

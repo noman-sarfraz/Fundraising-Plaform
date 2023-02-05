@@ -7,13 +7,16 @@ const app = express();
 const connectDB = require("./db/connect");
 
 // authenticators
-const authenticateFundraiser = require("./middleware/fundraiserAuthentication");
-const authenticateDonor = require("./middleware/donorAuthentication");
+const authenticateFundraiser = require("./middleware/Authentication/fundraiserAuthentication");
+const authenticateDonor = require("./middleware/Authentication/donorAuthentication");
+const authenticateAdmin = require("./middleware/Authentication/adminAuthentication");
+
 
 // import routes
 const authRoutes = require("./routes/auth");
 const fundraiserRoutes = require("./routes/fundraiser");
 const donorRoutes = require("./routes/donor");
+const adminRoutes = require("./routes/adminRouter");
 
 // error handlers
 const notFoundMiddleware = require("./middleware/not-found");
@@ -35,6 +38,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1/", authRoutes);
 app.use("/api/v1/fundraisers", authenticateFundraiser, fundraiserRoutes); 
 app.use("/api/v1/donors", authenticateDonor, donorRoutes);
+app.use("/api/v1/admins",authenticateAdmin, adminRoutes);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
