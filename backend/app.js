@@ -17,6 +17,7 @@ const authRoutes = require("./routes/auth");
 const fundraiserRoutes = require("./routes/fundraiser");
 const donorRoutes = require("./routes/donor");
 const adminRoutes = require("./routes/adminRouter");
+const bankRoutes = require("./routes/bankRouter");
 
 // error handlers
 const notFoundMiddleware = require("./middleware/not-found");
@@ -39,6 +40,7 @@ app.use("/api/v1/", authRoutes);
 app.use("/api/v1/fundraisers", authenticateFundraiser, fundraiserRoutes); 
 app.use("/api/v1/donors", authenticateDonor, donorRoutes);
 app.use("/api/v1/admins",authenticateAdmin, adminRoutes);
+app.use("/api/v1/banks",bankRoutes);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
