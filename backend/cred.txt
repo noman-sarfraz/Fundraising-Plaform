@@ -1,0 +1,17 @@
+{
+    "email":"donor01@gmail.com",
+    "password":"donor@fp",
+    "role":"Donor"
+}
+
+{
+    "email":"fundraiser01@gmail.com",
+    "password":"fundraiser@fp",
+    "role":"Fundraiser"
+}
+
+{
+    "email":"admin01@gmail.com",
+    "password":"admin01@fp",
+    "role":"Admin"
+}
