@@ -42,6 +42,12 @@ const campaignSchema = new mongoose.Schema(
     bankAccountNo: {
       type: Number,
       required: [true, "Please enter bank account number"],
+      validate: {
+        validator: function (val) {
+          return val.toString().length === 16;
+        },
+        message: (val) => `${val.value} has to be 16 digits`,
+      },
     },
     createdBy: {
       type: mongoose.Types.ObjectId,
