@@ -5,8 +5,8 @@
 }
 
 {
-    "email":"fundraiser01@gmail.com",
-    "password":"fundraiser@fp",
+    "email":"fraiser01@gmail.com",
+    "password":"fraiser01@fp",
     "role":"Fundraiser"
 }
 
