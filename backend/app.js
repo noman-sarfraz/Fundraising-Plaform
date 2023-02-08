@@ -6,14 +6,30 @@ const app = express();
 // connectDB
 const connectDB = require("./db/connect");
 
+// connect cloudinary
+const cloudinary = require("cloudinary").v2;
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
+
 // authenticators
-const authenticateFundraiser = require("./middleware/fundraiserAuthentication");
-const authenticateDonor = require("./middleware/donorAuthentication");
+const authenticateFundraiser = require("./middleware/Authentication/fundraiserAuthentication");
+const authenticateDonor = require("./middleware/Authentication/donorAuthentication");
+const authenticateAdmin = require("./middleware/Authentication/adminAuthentication");
+
+// fileupload
+const fileUpload = require("express-fileupload");
 
 // import routes
 const authRoutes = require("./routes/auth");
 const fundraiserRoutes = require("./routes/fundraiser");
 const donorRoutes = require("./routes/donor");
+const adminRoutes = require("./routes/adminRouter");
+const bankRoutes = require("./routes/bankRouter");
+const campaignRoutes = require("./routes/campaignRouter");
+const uploadsRoutes = require("./routes/uploadsRouter");
 
 // error handlers
 const notFoundMiddleware = require("./middleware/not-found");
@@ -22,10 +38,14 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
 // extra required packages
 const cors = require("cors");
 
-
 // MAIN WORK
 
 app.use(cors());
+app.use(
+  fileUpload({
+    useTempFiles: true,
+  })
+);
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -33,8 +53,12 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1/", authRoutes);
-app.use("/api/v1/fundraisers", authenticateFundraiser, fundraiserRoutes); 
+app.use("/api/v1/fundraisers", authenticateFundraiser, fundraiserRoutes);
 app.use("/api/v1/donors", authenticateDonor, donorRoutes);
+app.use("/api/v1/admins", authenticateAdmin, adminRoutes);
+app.use("/api/v1/banks", bankRoutes);
+app.use("/api/v1/campaigns", campaignRoutes);
+app.use("/api/v1/uploads",uploadsRoutes)
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

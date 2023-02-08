@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { UnauthenticatedError } = require("../errors");
+const { UnauthenticatedError } = require("../../errors");
 
 const auth = async (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -14,9 +14,6 @@ const auth = async (req, res, next) => {
       name: payload.name,
       role: payload.role,
     };
-    if (req.user.role !== "Fundraiser") {
-      throw new UnauthenticatedError("Authentication invalid");
-    }
   } catch (error) {
     throw new UnauthenticatedError("Authentication invalid");
   }
