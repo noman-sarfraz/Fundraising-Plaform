@@ -1,8 +1,8 @@
 import { Box, Divider, TextField, Typography } from "@mui/material";
-import React from "react";
-import Step1 from "../../components/fundraiser/compaign-steps/Step1";
+import React, { useState } from "react";
+import StartFundraiseStep from "../../components/fundraiser/compaign-steps/StartFundraiseStep";
 
-function Step({ stepNumber, stepName, selected }) {
+function Step({ stepNumber, stepName, selected, onClick }) {
   return (
     <Box
       sx={{
@@ -28,7 +28,9 @@ function Step({ stepNumber, stepName, selected }) {
           borderRadius: "50%",
           textAlign: "center",
           mr: 1,
+          cursor: "pointer",
         }}
+        onClick={onClick}
       >
         {stepNumber}
       </Typography>
@@ -42,7 +44,15 @@ function Step({ stepNumber, stepName, selected }) {
   );
 }
 
+const stepHeaders = [
+  { stepNo: 1, heading: "Get Started" },
+  { stepNo: 2, heading: "Fundraiser Story" },
+  { stepNo: 3, heading: "Payment Methods" },
+];
+
 function NewCompaign() {
+  const [stepNo, setStepNo] = useState(1);
+
   return (
     <Box>
       <Box>
@@ -70,13 +80,17 @@ function NewCompaign() {
           my: 2,
         }}
       >
-        <Step stepNumber={1} stepName={"Get Started"} selected={true} />
-        <Step stepNumber={2} stepName={"Fundraiser Story"} />
-        <Step stepNumber={3} stepName={"Final Details"} />
-        <Step stepNumber={4} stepName={"Payment Methods"} />
+        {stepHeaders.map((stepHeader) => (
+          <Step
+            stepNumber={stepHeader.stepNo}
+            stepName={stepHeader.heading}
+            selected={stepNo === stepHeader.stepNo}
+            onClick={() => setStepNo(stepHeader.stepNo)}
+          />
+        ))}
       </Box>
       <Divider sx={{ mb: 2 }} />
-      <Step1 />
+      <StartFundraiseStep stepNo={stepNo} />
     </Box>
   );
 }

@@ -10,19 +10,21 @@ import FundraiserLayout from "../layouts/FundraiserLayout";
 import DonorLayout from "../layouts/DonorLayout";
 import Home from "../views/general/Home";
 import DefaultLayout from "../layouts/DefaultLayout";
+import AdminLayout from "../layouts/AdminLayout";
 import NotFound from "../views/general/NotFound";
 import Register from "../views/general/Register";
 import Login from "../views/general/Login";
-import { Dashboard } from "@mui/icons-material";
 import NewDonation from "../views/donor/NewDonation";
 import DonationHistory from "../views/donor/DonationHistory";
 import SearchFundraisers from "../views/donor/SearchFundraisers";
 import SavedFundraisers from "../views/donor/SavedFundraisers";
 import RecurringDonations from "../views/donor/RecurringDonations";
 import DonorProfileSettings from "../views/donor/ProfileSettings";
+import AdminProfileSettings from "../views/admin/ProfileSettings";
 import DonorFAQs from "../views/donor/FAQs";
 import DonorHowItWorks from "../views/donor/HowItWorks";
 import Compaigns from "../views/fundraiser/Compaigns";
+import Compaign from "../views/fundraiser/Compaign";
 import NewCompaign from "../views/fundraiser/NewCompaign";
 import Fundings from "../views/fundraiser/Fundings";
 import VisualStatistics from "../views/fundraiser/VisualStatistics";
@@ -31,6 +33,7 @@ import FundraiserFAQs from "../views/fundraiser/FAQs";
 import FundraiserHowItWorks from "../views/fundraiser/HowItWorks";
 import FundraiserAuth from '../layouts/auths/FundraiserAuth'
 import DonorAuth from "../layouts/auths/DonorAuth";
+import Dashboard from "../views/admin/Dashboard";
 
 function MainRoutes() {
   return (
@@ -40,6 +43,7 @@ function MainRoutes() {
           <Route path="fr_account" element={<FundraiserLayout />}>
             <Route index element={<Compaigns />} />
             <Route path="compaigns" element={<Compaigns />} />
+            <Route path="compaign" element={<Compaign />} />
             <Route path="new-compaign" element={<NewCompaign />} />
             <Route path="fundings" element={<Fundings />} />
             <Route path="visual-statistics" element={<VisualStatistics />} />
@@ -68,6 +72,16 @@ function MainRoutes() {
             <Route path="how-it-works" element={<DonorHowItWorks />} />
           </Route>
         </Route>
+        {/* <Route element={<AdminAuth />}> */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Dashboard />} />
+          {/* <Route path="donation-history" element={<DonationHistory />} /> */}
+          <Route
+            path="profile-settings"
+            element={<AdminProfileSettings />}
+          />
+        </Route>
+        {/* </Route> */}
 
         <Route path="/" element={<DefaultLayout />}>
           <Route index element={<Navigate to="login" />} />

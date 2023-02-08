@@ -159,6 +159,7 @@ function Login() {
             <MenuItem value={"none"} disabled>
               Login As
             </MenuItem>
+            <MenuItem value={"Admin"}>Admin</MenuItem>
             <MenuItem value={"Fundraiser"}>Fundraiser</MenuItem>
             <MenuItem value={"Donor"}>Donor</MenuItem>
           </StyledSelect>

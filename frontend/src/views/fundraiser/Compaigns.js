@@ -1,90 +1,73 @@
+import { Campaign, Delete } from "@mui/icons-material";
 import {
   Button,
   Card,
   CardActions,
   CardContent,
   CardMedia,
+  Grid,
+  LinearProgress,
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
-import CompaignPic1 from "../../assets/images/Fundraise1.jpg";
-import CompaignPic2 from "../../assets/images/Fundraise2.jpg";
-import CompaignPic3 from "../../assets/images/Fundraise3.jpg";
+import styled from "styled-components";
+import CampaignPic1 from "../../assets/images/Fundraise1.jpg";
+import CampaignPic2 from "../../assets/images/Fundraise2.jpg";
+import CampaignPic3 from "../../assets/images/Fundraise3.jpg";
+import LengthyPic from "../../assets/images/lengthyImage.jpg";
+import CampaignCard from "../../components/fundraiser/cards/CampaignCard";
 
-function StyledCard({ heading, description, image }) {
-  return (
-    <Card sx={{ maxWidth: 345 }}>
-      <CardMedia
-        sx={{ height: 140 }}
-        image={image}
-        title="green iguana"
-        loading="lazy"
-      />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          {heading}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {description}
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small">View</Button>
-        <Button size="small" sx={{ color: "teal" }}>
-          Share
-        </Button>
-        <Button size="small" sx={{ color: "#FF0000" }}>
-          Delete
-        </Button>
-      </CardActions>
-    </Card>
-  );
-}
+const dummyCampaign = {
+  image: CampaignPic1,
+  category: "Flood Relief",
+  startDate: "Dec 22, 2022",
+  title: "Flood Relief Fund",
+  story: `As my previous 4 fundraisings, this one will have a goal to achieve too. If you don't know Adrian, he used to be the vocalist of the Polish death metal band Decapitated and recorded the album Organic Hallucinosis with them in 2006.`,
+  raisedAmount: 1000,
+  goalAmount: 7000,
+  donors: 5,
+  status: "Active",
+  stripeAccount: "Not Connected",
+  paypalAccount: "Not Connected",
+};
 
 function Compaigns() {
   return (
     <Box>
-      <Box>
-        <Typography
-          color={"#1D548F"}
-          sx={{
-            fontSize: "24px",
-            fontWeight: "bold",
-            px: 2,
-            py: 2,
-            textDecoration: "underline",
-            textUnderlineOffset: "5px",
-          }}
-        >
-          Your Compaigns
-        </Typography>
-      </Box>
-      <Box
+      <Typography
+        color={"#1D548F"}
+        // display='inline'
         sx={{
-          display: "flex",
-          flexDirection: {
-            xs: "column",
-            md: "row",
+          fontSize: "28px",
+          fontWeight: "bold",
+          // textDecordation: "underline",
+          textDecorationLine: "underline",
+          // textUnderlineOffset: "10px",
+          px: {
+            xs: 2,
+            md: 6,
           },
-          justifyContent: "space-evenly",
+          pt: 2,
+          mb: 3,
+          // textAlign: "center",
         }}
       >
-        <StyledCard
-          heading="Flood Relief"
-          description="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quam autem libero dolores. Distinctio cupiditate animi doloribus fugiat unde officiis laboriosam eum soluta voluptates voluptate aut veniam alias architecto, eos quas."
-          image={CompaignPic1}
-        />
-        <StyledCard
-          heading="Poverty Alleviation"
-          description="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quam autem libero dolores. Distinctio cupiditate animi doloribus fugiat unde officiis laboriosam eum soluta voluptates voluptate aut veniam alias architecto, eos quas."
-          image={CompaignPic2}
-        />
-        <StyledCard
-          heading="Animal Welfare"
-          description="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quam autem libero dolores. Distinctio cupiditate animi doloribus fugiat unde officiis laboriosam eum soluta voluptates voluptate aut veniam alias architecto, eos quas."
-          image={CompaignPic3}
-        />
+        Your Campaigns:
+      </Typography>
+      <Box
+        sx={{
+          width: "100%",
+          // border: "1px solid black",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          py: 2,
+        }}
+      >
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map(() => (
+          <CampaignCard campaign={dummyCampaign} />
+        ))}
       </Box>
     </Box>
   );

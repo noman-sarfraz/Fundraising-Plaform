@@ -10,90 +10,69 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import styled from "styled-components";
 
-function StyledTextField({ placeholder }) {
-  return (
-    <TextField
-      placeholder={placeholder}
-      fullWidth
-      size="small"
-      inputProps={{
-        style: {
-          fontSize: 14,
-          // padding: "12px 12px 12px 12px",
-        },
-      }}
-      sx={{
-        mb: 2,
-      }}
-      type="text"
-      required
-    />
-  );
-}
+const StyledTextField = styled(TextField).attrs((props) => ({
+  fullWidth: true,
+  size: "small",
+  inputProps: {
+    style: {
+      fontSize: 14,
+      // padding: "12px 12px 12px 12px",
+    },
+  },
+  type: "text",
+  required: true,
+}))`
+  margin-bottom: 16px !important;
+`;
 
-function StyledLabel({ label }) {
-  return (
-    <Typography
-      color={"#2F435A"}
-      sx={{
-        fontSize: "14px",
-        fontWeight: "500",
-        mb: 0.5,
-      }}
-    >
-      {label}
-    </Typography>
-  );
-}
+const StyledLabel = styled(Typography).attrs((props) => ({}))`
+  color: #2f435a !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  margin-bottom: 4px !important;
+`;
 
-function StyledHead({ heading }) {
-  return (
-    <Typography
-      color={"#0D54A9"}
-      sx={{
-        fontSize: "22px",
-        fontWeight: "400",
-        mb: 2,
-      }}
-    >
-      {heading}
-    </Typography>
-  );
-}
+const StyledHead = styled(Typography).attrs((props) => ({}))`
+  color: #0d54a9 !important;
+  font-size: 22px !important;
+  font-weight: 400 !important;
+  margin-bottom: 16px !important;
+`;
 
-function StyledSelect({ text }) {
-  return (
-    <FormControl
-      fullWidth
-      // error={isError}
-      sx={{
-        my: 0,
-        mb: 2,
-      }}
-    >
-      <InputLabel id="select-role" size="small" sx={{ fontSize: 14 }}>
-        {text}
-      </InputLabel>
-      <Select
-        labelId="select-role"
-        id="simple-role-select"
-        // value={role}
-        label="label"
-        // onChange={handleChange}
-        size="small"
-        sx={{
-          fontSize: 14,
-        }}
-      >
-        <MenuItem value={""}>{text} 1</MenuItem>
-        <MenuItem value={""}>{text} 2</MenuItem>
-        <MenuItem value={""}>Others</MenuItem>
-      </Select>
-      {/* {isError && <FormHelperText>This is required!</FormHelperText>} */}
-    </FormControl>
-  );
-}
+// function StyledSelect({ text }) {
+//   return (
+//     <FormControl
+//       fullWidth
+//       // error={isError}
+//       sx={{
+//         my: 0,
+//         mb: 2,
+//       }}
+//     >
+//       <InputLabel id="select-role" size="small" sx={{ fontSize: 14 }}>
+//         {text}
+//       </InputLabel>
+//       <Select
+//         labelId="select-role"
+//         id="simple-role-select"
+//         // value={role}
+//         label="label"
+//         // onChange={handleChange}
+//         size="small"
+//         sx={{
+//           fontSize: 14,
+//         }}
+//       >
+//         <MenuItem value={""}>{text} 1</MenuItem>
+//         <MenuItem value={""}>{text} 2</MenuItem>
+//         <MenuItem value={""}>Others</MenuItem>
+//       </Select>
+//       {/* {isError && <FormHelperText>This is required!</FormHelperText>} */}
+//     </FormControl>
+//   );
+// }
 
 function Step1() {
   return (
@@ -111,35 +90,36 @@ function Step1() {
             },
           }}
         >
+        
           <Box sx={{ mb: 5 }}>
-            <StyledHead heading="Fundraise Information" />
-            <StyledLabel label="Compaign Title" />
+            <StyledHead>Fundraise Information</StyledHead>
+            <StyledLabel>Compaign Title</StyledLabel>
             <StyledTextField placeholder="Enter Compaign Title" />
-            <StyledLabel label="Compaign Category" />
+            <StyledLabel>Compaign Category</StyledLabel>
             <StyledTextField placeholder="Category" />
             {/* <StyledSelect text="Category" /> */}
           </Box>
           <Box sx={{ mb: 5 }}>
-            <StyledHead heading="Fundraise Location" />
-            <StyledLabel label="Country" />
+            <StyledHead>Fundraise Location</StyledHead>
+            <StyledLabel>Country</StyledLabel>
             <StyledTextField placeholder="Country" />
             {/* <StyledSelect text="Country" /> */}
-            <StyledLabel label="City" />
+            <StyledLabel>City</StyledLabel>
             <StyledTextField placeholder="Enter City" />
           </Box>
           <Box sx={{ mb: 5 }}>
-            <StyledHead heading="Donation Informaion" />
-            <StyledLabel label="Donation Type" />
+            <StyledHead>Donation Informaion</StyledHead>
+            <StyledLabel>Donation Type</StyledLabel>
             <StyledTextField placeholder="Type" />
             {/* <StyledSelect text="Type" /> */}
-            <StyledLabel label="Target Amount" />
+            <StyledLabel>Target Amount</StyledLabel>
             <StyledTextField placeholder="Enter Target Amount" />
           </Box>
           <Box sx={{ mb: 5 }}>
-            <StyledHead heading="Fund & Registration details" />
-            <StyledLabel label="Your First Name" />
+            <StyledHead>Fund & Registration details</StyledHead>
+            <StyledLabel>Your First Name</StyledLabel>
             <StyledTextField placeholder="Enter First Name" />
-            <StyledLabel label="Your Last Name" />
+            <StyledLabel>Your Last Name</StyledLabel>
             <StyledTextField placeholder="Enter Last Name" />
           </Box>
           <Button
@@ -149,7 +129,7 @@ function Step1() {
               width: "100%",
               py: 1,
               borderRadius: 10,
-              textTransform: 'none'
+              textTransform: "none",
             }}
           >
             Continue
