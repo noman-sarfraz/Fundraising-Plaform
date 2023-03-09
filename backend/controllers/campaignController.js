@@ -1,6 +1,7 @@
 const Campaign = require("../models/Campaign");
 const { StatusCodes } = require("http-status-codes");
 const CustomErrors = require("../errors");
+const sendCampaignStatusChangeEmail = require("../utils/sendCampaignStatusChangeEmail");
 
 const getAllCampaigns = async (req, res) => {
   const campaigns = await Campaign.find({});
@@ -77,6 +78,13 @@ const deleteCampaign = async (req, res) => {
     );
   }
 
+  const origin = "front end link";
+  await sendCampaignStatusChangeEmail(
+    user.name,
+    user.email,
+    role,
+    origin
+  );
   res.status(StatusCodes.OK).json({ success: true });
 };
 
