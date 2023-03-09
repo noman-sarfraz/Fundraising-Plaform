@@ -39,6 +39,18 @@ const AdminSchema = new mongoose.Schema(
       type: String,
       maxlength: 50,
     },
+    verificationToken:String,
+    isVerified:{
+      type:Boolean,
+      default:false,
+    },
+    verified:Date,
+    passwordToken :{
+      type:String,
+    },
+    passwordTokenExpirationDate:{
+      type:Date,
+    }
   },
   { timestamps: true }
 );

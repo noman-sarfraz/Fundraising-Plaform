@@ -82,14 +82,29 @@ const deleteAccount = async (req, res) => {
 
 const createAdmin = async (req, res) => {
   const { role } = req.body;
+  
+  // create verification token
+  const verificationToken = crypto.randomBytes(40).toString("hex");
+  req.body.verificationToken = verificationToken;
+
   let user;
   if (role === "Admin") {
     user = await Admin.create({ ...req.body });
   } else {
     throw new CustomErrors.BadRequestError("Please provide a valid role.");
   }
+
+  // send verification email
+  const origin = "front end link";
+  await sendVerificationEmail(
+    user.name,
+    user.email,
+    role,
+    user.verificationToken,
+    origin
+  );
  
-  res.status(StatusCodes.CREATED).json({ success:true });
+  res.status(StatusCodes.CREATED).json({ msg: "Verification email sent" });
 };
 
 module.exports = {

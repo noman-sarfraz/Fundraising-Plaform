@@ -76,11 +76,13 @@ const verifyEmail = async (req, res) => {
     verificationToken: "",
   };
 
-  // update the user 
+  // update the user
   if (role === "Fundraiser") {
     await Fundraiser.findOneAndUpdate({ email }, updatedValues);
   } else if (role === "Donor") {
     await Donor.findOneAndUpdate({ email }, updatedValues);
+  } else if (role === "Admin") {
+    await Admin.findOneAndUpdate({ email }, updatedValues);
   }
 
   res.status(StatusCodes.OK).json({ msg: "Email verified" });
@@ -148,6 +150,10 @@ const forgotPassword = async (req, res) => {
     user = await Donor.findOneAndUpdate({ email }, updatedValues, {
       new: true,
     });
+  } else if (role === "Admin") {
+    user = await Admin.findOneAndUpdate({ email }, updatedValues, {
+      new: true,
+    });
   }
 
   // if user exists send reset password email
@@ -189,6 +195,8 @@ const resetPassword = async (req, res) => {
     user = await Fundraiser.findOne({ email });
   } else if (role === "Donor") {
     user = await Donor.findOne({ email });
+  } else if (role === "Admin") {
+    user = await Admin.findOne({ email });
   }
 
   // if user exists
@@ -208,6 +216,8 @@ const resetPassword = async (req, res) => {
         });
       } else if (role === "Donor") {
         await Donor.findOneAndUpdate({ email }, updatedValues, { new: true });
+      } else if (role === "Admin") {
+        await Admin.findOneAndUpdate({ email }, updatedValues, { new: true });
       }
     }
   }
