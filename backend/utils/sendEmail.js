@@ -1,17 +1,15 @@
-const nodemailer = require("nodemailer");
-const nodemailerConfig = require("./nodemailerConfig");
+const sgMail = require('@sendgrid/mail')
 
 const sendEmail = async ({ to, subject, html }) => {
-  let testAccount = await nodemailer.createTestAccount();
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
-  const transporter = nodemailer.createTransport(nodemailerConfig);
-
-  return transporter.sendMail({
-    from: '"Fundraising Platform" <fyp195@gmail.com>', // sender address
+  const message = {
+    from: 'fyp195@gmail.com', // sender address
     to,
     subject,
     html,
-  });
+  }
+  return sgMail.send(message);
 };
 
 module.exports = sendEmail;
