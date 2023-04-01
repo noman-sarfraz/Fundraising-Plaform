@@ -1,5 +1,7 @@
 const Fundraiser = require("../models/Fundraiser");
 const { StatusCodes } = require("http-status-codes");
+const createTokenUser = require("../utils/createTokenUser");
+const { attachCookiesToResponse } = require("../utils/jwt");
 const {
   BadRequestError,
   NotFoundError,
@@ -32,6 +34,8 @@ const updateFundraiser = async (req, res) => {
   if (!fundraiser) {
     throw new NotFoundError(`No fundraiser with id: ${fundraiserId}`);
   }
+  const tokenUser = createTokenUser(donor);
+  attachCookiesToResponse({ res, user: tokenUser });
   res.status(StatusCodes.OK).json({ fundraiser });
 };
 

@@ -1,26 +1,23 @@
-const jwt = require("jsonwebtoken");
+const { isTokenValid } = require("../../utils/jwt");
 const { UnauthenticatedError } = require("../../errors");
 
 const auth = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    throw new UnauthenticatedError("Authentication invalid");
+  const token = req.signedCookies.token;
+
+  if (!token) {
+    throw new UnauthenticatedError("Authentication Invalid");
   }
-  const token = authHeader.split(" ")[1];
+
   try {
-    const payload = await jwt.verify(token, process.env.JWT_SECRET);
-    req.user = {
-      userId: payload.userId,
-      name: payload.name,
-      role: payload.role,
-    };
+    const { name, userId, role } = isTokenValid({ token });
+    req.user = { name, userId, role };
     if (req.user.role !== "Admin") {
       throw new UnauthenticatedError("Authentication invalid");
     }
+    next();
   } catch (error) {
-    throw new UnauthenticatedError("Authentication invalid");
+    throw new UnauthenticatedError("Authentication Invalid");
   }
-  next();
 };
 
 module.exports = auth;

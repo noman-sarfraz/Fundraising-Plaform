@@ -6,6 +6,8 @@ const Admin = require("../models/Admin");
 
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
+const {attachCookiesToResponse} = require("../utils/jwt");
+const createTokenUser = require("../utils/createTokenUser");
 
 const sendVerificationEmail = require("../utils/sendVerificationEmail");
 const sendResetPasswordEmail = require("../utils/sendResetPasswordEmail");
@@ -15,7 +17,7 @@ const {
   UnauthenticatedError,
   NotFoundError,
   BadRequestError,
-} = require("./../errors");
+} = require("../errors");
 
 const register = async (req, res) => {
   const { role } = req.body;
@@ -118,8 +120,10 @@ const login = async (req, res) => {
     throw new UnauthenticatedError("Please verify your email");
   }
 
-  const token = user.createJWT();
-  res.status(StatusCodes.OK).json({ token });
+  const tokenUser = createTokenUser(user);
+  attachCookiesToResponse({ res, user: tokenUser });
+
+  res.status(StatusCodes.OK).json({ user: tokenUser });
 };
 
 const forgotPassword = async (req, res) => {
@@ -223,11 +227,18 @@ const resetPassword = async (req, res) => {
   }
   res.status(StatusCodes.OK).json({ msg: "password updated successfully" });
 };
-
+const logout = async (req, res) => {
+  res.cookie('token', 'logout', {
+    httpOnly: true,
+    expires: new Date(Date.now() + 1000),
+  });
+  res.status(StatusCodes.OK).json({ msg: 'user logged out!' });
+};
 module.exports = {
   register,
   verifyEmail,
   login,
   forgotPassword,
   resetPassword,
+  logout,
 };

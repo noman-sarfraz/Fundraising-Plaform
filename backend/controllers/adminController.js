@@ -2,6 +2,8 @@ const Admin = require("../models/Admin");
 const { StatusCodes } = require("http-status-codes");
 const CustomErrors = require("../errors");
 const bcrypt = require("bcryptjs");
+const createTokenUser = require("../utils/createTokenUser");
+const { attachCookiesToResponse } = require("../utils/jwt");
 
 const getAdmin = async (req, res) => {
   const { userId: adminId } = req.user;
@@ -32,6 +34,8 @@ const updateAdmin = async (req, res) => {
       `No admin with id: ${donorId}`
     );
   }
+  const tokenUser = createTokenUser(donor);
+  attachCookiesToResponse({ res, user: tokenUser });
   res.status(StatusCodes.OK).json({ admin });
 };
 

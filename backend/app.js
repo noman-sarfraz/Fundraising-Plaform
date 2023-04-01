@@ -37,6 +37,8 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
 
 // extra required packages
 const cors = require("cors");
+const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
 
 // MAIN WORK
 
@@ -46,7 +48,10 @@ app.use(
     useTempFiles: true,
   })
 );
+
 app.use(express.json());
+app.use(morgan("tiny"));
+app.use(cookieParser(process.env.JWT_SECRET));
 
 app.get("/", (req, res) => {
   res.send("Fundaising Platform API");
