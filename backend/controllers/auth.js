@@ -3,10 +3,11 @@ const { StatusCodes } = require("http-status-codes");
 const Donor = require("../models/Donor");
 const Fundraiser = require("../models/Fundraiser");
 const Admin = require("../models/Admin");
+const Token = require("../models/Token");
 
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
-const {attachCookiesToResponse} = require("../utils/jwt");
+const { attachCookiesToResponse } = require("../utils/jwt");
 const createTokenUser = require("../utils/createTokenUser");
 
 const sendVerificationEmail = require("../utils/sendVerificationEmail");
@@ -120,10 +121,31 @@ const login = async (req, res) => {
     throw new UnauthenticatedError("Please verify your email");
   }
 
-  const tokenUser = createTokenUser(user);
-  attachCookiesToResponse({ res, user: tokenUser });
+  const tokenUser = createTokenUser(user, role);
 
-  res.status(StatusCodes.OK).json({ user: tokenUser });
+  //create refresh token
+  let refreshToken = "";
+  //check for existing token
+  const existingToken = await Token.findOne({ user: user._id });
+
+  if (existingToken) {
+    const { isValid } = existingToken;
+    if (!isValid) {
+      throw new UnauthenticatedError("Invalid Credentials");
+    }
+
+    refreshToken = existingToken.refreshToken;
+  } else {
+    refreshToken = crypto.randomBytes(40).toString("hex");
+    const userAgent = req.headers["user-agent"];
+    const ip = req.ip;
+    const userToken = { refreshToken, ip, userAgent, user: user._id };
+
+    await Token.create(userToken);
+  }
+  attachCookiesToResponse({ res, user: tokenUser, refreshToken });
+
+  res.status(StatusCodes.OK).json({ user: tokenUser, refreshToken });
 };
 
 const forgotPassword = async (req, res) => {
@@ -228,11 +250,16 @@ const resetPassword = async (req, res) => {
   res.status(StatusCodes.OK).json({ msg: "password updated successfully" });
 };
 const logout = async (req, res) => {
-  res.cookie('token', 'logout', {
+  await Token.findOneAndDelete({ user: req.user.userId });
+  res.cookie("accessToken", "logout", {
     httpOnly: true,
-    expires: new Date(Date.now() + 1000),
+    expires: new Date(Date.now()),
   });
-  res.status(StatusCodes.OK).json({ msg: 'user logged out!' });
+  res.cookie("refreshToken", "logout", {
+    httpOnly: true,
+    expires: new Date(Date.now()),
+  });
+  res.status(StatusCodes.OK).json({ msg: "user logged out!" });
 };
 module.exports = {
   register,

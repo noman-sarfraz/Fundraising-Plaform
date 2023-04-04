@@ -2,19 +2,17 @@ const { isTokenValid } = require("../../utils/jwt");
 const { UnauthenticatedError } = require("../../errors");
 
 const auth = async (req, res, next) => {
-  const token = req.signedCookies.token;
-
-  if (!token) {
-    throw new UnauthenticatedError("Authentication Invalid");
-  }
+  const { refreshToken, accessToken } = req.signedCookies;
 
   try {
-    const { name, userId, role } = isTokenValid({ token });
-    req.user = { name, userId, role };
-    if (req.user.role !== "Donor") {
-      throw new UnauthenticatedError("Authentication invalid");
+    if (accessToken) {
+      const payload = isTokenValid(accessToken);
+      req.user = payload;
+      if (req.user.role !== "Donor") {
+        throw new UnauthenticatedError("Authentication invalid");
+      }
+      return next();
     }
-    next();
   } catch (error) {
     throw new UnauthenticatedError("Authentication Invalid");
   }

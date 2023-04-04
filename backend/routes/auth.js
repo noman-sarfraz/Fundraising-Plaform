@@ -12,7 +12,7 @@ const {
 
 router.post("/register", register);
 router.post("/login", login);
-router.get("/logout", logout);
+router.delete("/logout", logout);
 router.post("/verify-email", verifyEmail);
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", resetPassword);
