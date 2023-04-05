@@ -1,5 +1,7 @@
 const Fundraiser = require("../models/Fundraiser");
 const { StatusCodes } = require("http-status-codes");
+const createTokenUser = require("../utils/createTokenUser");
+const { attachCookiesToResponse } = require("../utils/jwt");
 const {
   BadRequestError,
   NotFoundError,
@@ -7,7 +9,7 @@ const {
 } = require("../errors");
 const bcrypt = require("bcryptjs");
 
-const getFundraiser = async (req, res) => {
+const showMe = async (req, res) => {
   const { userId: fundraiserId } = req.user;
   const fundraiser = await Fundraiser.findOne({
     _id: fundraiserId,
@@ -18,7 +20,19 @@ const getFundraiser = async (req, res) => {
 
   res.status(StatusCodes.OK).json({ fundraiser });
 };
+const getFundraiser = async (req, res) => {
+  const {
+    params: { id: fundraiserId },
+  } = req;
+  const fundraiser = await Fundraiser.findOne({
+    _id: fundraiserId,
+  });
+  if (!fundraiser) {
+    throw new NotFoundError(`No fundraiser with id: ${fundraiserId}`);
+  }
 
+  res.status(StatusCodes.OK).json({ fundraiser });
+};
 const updateFundraiser = async (req, res) => {
   const { userId: fundraiserId } = req.user;
   const fundraiser = await Fundraiser.findByIdAndUpdate(
@@ -32,6 +46,8 @@ const updateFundraiser = async (req, res) => {
   if (!fundraiser) {
     throw new NotFoundError(`No fundraiser with id: ${fundraiserId}`);
   }
+  const tokenUser = createTokenUser(donor);
+  attachCookiesToResponse({ res, user: tokenUser });
   res.status(StatusCodes.OK).json({ fundraiser });
 };
 
@@ -75,6 +91,7 @@ const deleteAccount = async (req, res) => {
 };
 
 module.exports = {
+  showMe,
   getFundraiser,
   updateFundraiser,
   changePassword,

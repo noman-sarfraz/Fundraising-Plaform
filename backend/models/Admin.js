@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 
 const AdminSchema = new mongoose.Schema(
   {
@@ -39,26 +38,27 @@ const AdminSchema = new mongoose.Schema(
       type: String,
       maxlength: 50,
     },
+    verificationToken:String,
+    isVerified:{
+      type:Boolean,
+      default:false,
+    },
+    verified:Date,
+    passwordToken :{
+      type:String,
+    },
+    passwordTokenExpirationDate:{
+      type:Date,
+    }
   },
   { timestamps: true }
 );
 
 AdminSchema.pre("save", async function (next) {
+  if(!this.isModified("password")) return;
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password,salt);
 });
-
-AdminSchema.methods.createJWT = function () {
-  return jwt.sign(
-    {
-      userId: this._id,
-      name: this.name,
-      role: "Admin",
-    },
-    process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_LIFETIME }
-  );
-};
 
 AdminSchema.methods.comparePassword = async function (candidatePassword) {
   const isMatch = await bcrypt.compare(candidatePassword, this.password);

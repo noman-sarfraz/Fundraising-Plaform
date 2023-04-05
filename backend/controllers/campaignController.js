@@ -1,6 +1,7 @@
 const Campaign = require("../models/Campaign");
 const { StatusCodes } = require("http-status-codes");
 const CustomErrors = require("../errors");
+const sendCampaignStatusChangeEmail = require("../utils/sendCampaignStatusChangeEmail");
 
 const getAllCampaigns = async (req, res) => {
   const campaigns = await Campaign.find({});
@@ -93,7 +94,7 @@ const changeStatus = async (req, res) => {
   } = req;
 
   const campaign = await Campaign.findOneAndUpdate(
-    { _id: campaignId},
+    { _id: campaignId },
     req.body,
     { new: true, runValidators: true }
   );

@@ -17,11 +17,11 @@ router
   .route("/")
   .get(Authentication.fundraiser, getMyCampaigns)
   .post(Authentication.fundraiser, createCampaign);
-router.route("/get-all").get(Authentication.user, getAllCampaigns);
+router.route("/get-all").get(getAllCampaigns);
 
 router
   .route("/:id")
-  .get(Authentication.user, getCampaign)
+  .get(getCampaign)
   .patch(Authentication.fundraiser, updateCampaign)
   .delete(Authentication.fundraiser, deleteCampaign);
 router.route("/change-status/:id").patch(Authentication.admin, changeStatus);
