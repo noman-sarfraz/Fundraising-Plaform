@@ -10,6 +10,25 @@ const auth = async (req, res, next) => {
       req.user = payload;
       return next();
     }
+    const payload = isTokenValid(refreshToken);
+
+    const existingToken = await Token.findOne({
+      user: payload.user.userId,
+      refreshToken: payload.refreshToken,
+    });
+
+    if (!existingToken || !existingToken?.isValid) {
+      throw new UnauthenticatedError("Authentication Invalid");
+    }
+
+    attachCookiesToResponse({
+      res,
+      user: payload.user,
+      refreshToken: existingToken.refreshToken,
+    });
+
+    req.user = payload.user;
+    next();
   } catch (error) {
     throw new UnauthenticatedError("Authentication Invalid");
   }

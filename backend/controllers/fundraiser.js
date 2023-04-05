@@ -9,7 +9,7 @@ const {
 } = require("../errors");
 const bcrypt = require("bcryptjs");
 
-const getFundraiser = async (req, res) => {
+const showMe = async (req, res) => {
   const { userId: fundraiserId } = req.user;
   const fundraiser = await Fundraiser.findOne({
     _id: fundraiserId,
@@ -20,7 +20,19 @@ const getFundraiser = async (req, res) => {
 
   res.status(StatusCodes.OK).json({ fundraiser });
 };
+const getFundraiser = async (req, res) => {
+  const {
+    params: { id: fundraiserId },
+  } = req;
+  const fundraiser = await Fundraiser.findOne({
+    _id: fundraiserId,
+  });
+  if (!fundraiser) {
+    throw new NotFoundError(`No fundraiser with id: ${fundraiserId}`);
+  }
 
+  res.status(StatusCodes.OK).json({ fundraiser });
+};
 const updateFundraiser = async (req, res) => {
   const { userId: fundraiserId } = req.user;
   const fundraiser = await Fundraiser.findByIdAndUpdate(
@@ -79,6 +91,7 @@ const deleteAccount = async (req, res) => {
 };
 
 module.exports = {
+  showMe,
   getFundraiser,
   updateFundraiser,
   changePassword,

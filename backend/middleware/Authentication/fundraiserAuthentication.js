@@ -22,7 +22,7 @@ const auth = async (req, res, next) => {
     });
 
     if (!existingToken || !existingToken?.isValid) {
-      throw new CustomError.UnauthenticatedError("Authentication Invalid");
+      throw new UnauthenticatedError("Authentication Invalid");
     }
 
     attachCookiesToResponse({

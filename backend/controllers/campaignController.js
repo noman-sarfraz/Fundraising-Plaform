@@ -78,13 +78,6 @@ const deleteCampaign = async (req, res) => {
     );
   }
 
-  const origin = "front end link";
-  await sendCampaignStatusChangeEmail(
-    user.name,
-    user.email,
-    role,
-    origin
-  );
   res.status(StatusCodes.OK).json({ success: true });
 };
 
@@ -101,7 +94,7 @@ const changeStatus = async (req, res) => {
   } = req;
 
   const campaign = await Campaign.findOneAndUpdate(
-    { _id: campaignId},
+    { _id: campaignId },
     req.body,
     { new: true, runValidators: true }
   );

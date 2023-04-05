@@ -58,6 +58,8 @@ const verifyEmail = async (req, res) => {
     user = await Fundraiser.findOne({ email });
   } else if (role === "Donor") {
     user = await Donor.findOne({ email });
+  } else if (role === "Admin") {
+    user = await Admin.findOne({ email });
   } else {
     throw new UnauthenticatedError("Verification failed!");
   }
@@ -145,7 +147,7 @@ const login = async (req, res) => {
   }
   attachCookiesToResponse({ res, user: tokenUser, refreshToken });
 
-  res.status(StatusCodes.OK).json({ user: tokenUser, refreshToken });
+  res.status(StatusCodes.OK).json({ user: tokenUser });
 };
 
 const forgotPassword = async (req, res) => {

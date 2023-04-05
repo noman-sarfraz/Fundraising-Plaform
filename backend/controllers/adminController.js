@@ -1,9 +1,14 @@
 const Admin = require("../models/Admin");
 const { StatusCodes } = require("http-status-codes");
 const CustomErrors = require("../errors");
+
 const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
+
 const createTokenUser = require("../utils/createTokenUser");
 const { attachCookiesToResponse } = require("../utils/jwt");
+
+const sendVerificationEmail = require("../utils/sendVerificationEmail");
 
 const getAdmin = async (req, res) => {
   const { userId: adminId } = req.user;
@@ -11,9 +16,7 @@ const getAdmin = async (req, res) => {
     _id: adminId,
   });
   if (!admin) {
-    throw new CustomErrors.NotFoundError(
-      `No Admin with id: ${adminId}`
-    );
+    throw new CustomErrors.NotFoundError(`No Admin with id: ${adminId}`);
   }
 
   res.status(StatusCodes.OK).json({ admin });
@@ -21,18 +24,12 @@ const getAdmin = async (req, res) => {
 
 const updateAdmin = async (req, res) => {
   const { userId: donorId } = req.user;
-  const admin = await Admin.findByIdAndUpdate(
-    { _id: donorId },
-    req.body,
-    {
-      new: true,
-      runValidators: true,
-    }
-  );
+  const admin = await Admin.findByIdAndUpdate({ _id: donorId }, req.body, {
+    new: true,
+    runValidators: true,
+  });
   if (!admin) {
-    throw new CustomErrors.NotFoundError(
-      `No admin with id: ${donorId}`
-    );
+    throw new CustomErrors.NotFoundError(`No admin with id: ${donorId}`);
   }
   const tokenUser = createTokenUser(donor);
   attachCookiesToResponse({ res, user: tokenUser });
@@ -69,8 +66,11 @@ const changePassword = async (req, res) => {
 
 const deleteAccount = async (req, res) => {
   const admins = await Admin.find({});
-  if(admins.length<=1){
-    return res.status(StatusCodes.FORBIDDEN).json({success:false, msg:"Platform must have atleast one Admin account"});
+  if (admins.length <= 1) {
+    return res.status(StatusCodes.FORBIDDEN).json({
+      success: false,
+      msg: "Platform must have atleast one Admin account",
+    });
   }
   const admin = await Admin.findByIdAndRemove({
     _id: req.user.userId,
@@ -86,7 +86,7 @@ const deleteAccount = async (req, res) => {
 
 const createAdmin = async (req, res) => {
   const { role } = req.body;
-  
+
   // create verification token
   const verificationToken = crypto.randomBytes(40).toString("hex");
   req.body.verificationToken = verificationToken;
@@ -107,7 +107,7 @@ const createAdmin = async (req, res) => {
     user.verificationToken,
     origin
   );
- 
+
   res.status(StatusCodes.CREATED).json({ msg: "Verification email sent" });
 };
 

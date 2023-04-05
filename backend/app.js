@@ -58,12 +58,12 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1/", authRoutes);
-app.use("/api/v1/fundraisers", authenticateFundraiser, fundraiserRoutes);
+app.use("/api/v1/fundraisers", fundraiserRoutes);
 app.use("/api/v1/donors", authenticateDonor, donorRoutes);
 app.use("/api/v1/admins", authenticateAdmin, adminRoutes);
 app.use("/api/v1/banks", bankRoutes);
 app.use("/api/v1/campaigns", campaignRoutes);
-app.use("/api/v1/uploads",uploadsRoutes)
+app.use("/api/v1/uploads", uploadsRoutes);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
