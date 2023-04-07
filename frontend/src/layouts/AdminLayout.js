@@ -34,7 +34,7 @@ function MainLayout() {
   };
 
   return (
-    <div>
+    <Box>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         {/* Appbar */}
@@ -69,7 +69,7 @@ function MainLayout() {
           </Box>
         </Box>
       </Box>
-    </div>
+    </Box>
   );
 }
 

@@ -68,7 +68,6 @@ const deleteAccount = async (req, res) => {
     _id: req.user.userId,
   });
   if (!fundraiser) {
-    // console.log(req.user)
     throw new NotFoundError(`No such user with id: ${req.user.userId}`);
   }
   res.status(StatusCodes.OK).json({ success: true });

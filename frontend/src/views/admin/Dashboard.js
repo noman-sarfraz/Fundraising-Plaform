@@ -18,11 +18,10 @@ import { useNavigate } from "react-router-dom";
 import CircularLoader from "../../components/general/CircularLoader";
 import {
   useChangeCampaignStatusMutation,
-  useGetAllCompaignsQuery,
-} from "./../../features/admin/adminApiSlice";
+  useGetAllcampaignsQuery,
+} from "./../../features/campaign/campaignApiSlice";
 import { toast } from "react-toastify";
 import { toNormalDate } from "../../utils/date";
-
 
 const StyledTableCell = Styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -83,7 +82,7 @@ export default function Dashboard() {
   const [changeCampaignStatus, { isLoading }] =
     useChangeCampaignStatusMutation();
 
-  const { data, isLoading: campaignsLoading } = useGetAllCompaignsQuery();
+  const { data, isLoading: campaignsLoading } = useGetAllcampaignsQuery();
 
   const changeStatus = async (id, status) => {
     try {
@@ -118,7 +117,7 @@ export default function Dashboard() {
       // campaigns = data.campaigns;
       console.log(data.campaigns);
     } else {
-      console.log("error",data);
+      console.log("error", data);
       return <h1>Error: Cannot fetch campaigns...</h1>;
     }
   }
@@ -146,7 +145,7 @@ export default function Dashboard() {
                 </StyledTableCell>
                 <StyledTableCell>
                   <Link
-                    href={`compaign/${campaign._id}`}
+                    href={`campaign/${campaign._id}`}
                     sx={{
                       textDecoration: "none",
                     }}
@@ -156,7 +155,9 @@ export default function Dashboard() {
                 </StyledTableCell>
                 <StyledTableCell>{campaign.organizerName}</StyledTableCell>
                 {/* <StyledTableCell>Jan 12, 2023</StyledTableCell> */}
-                <StyledTableCell>{ toNormalDate(campaign.createdAt) }</StyledTableCell>
+                <StyledTableCell>
+                  {toNormalDate(campaign.createdAt)}
+                </StyledTableCell>
                 <StyledTableCell id={`status-${campaign._id}`}>
                   <StyledStatus status={campaign.status}>
                     {campaign.status}

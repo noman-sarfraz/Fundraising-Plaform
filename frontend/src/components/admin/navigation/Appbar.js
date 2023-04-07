@@ -52,6 +52,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import jwtDecode from 'jwt-decode'
+import { campaignApiSlice } from "../../../features/campaign/campaignApiSlice";
 
 const drawerWidth = 250;
 
@@ -85,6 +86,8 @@ function AppbarComponent({ open, toggleDrawer }) {
 
   const onLogout = () => {
     dispatch(logOut());
+    dispatch(campaignApiSlice.util.resetApiState());
+
     navigate("/login");
   };
 

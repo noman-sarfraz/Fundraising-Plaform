@@ -13,10 +13,10 @@ import {
 import { Box } from "@mui/system";
 import React from "react";
 import styled from "styled-components";
-import CompaignPic1 from "../../../assets/images/Fundraise1.jpg";
-// import CompaignPic1 from "../../assets/images/Fundraise1.jpg";
-import CompaignPic2 from "../../../assets/images/Fundraise2.jpg";
-import CompaignPic3 from "../../../assets/images/Fundraise3.jpg";
+import campaignPic1 from "../../../assets/images/Fundraise1.jpg";
+// import campaignPic1 from "../../assets/images/Fundraise1.jpg";
+import campaignPic2 from "../../../assets/images/Fundraise2.jpg";
+import campaignPic3 from "../../../assets/images/Fundraise3.jpg";
 import LengthyPic from "../../../assets/images/lengthyImage.jpg";
 import { truncate } from "../../../utils/string";
 import { MdDeleteOutline } from "react-icons/md";
@@ -53,7 +53,7 @@ const SideButtonText = styled(Box).attrs((props) => ({}))`
 
 function CampaignShortCard({
   campaign: {
-    id,
+    _id,
     image,
     category,
     city,
@@ -91,7 +91,7 @@ function CampaignShortCard({
         }}
       >
         {/* Image */}
-        <Box component={Link} href={`/compaign/${id}`}>
+        <Box component={Link} href={`/campaign/${_id}`}>
           <img
             src={image}
             alt="Paris"
@@ -122,7 +122,7 @@ function CampaignShortCard({
           </Box>
           <Box
             component={Link}
-            href={`/compaign/${id}`}
+            href={`/campaign/${_id}`}
             sx={{ height: "56px", textDecoration: "none", color: "black" }}
           >
             <Typography sx={{ fontSize: 18, fontWeight: 550, mb: 2 }}>

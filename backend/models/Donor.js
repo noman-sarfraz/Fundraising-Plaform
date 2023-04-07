@@ -36,6 +36,7 @@ const DonorSchema = new mongoose.Schema(
       type: String,
       maxlength: 50,
     },
+    image: String,
   },
   { timestamps: true }
 );

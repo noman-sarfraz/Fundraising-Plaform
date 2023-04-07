@@ -10,12 +10,12 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import CompaignPic1 from "../../../assets/images/Fundraise1.jpg";
-// import CompaignPic1 from "../../assets/images/Fundraise1.jpg";
-import CompaignPic2 from "../../../assets/images/Fundraise2.jpg";
-import CompaignPic3 from "../../../assets/images/Fundraise3.jpg";
+import campaignPic1 from "../../../assets/images/Fundraise1.jpg";
+// import campaignPic1 from "../../assets/images/Fundraise1.jpg";
+import campaignPic2 from "../../../assets/images/Fundraise2.jpg";
+import campaignPic3 from "../../../assets/images/Fundraise3.jpg";
 import LengthyPic from "../../../assets/images/lengthyImage.jpg";
 import { truncate } from "../../../utils/string";
 import { MdDeleteOutline } from "react-icons/md";
@@ -27,6 +27,9 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import { TbEdit } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
+import LinkDialogue from "../../dialogues/LinkDialogue";
+import DeleteCampaignDialogue from "../../dialogues/campaign/ConfirmDeleteCampaign";
+import StopCampaignDialogue from "../../dialogues/campaign/ComfirmStopCampaign";
 
 const StyledLinearProgress = styled(LinearProgress).attrs((props) => ({}))`
   height: 10px !important;
@@ -52,27 +55,70 @@ const SideButtonText = styled(Box).attrs((props) => ({}))`
 `;
 
 const startDate = "Jan 20, 2021";
-const image = CompaignPic1;
+const defaultImage = campaignPic1;
 const raisedAmount = 0;
 const donors = 0;
-const stripeAccount = "Not Connected";
-const paypalAccount = "Not Connected";
+
+// just a detour to access the campaign id
+var deleteCampaignId = null;
+var stopCampaignId = null;
 
 function CampaignCard({
-  campaign: { _id, category, title, story, amountNeeded, status },
+  campaign: {
+    _id,
+    category,
+    image,
+    title,
+    story,
+    amountNeeded,
+    status,
+    bankName,
+    bankAccountNo,
+  },
 }) {
   const navigate = useNavigate();
+  // var deleteCampaignId = null;
+  // const [deleteCampaignId, setDeleteCampaignId] = useState(null);
+
+  const [openLinkDialogue, setOpenLinkDialogue] = useState(false);
+  const [openDeleteDialogue, setOpenDeleteDialogue] = useState(false);
+  const [openStopDialogue, setOpenStopDialogue] = useState(false);
 
   return (
     <Box
       sx={{
         display: "flex",
         borderRadius: 5,
-        boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+        // boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+        // boxShadow: "rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px",
+        boxShadow: "rgba(0, 0, 0, 0.09) 0px 3px 12px",
         width: "70%",
         mb: 10,
       }}
     >
+      <LinkDialogue
+        open={openLinkDialogue}
+        setOpen={setOpenLinkDialogue}
+        title={"Campaign Link"}
+        link={`localhost:3000/campaign/${_id}`}
+      />
+
+      <DeleteCampaignDialogue
+        open={openDeleteDialogue}
+        setOpen={setOpenDeleteDialogue}
+        id={deleteCampaignId}
+        title={"Delete Campaign"}
+        message={"Are you sure you want to delete this campaign?"}
+      />
+
+      <StopCampaignDialogue
+        open={openStopDialogue}
+        setOpen={setOpenStopDialogue}
+        id={stopCampaignId}
+        title={"Stop Campaign"}
+        message={"Are you sure you want to stop this campaign?"}
+      />
+
       <Box
         sx={{
           width: "70%",
@@ -84,7 +130,7 @@ function CampaignCard({
         {/* Image */}
         <Box>
           <img
-            src={image}
+            src={image ? image : defaultImage}
             alt="Paris"
             style={{
               borderRadius: "10px",
@@ -118,7 +164,11 @@ function CampaignCard({
           <Box sx={{ mb: 1 }}>
             <StyledLinearProgress
               variant="determinate"
-              value={Math.round((raisedAmount * 100) / amountNeeded).toFixed(2)}
+              value={
+                amountNeeded > 0
+                  ? Math.round((raisedAmount * 100) / amountNeeded).toFixed(2)
+                  : 0
+              }
             />
           </Box>
           <Box sx={{ display: "flex", px: 1 }}>
@@ -167,19 +217,19 @@ function CampaignCard({
 
           <Grid container>
             <Grid item xs={4}>
-              <Typography variant="caption">Stripe Account:</Typography>
+              <Typography variant="caption">Bank Name:</Typography>
             </Grid>
             <Grid item xs={8}>
-              <Typography variant="caption">{stripeAccount}</Typography>
+              <Typography variant="caption">{bankName}</Typography>
             </Grid>
           </Grid>
 
           <Grid container>
             <Grid item xs={4}>
-              <Typography variant="caption">Paypal Account:</Typography>
+              <Typography variant="caption">Account Number:</Typography>
             </Grid>
             <Grid item xs={8}>
-              <Typography variant="caption">{paypalAccount}</Typography>
+              <Typography variant="caption">{bankAccountNo}</Typography>
             </Grid>
           </Grid>
         </Box>
@@ -199,13 +249,18 @@ function CampaignCard({
           <CampaignSideButton startIcon={<AiOutlineEye color="#0D54BC" />}>
             <SideButtonText
               color="#0D54BC"
-              onClick={() => navigate(`../compaign/${_id}`)}
+              onClick={() => navigate(`../campaign/${_id}`)}
             >
               View Campaign
             </SideButtonText>
           </CampaignSideButton>
           <CampaignSideButton startIcon={<AiOutlineLink color="#0D54BC" />}>
-            <SideButtonText color="#0D54BC">Campaign Link</SideButtonText>
+            <SideButtonText
+              color="#0D54BC"
+              onClick={() => setOpenLinkDialogue(true)}
+            >
+              Campaign Link
+            </SideButtonText>
           </CampaignSideButton>
           <CampaignSideButton
             startIcon={<AiOutlineDollarCircle color="#0D54BC" />}
@@ -220,18 +275,27 @@ function CampaignCard({
             sx={{ mt: 3 }}
             customBorderColor="#00897b"
             startIcon={<TbEdit color="#00897b" />}
+            onClick={() => navigate(`/fr_account/edit-campaign/${_id}`)}
           >
             <SideButtonText color="#00897b">Edit Campaign</SideButtonText>
           </CampaignSideButton>
           <CampaignSideButton
             color="warning"
             startIcon={<TiDeleteOutline color="#ED6E2B" />}
+            onClick={() => {
+              stopCampaignId = _id;
+              setOpenStopDialogue(true);
+            }}
           >
             <SideButtonText color="#e65100">Stop</SideButtonText>
           </CampaignSideButton>
           <CampaignSideButton
             color="error"
             startIcon={<MdDeleteOutline color="#D32F2F" />}
+            onClick={() => {
+              deleteCampaignId = _id;
+              setOpenDeleteDialogue(true);
+            }}
           >
             <SideButtonText color="inherit">Delete Campaign</SideButtonText>
           </CampaignSideButton>

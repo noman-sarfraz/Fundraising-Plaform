@@ -23,12 +23,11 @@ import DonorProfileSettings from "../views/donor/ProfileSettings";
 import AdminProfileSettings from "../views/admin/ProfileSettings";
 import DonorFAQs from "../views/donor/FAQs";
 import DonorHowItWorks from "../views/donor/HowItWorks";
-import Compaigns from "../views/fundraiser/Compaigns";
-import Compaign from "../views/fundraiser/Compaign";
-import PublicCompaign from "../views/general/Compaign";
-import NewCompaign from "../views/fundraiser/NewCompaign";
-import Fundings from "../views/fundraiser/Fundings";
-import VisualStatistics from "../views/fundraiser/VisualStatistics";
+import Campaigns from "../views/fundraiser/Campaigns";
+import Campaign from "../views/fundraiser/Campaign";
+import Publiccampaign from "../views/general/Campaign";
+import Newcampaign from "../views/fundraiser/NewCampaign";
+import FRDonationHistory from "../views/fundraiser/DonationHistory";
 import FundraiserProfileSettings from "../views/fundraiser/ProfileSettings";
 import FundraiserFAQs from "../views/fundraiser/FAQs";
 import FundraiserHowItWorks from "../views/fundraiser/HowItWorks";
@@ -36,18 +35,24 @@ import FundraiserAuth from "../layouts/auths/FundraiserAuth";
 import DonorAuth from "../layouts/auths/DonorAuth";
 import AdminAuth from "../layouts/auths/AdminAuth";
 import Dashboard from "../views/admin/Dashboard";
+import Editcampaign from "../views/fundraiser/EditCampaign";
+import Donate from "../views/general/Donate";
+import CampaignStatistics from "../views/fundraiser/CampaignStatistics";
+import LayoutDeterminer from "../layouts/layout-determiner/LayoutDeterminer";
+import PaymentMethod from "../views/general/PaymentMethod";
 
 function MainRoutes() {
   return (
     <Routes>
       <Route element={<FundraiserAuth />}>
         <Route path="fr_account" element={<FundraiserLayout />}>
-          <Route index element={<Compaigns />} />
-          <Route path="compaigns" element={<Compaigns />} />
-          <Route path="compaign/:id" element={<Compaign />} />
-          <Route path="new-compaign" element={<NewCompaign />} />
-          <Route path="fundings" element={<Fundings />} />
-          <Route path="visual-statistics" element={<VisualStatistics />} />
+          <Route index element={<Campaigns />} />
+          <Route path="campaigns" element={<Campaigns />} />
+          <Route path="campaign/:id" element={<Campaign />} />
+          <Route path="new-campaign" element={<Newcampaign />} />
+          <Route path="edit-campaign/:id" element={<Editcampaign />} />
+          <Route path="donation-history" element={<FRDonationHistory />} />
+          <Route path="campaign-statistics" element={<CampaignStatistics />} />
           <Route
             path="profile-settings"
             element={<FundraiserProfileSettings />}
@@ -62,6 +67,7 @@ function MainRoutes() {
           <Route index element={<DonationHistory />} />
           <Route path="donation-history" element={<DonationHistory />} />
           <Route path="new-donation" element={<NewDonation />} />
+          {/* <Route path="donate/:id" element={<Donate />} /> */}
           <Route path="search-fundraisers" element={<SearchFundraisers />} />
           <Route path="saved-fundraisers" element={<SavedFundraisers />} />
           <Route path="recurring-donations" element={<RecurringDonations />} />
@@ -82,7 +88,14 @@ function MainRoutes() {
         <Route index element={<Navigate to="login" />} />
         <Route path="register" element={<Register />} />
         <Route path="login" element={<Login />} />
-        <Route path="compaign/:id" element={<PublicCompaign />} />
+        {/* <Route path="campaign/:id" element={<Publiccampaign />} /> */}
+
+        <Route path="*" element={<NotFound />} />
+      </Route>
+      <Route path="/" element={<LayoutDeterminer />}>
+        <Route path="campaign/:id" element={<Publiccampaign />} />
+        <Route path="donate/:id" element={<Donate />} />
+        <Route path="donate/payment-method/:id" element={<PaymentMethod />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

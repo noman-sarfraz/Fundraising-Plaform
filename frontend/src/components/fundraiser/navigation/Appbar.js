@@ -52,6 +52,9 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import jwtDecode from "jwt-decode";
+import { campaignApiSlice } from "../../../features/campaign/campaignApiSlice";
+import { useGetFundraiserDetailsQuery } from "../../../features/fundraiser/fundraiserApiSlice";
+import CircularLoader from "../../general/CircularLoader";
 
 const drawerWidth = 250;
 
@@ -82,9 +85,13 @@ function AppbarComponent({ open, toggleDrawer }) {
 
   const token = useSelector(selectCurrentToken);
   const { name, role } = jwtDecode(token);
+  const { data } = useGetFundraiserDetailsQuery();
 
   const onLogout = () => {
+    dispatch(campaignApiSlice.util.resetApiState());
+
     dispatch(logOut());
+
     navigate("/login");
   };
 
@@ -143,7 +150,7 @@ function AppbarComponent({ open, toggleDrawer }) {
             <Avatar
               size="large"
               alt="Profile Picture"
-              src={default_DP}
+              src={data?.fundraiser?.image}
               sx={{
                 height: "24px",
                 width: "24px",
@@ -225,7 +232,7 @@ function AppbarComponent({ open, toggleDrawer }) {
                       <Avatar
                         // size="large"
                         alt="Profile Picture"
-                        src={default_DP}
+                        src={data?.fundraiser?.image}
                         sx={{
                           height: "80px",
                           width: "80px",

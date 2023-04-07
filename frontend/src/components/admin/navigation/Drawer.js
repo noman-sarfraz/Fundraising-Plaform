@@ -55,6 +55,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import { logOut } from "../../../features/auth/authSlice";
+import { campaignApiSlice } from "../../../features/campaign/campaignApiSlice";
 
 // drawer width
 
@@ -98,6 +99,8 @@ function DrawerComponent({ open, toggleDrawer }) {
 
   const onLogout = () => {
     dispatch(logOut());
+    dispatch(campaignApiSlice.util.resetApiState());
+
     navigate("/login");
   };
 

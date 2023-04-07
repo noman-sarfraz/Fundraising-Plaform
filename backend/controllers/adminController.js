@@ -72,7 +72,6 @@ const deleteAccount = async (req, res) => {
     _id: req.user.userId,
   });
   if (!admin) {
-    // console.log(req.user)
     throw new CustomErrors.NotFoundError(
       `No such user with id: ${req.user.userId}`
     );

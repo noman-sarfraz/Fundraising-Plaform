@@ -33,14 +33,28 @@ const StyledTextField = styled(TextField).attrs((props) => ({
   },
 }))``;
 
+
 const StyledSelect = styled(Select).attrs((props) => ({
   fullWidth: true,
   size: "small",
-  sx: {
-    fontSize: 14,
-    mb: 1,
+  MenuProps: {
+    PaperProps: {
+      sx: {
+        "& .MuiMenuItem-root": {
+          fontSize: 14,
+          // padding: 0,
+        },
+        "& .MuiList-padding": {
+          padding: 0,
+        },
+      },
+    },
   },
-}))``;
+}))`
+  font-size: 14px !important;
+  margin-bottom: 8px !important;
+`;
+
 
 function Login() {
   const {

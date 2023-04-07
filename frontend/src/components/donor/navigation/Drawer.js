@@ -55,6 +55,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import { logOut } from "../../../features/auth/authSlice";
+import { campaignApiSlice } from "../../../features/campaign/campaignApiSlice";
 
 // drawer width
 const drawerWidth = 250;
@@ -75,22 +76,8 @@ var navItems = [
   },
   {
     name: "search-fundraisers",
-    text: "Search Fundraisers",
+    text: "Search Fundraises",
     link: "/don_account/search-fundraisers",
-    icon: <FontAwesomeIcon icon={faDashboard} />,
-    children: null,
-  },
-  {
-    name: "saved-fundraisers",
-    text: "Saved Fundraisers",
-    link: "/don_account/saved-fundraisers",
-    icon: <FontAwesomeIcon icon={faDashboard} />,
-    children: null,
-  },
-  {
-    name: "recurring-donations",
-    text: "Recurring Donations",
-    link: "/don_account/recurring-donations",
     icon: <FontAwesomeIcon icon={faDashboard} />,
     children: null,
   },
@@ -100,6 +87,22 @@ var navItems = [
     link: "/don_account/profile-settings",
     icon: <FontAwesomeIcon icon={faDashboard} />,
     children: null,
+  },
+  {
+    name: "saved-fundraisers",
+    text: "Saved Fundraisers",
+    link: "/don_account/saved-fundraisers",
+    icon: <FontAwesomeIcon icon={faDashboard} />,
+    children: null,
+    disabled: true,
+  },
+  {
+    name: "recurring-donations",
+    text: "Recurring Donations",
+    link: "/don_account/recurring-donations",
+    icon: <FontAwesomeIcon icon={faDashboard} />,
+    children: null,
+    disabled: true,
   },
 ];
 
@@ -137,6 +140,7 @@ function DrawerComponent({ open, toggleDrawer }) {
 
   const onLogout = () => {
     dispatch(logOut());
+    dispatch(campaignApiSlice.util.resetApiState());
     navigate("/login");
   };
 
@@ -191,7 +195,7 @@ function DrawerComponent({ open, toggleDrawer }) {
               >
                 <ListItemButton
                   href={item.link}
-                  disabled={item.disable}
+                  disabled={item.disabled}
                   selected={
                     item.link === location.pathname ||
                     (item.link === "/don_account/donation-history" &&
@@ -262,7 +266,7 @@ function DrawerComponent({ open, toggleDrawer }) {
                   {...(item.name === "logout"
                     ? { onClick: onLogout }
                     : { href: item.link })}
-                  disabled={item.disable}
+                  disabled={item.disabled}
                   selected={item.link === location.pathname ? true : false}
                   // // onLoad={item.children ? checkOpenedParent(item) : undefined}
                   // onClick={

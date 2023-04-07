@@ -55,48 +55,49 @@ import AddIcon from "@mui/icons-material/Add";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import { logOut } from "../../../features/auth/authSlice";
-
+import { campaignApiSlice } from "../../../features/campaign/campaignApiSlice";
 // drawer width
 
 const drawerWidth = 250;
 var navItems = [
   {
-    name: "compaigns",
-    text: "Compaigns",
-    link: "/fr_account/compaigns",
+    name: "Campaigns",
+    text: "campaigns",
+    link: "/fr_account/campaigns",
     link2: "/fr_account",
     icon: <FontAwesomeIcon icon={faDashboard} />,
     children: null,
   },
   {
-    name: "new-compaign",
-    text: "New Compaign",
-    link: "/fr_account/new-compaign",
+    name: "new-campaign",
+    text: "New campaign",
+    link: "/fr_account/new-campaign",
     icon: <FontAwesomeIcon icon={faDashboard} />,
     children: null,
   },
-  {
-    name: "fundings",
-    text: "Fundings",
-    link: "/fr_account/fundings",
-    icon: <FontAwesomeIcon icon={faDashboard} />,
-    children: null,
-  },
-
-  {
-    name: "visual-statistics",
-    text: "Visual Statistics",
-    link: "/fr_account/visual-statistics",
-    icon: <FontAwesomeIcon icon={faDashboard} />,
-    children: null,
-  },
-
   {
     name: "profile-settings",
     text: "Profile Settings",
     link: "/fr_account/profile-settings",
     icon: <FontAwesomeIcon icon={faDashboard} />,
     children: null,
+  },
+
+  {
+    name: "campaign-statistics",
+    text: "Campaign Statistics",
+    link: "/fr_account/campaign-statistics",
+    icon: <FontAwesomeIcon icon={faDashboard} />,
+    children: null,
+    disabled: true,
+  },
+  {
+    name: "donation-history",
+    text: "Donation History",
+    link: "/fr_account/donation-history",
+    icon: <FontAwesomeIcon icon={faDashboard} />,
+    children: null,
+    disabled: true,
   },
 ];
 
@@ -135,6 +136,7 @@ function DrawerComponent({ open, toggleDrawer }) {
 
   const onLogout = () => {
     dispatch(logOut());
+    dispatch(campaignApiSlice.util.resetApiState());
     navigate("/login");
   };
 
@@ -190,10 +192,10 @@ function DrawerComponent({ open, toggleDrawer }) {
               >
                 <ListItemButton
                   href={item.link}
-                  disabled={item.disable}
+                  disabled={item.disabled}
                   selected={
                     location.pathname.match(item.link) ||
-                    (item.link === "/fr_account/compaigns" &&
+                    (item.link === "/fr_account/campaigns" &&
                       (location.pathname === "/fr_account" ||
                         location.pathname === "/fr_account/"))
                       ? true
@@ -257,7 +259,7 @@ function DrawerComponent({ open, toggleDrawer }) {
                   {...(item.name === "logout"
                     ? { onClick: onLogout }
                     : { href: item.link })}
-                  disabled={item.disable}
+                  disabled={item.disabled}
                   selected={item.link === location.pathname ? true : false}
                   // // onLoad={item.children ? checkOpenedParent(item) : undefined}
                   // onClick={

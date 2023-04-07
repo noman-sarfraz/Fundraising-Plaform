@@ -38,6 +38,7 @@ import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import SettingsIcon from "@mui/icons-material/Settings";
 import dp from "../../../../src/assets/images/dp.jpg";
+import default_DP from "../../../../src/assets/images/default_DP.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faDashboard,
@@ -51,6 +52,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut, selectCurrentToken } from "../../../features/auth/authSlice";
 import jwtDecode from "jwt-decode";
+import { campaignApiSlice } from "../../../features/campaign/campaignApiSlice";
+import { useGetDetailsQuery } from "../../../features/donor/donorApiSlice";
 
 const drawerWidth = 250;
 
@@ -79,11 +82,12 @@ function AppbarComponent({ open, toggleDrawer }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  
   const token = useSelector(selectCurrentToken);
   const { name, role } = jwtDecode(token);
+  const { data, isLoading } = useGetDetailsQuery();
 
   const onLogout = () => {
+    dispatch(campaignApiSlice.util.resetApiState());
     dispatch(logOut());
     navigate("/login");
   };
@@ -147,7 +151,7 @@ function AppbarComponent({ open, toggleDrawer }) {
             <Avatar
               size="large"
               alt="Profile Picture"
-              src={dp}
+              src={data?.donor?.image}
               sx={{
                 height: "24px",
                 width: "24px",
@@ -238,7 +242,7 @@ function AppbarComponent({ open, toggleDrawer }) {
                       <Avatar
                         // size="large"
                         alt="Profile Picture"
-                        src={dp}
+                        src={data?.donor?.image}
                         sx={{
                           height: "80px",
                           width: "80px",

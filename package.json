@@ -4,22 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "server": "npm run server --prefix backend",
     "client": "npm start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/noman-sarfraz/Fundraising-Plaform.git"
-  },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/noman-sarfraz/Fundraising-Plaform/issues"
-  },
-  "homepage": "https://github.com/noman-sarfraz/Fundraising-Plaform#readme",
   "dependencies": {
-    "concurrently": "^7.6.0"
+    "concurrently": "^8.0.1"
   }
 }

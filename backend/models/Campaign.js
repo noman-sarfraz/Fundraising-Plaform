@@ -5,12 +5,12 @@ const campaignSchema = new mongoose.Schema(
     title: {
       type: String,
       required: [true, "Please enter campaign title"],
-      maxlength: 50,
+      maxlength: 25,
     },
     category: {
       type: String,
       required: [true, "Please enter campaign category"],
-      maxlength: 30,
+      maxlength: 15,
     },
     country: {
       type: String,
@@ -31,32 +31,32 @@ const campaignSchema = new mongoose.Schema(
     image: String,
     status: {
       type: String,
-      enum: ["Pending", "Approved", "Rejected"],
+      enum: ["Pending", "Approved", "Rejected", "Stopped"],
       default: "Pending",
     },
-    // bankName: {
-    //   type: mongoose.Types.ObjectId,
-    //   ref: "Bank",
-    //   required: [true, "Please enter bank name"],
-    // },
-    // bankAccountNo: {
-    //   type: Number,
-    //   required: [true, "Please enter bank account number"],
-    //   validate: {
-    //     validator: function (val) {
-    //       return val.toString().length === 16;
-    //     },
-    //     message: (val) => `${val.value} has to be 16 digits`,
-    //   },
-    // },
+    bankName: {
+      type: mongoose.Types.ObjectId,
+      ref: "Bank",
+      required: [true, "Please enter bank name"],
+    },
+    bankAccountNo: {
+      type: Number,
+      required: [true, "Please enter bank account number"],
+      validate: {
+        validator: function (val) {
+          return val.toString().length === 16;
+        },
+        message: (val) => `${val.value} has to be 16 digits`,
+      },
+    },
     createdBy: {
       type: mongoose.Types.ObjectId,
       ref: "Fundraiser",
       required: [true, "please enter fundraiser id"],
-    },  
+    },
     organizerName: {
       type: String,
-      required: [true, "please enter fundraiser name"],
+      required: [true, "please enter organizer name"],
     },
   },
   { timestamps: true }
