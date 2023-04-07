@@ -28,6 +28,25 @@ export const studentsApiSlice = apiSlice.injectEndpoints({
         method: "DELETE",
       }),
     }),
+    createCampaign: builder.mutation({
+      query: (body) => ({
+        url: "/campaigns",
+        method: "POST",
+        body,
+      }),
+    }),
+    getCampaign: builder.query({
+      query: (id) => ({
+        url: `/campaigns/${id}`,
+        method: "GET",
+      }),
+    }),
+    getCampaigns: builder.query({
+      query: () => ({
+        url: `/campaigns`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -35,5 +54,10 @@ export const {
   useGetFundraiserDetailsQuery,
   useChangeFundraiserPasswordMutation,
   useDeleteFundraiserAccontMutation,
-  useUpdateFundraiserDetailsMutation
+  useUpdateFundraiserDetailsMutation,
+  useCreateCampaignMutation,
+  useGetCampaignQuery,
+  useGetCampaignsQuery,
+
+
 } = studentsApiSlice;

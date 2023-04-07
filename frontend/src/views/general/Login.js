@@ -68,8 +68,10 @@ function Login() {
         dispatch(setCredentials({ token }));
         if (data.role === "Fundraiser") {
           navigate("/fr_account");
-        } else {
+        } else if (data.role === "Donor") {
           navigate("/don_account");
+        } else if (data.role === "Admin") {
+          navigate("/admin");
         }
       }
     } catch (err) {
@@ -77,7 +79,6 @@ function Login() {
       toast.error(err.data?.msg ? err.data.msg : "Could not login user!");
       return;
     }
-    
   };
 
   return (

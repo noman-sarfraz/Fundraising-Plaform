@@ -7,6 +7,7 @@ import {
   CardMedia,
   Grid,
   LinearProgress,
+  Link,
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
@@ -52,13 +53,14 @@ const SideButtonText = styled(Box).attrs((props) => ({}))`
 
 function CampaignShortCard({
   campaign: {
+    id,
     image,
     category,
     city,
     title,
     story,
     raisedAmount,
-    goalAmount,
+    amountNeeded,
     donors,
   },
 }) {
@@ -89,7 +91,7 @@ function CampaignShortCard({
         }}
       >
         {/* Image */}
-        <Box>
+        <Box component={Link} href={`/compaign/${id}`}>
           <img
             src={image}
             alt="Paris"
@@ -118,7 +120,11 @@ function CampaignShortCard({
               {city}
             </Typography>
           </Box>
-          <Box sx={{ height: "56px" }}>
+          <Box
+            component={Link}
+            href={`/compaign/${id}`}
+            sx={{ height: "56px", textDecoration: "none", color: "black" }}
+          >
             <Typography sx={{ fontSize: 18, fontWeight: 550, mb: 2 }}>
               {title}
             </Typography>
@@ -135,7 +141,9 @@ function CampaignShortCard({
               </Typography>
               <StyledLinearProgress
                 variant="determinate"
-                value={Math.round((raisedAmount * 100) / goalAmount).toFixed(2)}
+                value={Math.round((raisedAmount * 100) / amountNeeded).toFixed(
+                  2
+                )}
                 sx={{
                   "& .MuiLinearProgress-bar1Determinate": {
                     backgroundColor: "#6EC052",
@@ -157,7 +165,7 @@ function CampaignShortCard({
                   fontWeight: 700,
                 }}
               >
-                {`${Math.round((raisedAmount * 100) / goalAmount)}% funded`}
+                {`${Math.round((raisedAmount * 100) / amountNeeded)}% funded`}
               </Typography>
             </Box>
           </Box>

@@ -51,7 +51,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import jwtDecode from 'jwt-decode'
+import jwtDecode from "jwt-decode";
 
 const drawerWidth = 250;
 
@@ -233,9 +233,7 @@ function AppbarComponent({ open, toggleDrawer }) {
                         }}
                       />
                     </Box>
-                    <Typography sx={{ fontSize: 18 }}>
-                      {name}
-                    </Typography>
+                    <Typography sx={{ fontSize: 18 }}>{name}</Typography>
                     <Typography>{role}</Typography>
                   </Box>
                 </Box>

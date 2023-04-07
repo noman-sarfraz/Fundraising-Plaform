@@ -11,16 +11,13 @@ import React from "react";
 import CampaignShortCard from "../../components/donor/cards/CampaignShortCard";
 import CampaignPic1 from "../../assets/images/Fundraise1.jpg";
 import styled from "styled-components";
+import { useGetApprovedCampaignsQuery } from "../../features/donor/donorApiSlice";
+import CircularLoader from "../../components/general/CircularLoader";
 
 const dummyCampaign = {
   image: CampaignPic1,
-  category: "Flood Relief",
-  city: "Lahore",
-  title: "Flood Relief Fund",
-  story: `As my previous 4 fundraisings, this one will have a goal to achieve too. If you don't know Adrian, he used to be the vocalist of the Polish death metal band Decapitated and recorded the album Organic Hallucinosis with them in 2006.`,
-  raisedAmount: 1000,
-  goalAmount: 7000,
-  donors: 5,
+  raisedAmount: 0,
+  donors: 0,
 };
 
 const StyledTextField = styled(TextField).attrs((props) => ({
@@ -66,8 +63,30 @@ const StyledLabel = styled(Typography).attrs((props) => ({}))`
   margin-bottom: 4px !important;
 `;
 
-const campaigns = [dummyCampaign, dummyCampaign, dummyCampaign, dummyCampaign];
+const campaigns = [];
 function SearchFundraisers() {
+
+  const {data, isLoading} = useGetApprovedCampaignsQuery();
+  if(isLoading) return <CircularLoader />
+  if(!isLoading) {
+    if (data?.campaigns) {
+      data.campaigns.forEach((campaign) => {
+        campaigns.push({
+          id: campaign._id,
+          title: campaign.title,
+          category: campaign.category,
+          story: campaign.story,
+          city: campaign.city,
+          image: CampaignPic1,
+          raisedAmount: 0,
+          amountNeeded: campaign.amountNeeded,
+          donors: 0,
+        });
+      });
+    }
+    console.log(data);
+  }
+
   return (
     <Box>
       <Box sx={{ py: 5, bgcolor: "#EEF5FE", mb: 5 }}>
@@ -156,6 +175,7 @@ function SearchFundraisers() {
       >
         {campaigns.map((campaign) => (
           <Grid item xs={12} sm={6} md={6} lg={4}>
+          
             <CampaignShortCard campaign={campaign} />
           </Grid>
         ))}

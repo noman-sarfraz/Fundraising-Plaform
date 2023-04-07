@@ -28,6 +28,12 @@ export const studentsApiSlice = apiSlice.injectEndpoints({
         method: "DELETE",
       }),
     }),
+    getApprovedCampaigns: builder.query({
+      query: () => ({
+        url: "/campaigns/get-approved",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -35,6 +41,7 @@ export const {
   useGetDetailsQuery,
   useUpdateDetailsMutation,
   useChangePasswordMutation,
-  useDeleteAccontMutation
+  useDeleteAccontMutation,
+  useGetApprovedCampaignsQuery,
 
 } = studentsApiSlice;

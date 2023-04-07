@@ -1,9 +1,17 @@
 const Campaign = require("../models/Campaign");
+const Fundraiser = require("../models/Fundraiser");
 const { StatusCodes } = require("http-status-codes");
 const CustomErrors = require("../errors");
 
 const getAllCampaigns = async (req, res) => {
-  const campaigns = await Campaign.find({});
+  const campaigns = await Campaign.find({}).sort("-createdAt");
+  res.status(StatusCodes.OK).json({ campaigns, count: campaigns.length });
+};
+
+const getApprovedCampaigns = async (req, res) => {
+  const campaigns = await Campaign.find({ status: "Approved" }).sort(
+    "-createdAt"
+  );
   res.status(StatusCodes.OK).json({ campaigns, count: campaigns.length });
 };
 
@@ -31,7 +39,8 @@ const getCampaign = async (req, res) => {
 
 const createCampaign = async (req, res) => {
   req.body.createdBy = req.user.userId;
-  req.body.endDate = new Date(req.body.endDate);
+  req.body.organizerName = req.user.name;
+  req.body.endDate = req.body.endDate ? new Date(req.body.endDate) : null;
 
   const campaign = await Campaign.create(req.body);
   res.status(StatusCodes.CREATED).json({ campaign });
@@ -93,7 +102,7 @@ const changeStatus = async (req, res) => {
   } = req;
 
   const campaign = await Campaign.findOneAndUpdate(
-    { _id: campaignId},
+    { _id: campaignId },
     req.body,
     { new: true, runValidators: true }
   );
@@ -109,6 +118,7 @@ const changeStatus = async (req, res) => {
 
 module.exports = {
   getAllCampaigns,
+  getApprovedCampaigns,
   getMyCampaigns,
   getCampaign,
   createCampaign,

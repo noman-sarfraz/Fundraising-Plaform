@@ -8,11 +8,21 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Box } from "@mui/system";
-import { Button, Typography } from "@mui/material";
+import { Button, Link, Typography } from "@mui/material";
 import styled from "styled-components";
 import { FaBan } from "react-icons/fa";
 import { FcApprove } from "react-icons/fc";
 import { TiTick } from "react-icons/ti";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import CircularLoader from "../../components/general/CircularLoader";
+import {
+  useChangeCampaignStatusMutation,
+  useGetAllCompaignsQuery,
+} from "./../../features/admin/adminApiSlice";
+import { toast } from "react-toastify";
+import { toNormalDate } from "../../utils/date";
+
 
 const StyledTableCell = Styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -45,49 +55,77 @@ const StyledButton = styled(Button).attrs({
   font-size: 12px !important;
 `;
 
-{
-  /* <Typography
-  sx={{
-    color: "#1D548F",
-    fontSize: "32px",
-    fontWeight: "bold",
-    textAlign: "center",
-    mb: 1,
-  }}
-  py: 5, bgcolor: "#EEF5FE", mb: 5
->
-  Search Fundraises
-</Typography>; */
-}
-
 const StyledHeader = styled(Typography).attrs({})`
   color: #1d548f !important;
-  font-size: 32px !important;
+  font-size: 30px !important;
   font-weight: bold !important;
   text-align: center !important;
   margin-bottom: 4px !important;
-  padding-top: 5rem !important;
-  padding-bottom: 5rem !important;
+  padding-top: 2rem !important;
+  padding-bottom: 3rem !important;
   background-color: #eef5fe;
 `;
 
-function createData(id, title, organizer, requestedAt, status) {
-  return { id, title, organizer, requestedAt, status };
-}
-
-
-const rows = [
-  createData(1, "Flood Relief Fund", "Maria Younus", "Jan 09, 2023", "Pending"),
-  createData(2, "Flood Relief Fund", "Maria Younus", "Jan 09, 2023", "Pending"),
-  createData(3, "Flood Relief Fund", "Maria Younus", "Jan 09, 2023", "Pending"),
-  createData(4, "Flood Relief Fund", "Maria Younus", "Jan 09, 2023", "Pending"),
-  createData(5, "Flood Relief Fund", "Maria Younus", "Jan 09, 2023", "Pending"),
-];
+const StyledStatus = styled(Typography).attrs({})`
+  font-size: 14px !important;
+  color: ${(props) =>
+    props.status === "Approved"
+      ? "#2E7D32"
+      : props.status === "Rejected"
+      ? "red"
+      : ""};
+`;
 
 export default function Dashboard() {
+  // const [campaigns, setCampaigns] = React.useState([]);
+  // var campaigns = [];
+
+  const [changeCampaignStatus, { isLoading }] =
+    useChangeCampaignStatusMutation();
+
+  const { data, isLoading: campaignsLoading } = useGetAllCompaignsQuery();
+
+  const changeStatus = async (id, status) => {
+    try {
+      const res = await changeCampaignStatus({ id, status });
+      if (res?.data?.campaign) {
+        toast.success("Status changed successfully! REFRESH PAGE");
+        console.log("campaign:", res);
+
+        // document.getElementById(`status-${id}`).innerHTML = 'a'
+        // (
+        // <h1 color="red">RED</h1>
+        // );
+        //   <StyledStatus status={res.data.campaign.status}>
+        //     {res.data.campaign.status}
+        //   </StyledStatus>
+        // );
+        // res.data.campaign.status;
+        // alert(res.campaign.status);
+      } else {
+        console.log("error", res);
+        toast.error("Status could not be changed!");
+      }
+    } catch (e) {
+      toast.error("Status could not be changed!");
+      console.log(e);
+    }
+  };
+
+  if (campaignsLoading) return <CircularLoader />;
+  if (!campaignsLoading) {
+    if (data?.campaigns) {
+      // campaigns = data.campaigns;
+      console.log(data.campaigns);
+    } else {
+      console.log("error",data);
+      return <h1>Error: Cannot fetch campaigns...</h1>;
+    }
+  }
+
   return (
     <Box>
-      <StyledHeader>Campaign Requests</StyledHeader>
+      <StyledHeader>Approval Requests</StyledHeader>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
@@ -95,42 +133,60 @@ export default function Dashboard() {
               <StyledTableCell></StyledTableCell>
               <StyledTableCell>Campaign Title</StyledTableCell>
               <StyledTableCell>Organizer</StyledTableCell>
-              <StyledTableCell>Requested At</StyledTableCell>
+              <StyledTableCell>Request Date</StyledTableCell>
               <StyledTableCell>Status</StyledTableCell>
-              <StyledTableCell align="right"></StyledTableCell>
+              <StyledTableCell align="center"></StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, index) => (
-              <StyledTableRow key={row.name}>
+            {data.campaigns.map((campaign, index) => (
+              <StyledTableRow key={campaign._id}>
                 <StyledTableCell component="th" scope="row">
                   {index + 1}
                 </StyledTableCell>
-                <StyledTableCell>{row.title}</StyledTableCell>
-                <StyledTableCell>{row.organizer}</StyledTableCell>
-                <StyledTableCell>{row.requestedAt}</StyledTableCell>
-                <StyledTableCell>{row.status}</StyledTableCell>
-                <StyledTableCell align="right">
-                  <Box
+                <StyledTableCell>
+                  <Link
+                    href={`compaign/${campaign._id}`}
                     sx={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      gap: "2px",
+                      textDecoration: "none",
                     }}
                   >
-                    <StyledButton
-                      color="success"
-                      startIcon={<TiTick color="#fff" size="18px" />}
+                    {campaign.title}
+                  </Link>
+                </StyledTableCell>
+                <StyledTableCell>{campaign.organizerName}</StyledTableCell>
+                {/* <StyledTableCell>Jan 12, 2023</StyledTableCell> */}
+                <StyledTableCell>{ toNormalDate(campaign.createdAt) }</StyledTableCell>
+                <StyledTableCell id={`status-${campaign._id}`}>
+                  <StyledStatus status={campaign.status}>
+                    {campaign.status}
+                  </StyledStatus>
+                </StyledTableCell>
+                <StyledTableCell align="right">
+                  {campaign.status === "Pending" && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        gap: "2px",
+                      }}
                     >
-                      Approve
-                    </StyledButton>
-                    <StyledButton
-                      color="warning"
-                      startIcon={<FaBan color="#fff" size="14px" />}
-                    >
-                      Reject
-                    </StyledButton>
-                  </Box>
+                      <StyledButton
+                        color="success"
+                        startIcon={<TiTick color="#fff" size="18px" />}
+                        onClick={() => changeStatus(campaign._id, "Approved")}
+                      >
+                        Approve
+                      </StyledButton>
+                      <StyledButton
+                        color="warning"
+                        startIcon={<FaBan color="#fff" size="14px" />}
+                        onClick={() => changeStatus(campaign._id, "Rejected")}
+                      >
+                        Reject
+                      </StyledButton>
+                    </Box>
+                  )}
                 </StyledTableCell>
               </StyledTableRow>
             ))}

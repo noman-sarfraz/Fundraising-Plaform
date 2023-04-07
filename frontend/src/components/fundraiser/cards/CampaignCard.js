@@ -1,4 +1,4 @@
-import { Delete } from "@mui/icons-material";
+import { Campaign, Delete } from "@mui/icons-material";
 import {
   Button,
   Card,
@@ -26,8 +26,7 @@ import { AiOutlineLink } from "react-icons/ai";
 import { AiOutlineDelete } from "react-icons/ai";
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import { TbEdit } from "react-icons/tb";
-
-
+import { useNavigate } from "react-router-dom";
 
 const StyledLinearProgress = styled(LinearProgress).attrs((props) => ({}))`
   height: 10px !important;
@@ -52,27 +51,24 @@ const SideButtonText = styled(Box).attrs((props) => ({}))`
   font-weight: 550;
 `;
 
+const startDate = "Jan 20, 2021";
+const image = CompaignPic1;
+const raisedAmount = 0;
+const donors = 0;
+const stripeAccount = "Not Connected";
+const paypalAccount = "Not Connected";
+
 function CampaignCard({
-  campaign: {
-    image,
-    category,
-    startDate,
-    title,
-    story,
-    raisedAmount,
-    goalAmount,
-    donors,
-    status,
-    stripeAccount,
-    paypalAccount,
-  },
+  campaign: { _id, category, title, story, amountNeeded, status },
 }) {
+  const navigate = useNavigate();
+
   return (
     <Box
       sx={{
         display: "flex",
         borderRadius: 5,
-        boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
+        boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
         width: "70%",
         mb: 10,
       }}
@@ -122,7 +118,7 @@ function CampaignCard({
           <Box sx={{ mb: 1 }}>
             <StyledLinearProgress
               variant="determinate"
-              value={Math.round((raisedAmount * 100) / goalAmount).toFixed(2)}
+              value={Math.round((raisedAmount * 100) / amountNeeded).toFixed(2)}
             />
           </Box>
           <Box sx={{ display: "flex", px: 1 }}>
@@ -139,7 +135,7 @@ function CampaignCard({
                 fontWeight: 600,
               }}
             >
-              {`Goal: PKR ${goalAmount.toFixed(2)}`}
+              {`Goal: PKR ${amountNeeded.toFixed(2)}`}
             </Typography>
           </Box>
         </Box>
@@ -200,6 +196,17 @@ function CampaignCard({
         }}
       >
         <Box sx={{ display: "flex", flexDirection: "column" }}>
+          <CampaignSideButton startIcon={<AiOutlineEye color="#0D54BC" />}>
+            <SideButtonText
+              color="#0D54BC"
+              onClick={() => navigate(`../compaign/${_id}`)}
+            >
+              View Campaign
+            </SideButtonText>
+          </CampaignSideButton>
+          <CampaignSideButton startIcon={<AiOutlineLink color="#0D54BC" />}>
+            <SideButtonText color="#0D54BC">Campaign Link</SideButtonText>
+          </CampaignSideButton>
           <CampaignSideButton
             startIcon={<AiOutlineDollarCircle color="#0D54BC" />}
           >
@@ -207,12 +214,7 @@ function CampaignCard({
               Add amount raised offline
             </SideButtonText>
           </CampaignSideButton>
-          <CampaignSideButton startIcon={<AiOutlineEye color="#0D54BC" />}>
-            <SideButtonText color="#0D54BC">View Campaign</SideButtonText>
-          </CampaignSideButton>
-          <CampaignSideButton startIcon={<AiOutlineLink color="#0D54BC" />}>
-            <SideButtonText color="#0D54BC">Campaign Link</SideButtonText>
-          </CampaignSideButton>
+
           <CampaignSideButton
             // color="teal"
             sx={{ mt: 3 }}

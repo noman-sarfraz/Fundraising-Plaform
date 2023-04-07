@@ -12,7 +12,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import stripeLogo from "../../../assets/images/stripe.svg";
 import paypalLogo from "../../../assets/images/paypal.svg";
@@ -22,6 +22,11 @@ import { AiOutlineLink } from "react-icons/ai";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { IoWarningOutline } from "react-icons/io5";
 import { AiOutlineWarning } from "react-icons/ai";
+import { useCreateCampaignMutation } from "../../../features/fundraiser/fundraiserApiSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { LoadingButton } from "@mui/lab";
 
 const Dot = () => {
   return (
@@ -39,7 +44,6 @@ const Dot = () => {
     </span>
   );
 };
-
 
 const StyledLabel = styled(Typography).attrs((props) => ({}))`
   color: #2f435a !important;
@@ -63,7 +67,42 @@ const StyledText = styled(Typography).attrs((props) => ({
   text-align: center !important;
 `;
 
-function Step3() {
+function Step3({ state, setState, stepNo, setStepNo, setStepDone }) {
+  const visited = () => {
+    setStepDone((stepDone) => ({ ...stepDone, [`step${stepNo}`]: true }));
+  };
+
+  useEffect(() => {
+    return () => {
+      visited();
+    };
+  }, []);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [createCampaign, { isLoading, error }] = useCreateCampaignMutation();
+
+  const sendForApproval = async () => {
+    try {
+      const { campaign } = await createCampaign(state).unwrap();
+      // console.log("done");
+      if (!campaign) {
+        toast.error("Could not send for approval!");
+        return;
+      } else {
+        // dispatch(setCredentials({ token }));
+        console.log('campaign:', campaign);
+      }
+    } catch (err) {
+      // console.log(err.data?.msg ? err.data.msg : "Could not login user!");
+      toast.error(
+        err.data?.msg ? err.data.msg : "Could not send for approval!"
+      );
+      return;
+    }
+  };
+
   return (
     <Box>
       <Box sx={{ p: 2 }}>
@@ -259,7 +298,7 @@ function Step3() {
             </Box>
           </Box>
 
-          <Button
+          <LoadingButton
             variant="contained"
             disableElevation
             sx={{
@@ -268,9 +307,11 @@ function Step3() {
               borderRadius: 10,
               textTransform: "none",
             }}
+            loading={isLoading}
+            onClick={sendForApproval}
           >
-            Continue
-          </Button>
+            Send for Approval
+          </LoadingButton>
         </Box>
       </Box>
     </Box>

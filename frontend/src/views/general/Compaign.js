@@ -71,7 +71,15 @@ function Compaign() {
   }
 
   return (
-    <Box>
+    <Box
+      sx={{
+        px: {
+          xs: 2,
+          md: 20,
+        },
+        py: 6,
+      }}
+    >
       <Typography
         color={"#1D548F"}
         sx={{

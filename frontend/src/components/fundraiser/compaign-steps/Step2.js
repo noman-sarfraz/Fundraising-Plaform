@@ -9,11 +9,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import image from "../../../assets/images/Fundraise1.jpg";
 import { GrAddCircle } from "react-icons/gr";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import { useForm } from "react-hook-form";
 
 const StyledTextField = styled(TextField).attrs((props) => ({
   fullWidth: true,
@@ -24,7 +25,6 @@ const StyledTextField = styled(TextField).attrs((props) => ({
     },
   },
   type: "text",
-  required: true,
 }))`
   margin-bottom: 16px !important;
   margin-top: 16px !important;
@@ -81,7 +81,40 @@ const StyledText = styled(Typography).attrs((props) => ({
   color: #798798;
 `;
 
-function Step2() {
+function Step2({ state, setState, stepNo, setStepNo, setStepDone }) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const visited = () => {
+    setStepDone((stepDone) => ({ ...stepDone, [`step${stepNo}`]: true }));
+  };
+
+  useEffect(() => {
+    return () => {
+      visited();
+    };
+  }, []);
+
+  const onContinue = (data) => {
+    setState((state) => ({
+      ...state,
+      ...data,
+    }));
+    setStepNo((stepNo) => stepNo + 1);
+    // setStepDone((stepDone) => ({ ...stepDone, [`step${stepNo}`]: true }));
+
+    // console.log({
+    //   ...data,
+    //   city: cityValue,
+    //   country: countryValue,
+    //   donationType: typeValue,
+    //   category: categoryValue,
+    // });
+  };
+
   return (
     <Box>
       <Box sx={{ p: 2 }}>
@@ -97,60 +130,71 @@ function Step2() {
             },
           }}
         >
-          <Box sx={{ mb: 5 }}>
-            <StyledHead>Your fundraiser story</StyledHead>
-            <StyledText>
-              Explain why you're raising money, what the funds will be used for,
-              and how much you value the support
-            </StyledText>
-            <StyledTextArea placeholder="Write your story here..." />
-          </Box>
-          <Box sx={{ mb: 5 }}>
-            <StyledHead>Upload cover photo</StyledHead>
-            <StyledText>
-              You can select and upload several your cover picture.
-            </StyledText>
-            <Box>
-              <img
-                src={image}
-                alt="Campaign Cover"
-                style={{
-                  borderRadius: "10px",
-                  width: "100%",
-                  height: "250px",
-                  objectFit: "cover",
-                }}
+          <form onSubmit={handleSubmit((data) => onContinue(data))}>
+            <Box sx={{ mb: 5 }}>
+              <StyledHead>Your fundraiser story</StyledHead>
+              <StyledText>
+                Explain why you're raising money, what the funds will be used
+                for, and how much you value the support
+              </StyledText>
+              <StyledTextArea
+                defaultValue={state.fundraiserStory}
+                {...register("story", { required: true })}
+                placeholder="Write your story here..."
               />
             </Box>
-            <AddCoverPhotoButton
-              fullWidth
-              startIcon={<AddCircleOutlineIcon sx={{color: "#798798"}} />}
-            >
-              <span style={{ color: "#798798" }}>Add Photo</span>
-            </AddCoverPhotoButton>
-          </Box>
-          <Box sx={{ mb: 5 }}>
-            <StyledHead>Your video URL</StyledHead>
-            <StyledText>
-              The inclusion of a personalized video can help your fundraiser
-              raise more money. We support links from YouTube and Vimeo. Simply
-              copy paste your video link into the field below.
-            </StyledText>
-            <StyledTextField placeholder="http://" />
-          </Box>
+            <Box sx={{ mb: 5 }}>
+              <StyledHead>Upload cover photo</StyledHead>
+              <StyledText>
+                You can select and upload your cover picture.
+              </StyledText>
+              <Box>
+                <img
+                  src={image}
+                  alt="Campaign Cover"
+                  style={{
+                    borderRadius: "10px",
+                    width: "100%",
+                    height: "250px",
+                    objectFit: "cover",
+                  }}
+                />
+              </Box>
+              <AddCoverPhotoButton
+                fullWidth
+                startIcon={<AddCircleOutlineIcon sx={{ color: "#798798" }} />}
+              >
+                <span style={{ color: "#798798" }}>Add Photo</span>
+              </AddCoverPhotoButton>
+            </Box>
+            <Box sx={{ mb: 5 }}>
+              <StyledHead>Your video URL</StyledHead>
+              <StyledText>
+                The inclusion of a personalized video can help your fundraiser
+                raise more money. Simply copy paste your valid video link into
+                the field below.
+              </StyledText>
+              <StyledTextField
+                defaultValue={state.videoURL}
+                {...register("videoURL")}
+                placeholder="http://"
+              />
+            </Box>
 
-          <Button
-            variant="contained"
-            disableElevation
-            sx={{
-              width: "100%",
-              py: 1,
-              borderRadius: 10,
-              textTransform: "none",
-            }}
-          >
-            Continue
-          </Button>
+            <Button
+              variant="contained"
+              disableElevation
+              type="submit"
+              sx={{
+                width: "100%",
+                py: 1,
+                borderRadius: 10,
+                textTransform: "none",
+              }}
+            >
+              Continue
+            </Button>
+          </form>
         </Box>
       </Box>
     </Box>

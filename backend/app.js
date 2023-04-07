@@ -30,6 +30,7 @@ const adminRoutes = require("./routes/adminRouter");
 const bankRoutes = require("./routes/bankRouter");
 const campaignRoutes = require("./routes/campaignRouter");
 const uploadsRoutes = require("./routes/uploadsRouter");
+const tempRoutes = require("./routes/tempRouter");
 
 // error handlers
 const notFoundMiddleware = require("./middleware/not-found");
@@ -58,7 +59,10 @@ app.use("/api/v1/donors", authenticateDonor, donorRoutes);
 app.use("/api/v1/admins", authenticateAdmin, adminRoutes);
 app.use("/api/v1/banks", bankRoutes);
 app.use("/api/v1/campaigns", campaignRoutes);
-app.use("/api/v1/uploads",uploadsRoutes)
+app.use("/api/v1/uploads", uploadsRoutes);
+// public for temp use
+app.use("/api/v1/temp",tempRoutes)
+
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

@@ -2,7 +2,7 @@ import { Box, Divider, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import StartFundraiseStep from "../../components/fundraiser/compaign-steps/StartFundraiseStep";
 
-function Step({ stepNumber, stepName, selected, onClick }) {
+function Step({ stepNumber, stepName, selected, disabled, onClick }) {
   return (
     <Box
       sx={{
@@ -28,14 +28,15 @@ function Step({ stepNumber, stepName, selected, onClick }) {
           borderRadius: "50%",
           textAlign: "center",
           mr: 1,
-          cursor: "pointer",
+          cursor: !disabled ? "pointer" : "default",
         }}
-        onClick={onClick}
+        color={selected ? "#5A9AE5" : disabled ? "#ccc" : "#3F5267"}
+        onClick={!disabled ? onClick : null}
       >
         {stepNumber}
       </Typography>
       <Typography
-        color={selected ? "#5A9AE5" : "#3F5267"}
+        color={selected ? "#5A9AE5" : disabled ? "#ccc" : "#3F5267"}
         sx={{ fontWeight: "bold" }}
       >
         {stepName}
@@ -50,9 +51,31 @@ const stepHeaders = [
   { stepNo: 3, heading: "Payment Methods" },
 ];
 
+const stepDoneInit = { step1: false, step2: false, step3: false };
+
 function NewCompaign() {
   const [stepNo, setStepNo] = useState(1);
+  const [stepDone, setStepDone] = useState(stepDoneInit);
 
+  const [state, setState] = useState({
+    title: "",
+    category: "",
+    country: "",
+    city: "",
+    amountNeeded: "",
+    endDate: "",
+    status: 'Pending',
+    bankName: 'National Bank of Pakistan',
+    bankAccountNo: 1234567890123456,
+    donationType: "",
+    story: "",
+    videoURL: "",
+
+  });
+
+  
+
+  console.log(state);
   return (
     <Box>
       <Box>
@@ -84,13 +107,22 @@ function NewCompaign() {
           <Step
             stepNumber={stepHeader.stepNo}
             stepName={stepHeader.heading}
+            stepDone={stepHeader.done}
             selected={stepNo === stepHeader.stepNo}
+            disabled={!stepDone[`step${stepHeader.stepNo}`]}
+            // disabled={false}
             onClick={() => setStepNo(stepHeader.stepNo)}
           />
         ))}
       </Box>
       <Divider sx={{ mb: 2 }} />
-      <StartFundraiseStep stepNo={stepNo} />
+      <StartFundraiseStep
+        stepNo={stepNo}
+        setStepNo={setStepNo}
+        state={state}
+        setState={setState}
+        setStepDone={setStepDone}
+      />
     </Box>
   );
 }

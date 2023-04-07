@@ -11,12 +11,16 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import CampaignPic1 from "../../assets/images/Fundraise1.jpg";
 import CampaignPic2 from "../../assets/images/Fundraise2.jpg";
 import CampaignPic3 from "../../assets/images/Fundraise3.jpg";
 import LengthyPic from "../../assets/images/lengthyImage.jpg";
 import CampaignCard from "../../components/fundraiser/cards/CampaignCard";
+import CircularLoader from "../../components/general/CircularLoader";
+import { useGetCampaignsQuery } from "../../features/fundraiser/fundraiserApiSlice";
 
 const dummyCampaign = {
   image: CampaignPic1,
@@ -33,6 +37,25 @@ const dummyCampaign = {
 };
 
 function Compaigns() {
+  const { data, isLoading, isError, isSuccess, error } =
+    useGetCampaignsQuery();
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  if (isLoading) {
+    return <CircularLoader />;
+  }
+  if (isError || !data.campaigns) {
+    console.log(error);
+    return <h1>Error</h1>;
+  }
+
+  let campaigns
+  if (isSuccess) {
+    campaigns = data.campaigns;
+  }
+
   return (
     <Box>
       <Typography
@@ -65,8 +88,8 @@ function Compaigns() {
           py: 2,
         }}
       >
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map(() => (
-          <CampaignCard campaign={dummyCampaign} />
+        {campaigns.map((campaign) => (
+          <CampaignCard campaign={campaign} />
         ))}
       </Box>
     </Box>

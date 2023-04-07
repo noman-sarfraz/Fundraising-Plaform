@@ -62,19 +62,19 @@ const drawerWidth = 250;
 var navItems = [
   {
     name: "dashboard",
-    text: "Dashboard",
+    text: "Home",
     link: "/admin",
     // link2: "/admin/dashboard",
     icon: <FontAwesomeIcon icon={faDashboard} />,
     children: null,
   },
-  {
-    name: "profile-settings",
-    text: "Profile Settings",
-    link: "/admin/profile-settings",
-    icon: <FontAwesomeIcon icon={faDashboard} />,
-    children: null,
-  },
+  // {
+  //   name: "profile-settings",
+  //   text: "Profile Settings",
+  //   link: "/admin/profile-settings",
+  //   icon: <FontAwesomeIcon icon={faDashboard} />,
+  //   children: null,
+  // },
 ];
 
 var navItems2 = [
@@ -97,8 +97,8 @@ function DrawerComponent({ open, toggleDrawer }) {
   const navigate = useNavigate();
 
   const onLogout = () => {
-    // dispatch(logOut());
-    // navigate("/login");
+    dispatch(logOut());
+    navigate("/login");
   };
 
   const handleToggleDrawer = () => {

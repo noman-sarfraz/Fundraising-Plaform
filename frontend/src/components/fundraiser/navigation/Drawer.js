@@ -150,6 +150,7 @@ function DrawerComponent({ open, toggleDrawer }) {
     }
   }, [open]);
 
+  console.log("rendering drawer");
   const drawer = (
     <Box
       sx={{

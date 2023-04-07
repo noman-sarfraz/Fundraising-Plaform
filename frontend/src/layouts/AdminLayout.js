@@ -37,15 +37,15 @@ function MainLayout() {
     <div>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        {/* <Appbar /> */}
+        {/* Appbar */}
         <Appbar open={open} toggleDrawer={toggleDrawer} />
         <Box sx={{ display: "flex", width: "100%" }}>
+          {/* Drawer */}
           <Drawer
             open={open}
             isMobile={theme.breakpoints.down("sm")}
             toggleDrawer={toggleDrawer}
           />
-          {/* <Toolbar /> */}
           <Box
             sx={{
               flexGrow: "1",
@@ -53,7 +53,6 @@ function MainLayout() {
             }}
           >
             <Main open={open} sx={{ mt: 5, width: "100%" }}>
-              {/* <PageHead /> */}
               <Box
                 sx={{
                   bgcolor: "white",

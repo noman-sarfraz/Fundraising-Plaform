@@ -84,8 +84,8 @@ function AppbarComponent({ open, toggleDrawer }) {
   const { name, role } = jwtDecode(token);
 
   const onLogout = () => {
-  //   dispatch(logOut());
-  //   navigate("/login");
+    dispatch(logOut());
+    navigate("/login");
   };
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -261,7 +261,7 @@ function AppbarComponent({ open, toggleDrawer }) {
                     borderRadius: 0,
                   }}
                   onClick={() => {
-                    navigate("/fr_account/profile-settings");
+                    navigate("/admin/profile-settings");
                     handleProfileClose();
                   }}
                 >
