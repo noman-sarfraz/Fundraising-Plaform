@@ -31,7 +31,7 @@ const campaignSchema = new mongoose.Schema(
     image: String,
     status: {
       type: String,
-      enum: ["Pending", "Approved", "Rejected", "Stopped"],
+      enum: ["Pending", "Approved", "Rejected"],
       default: "Pending",
     },
     bankName: {
@@ -53,10 +53,6 @@ const campaignSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: "Fundraiser",
       required: [true, "please enter fundraiser id"],
-    },
-    organizerName: {
-      type: String,
-      required: [true, "please enter organizer name"],
     },
   },
   { timestamps: true }

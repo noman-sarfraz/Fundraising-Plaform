@@ -1,8 +1,13 @@
 const Donor = require("../models/Donor");
 const { StatusCodes } = require("http-status-codes");
-const { BadRequestError, NotFoundError, UnauthenticatedError } = require("../errors");
+const {
+  BadRequestError,
+  NotFoundError,
+  UnauthenticatedError,
+} = require("../errors");
 const bcrypt = require("bcryptjs");
-
+const createTokenUser = require("../utils/createTokenUser");
+const { attachCookiesToResponse } = require("../utils/jwt");
 
 const getDonor = async (req, res) => {
   const { userId: donorId } = req.user;
@@ -18,14 +23,15 @@ const getDonor = async (req, res) => {
 
 const updateDonor = async (req, res) => {
   const { userId: donorId } = req.user;
-  const donor = await Donor.findByIdAndUpdate(
-    { _id: donorId },
-    req.body,
-    { new: true, runValidators: true }
-  );
+  const donor = await Donor.findByIdAndUpdate({ _id: donorId }, req.body, {
+    new: true,
+    runValidators: true,
+  });
   if (!donor) {
     throw new NotFoundError(`No donor with id: ${donorId}`);
   }
+  const tokenUser = createTokenUser(donor);
+  attachCookiesToResponse({ res, user: tokenUser });
   res.status(StatusCodes.OK).json({ donor });
 };
 
@@ -50,9 +56,7 @@ const changePassword = async (req, res) => {
     { new: true, runValidators: true }
   );
   if (!newDonor) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ msg: "Something went wrong" });
+    res.status(StatusCodes.BAD_REQUEST).json({ msg: "Something went wrong" });
   }
   res.status(StatusCodes.OK).json({ newPassword: newPassword });
 };
