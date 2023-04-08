@@ -44,7 +44,7 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
 //           Admin
 //         </Typography>
 //         <Link to="/">Dashboard</Link>
-//         <Link to="/new-campaign">New campaign</Link>
+//         <Link to="/new-compaign">New Compaign</Link>
 //       </Toolbar>
 //     </Box>
 //   );

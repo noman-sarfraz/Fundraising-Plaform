@@ -1,8 +1,8 @@
 import { Box, Divider, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
-import StartFundraiseStep from "../../components/fundraiser/compaign-steps/StartFundraiseStep";
+import React from "react";
+import Step1 from "../../components/fundraiser/compaign-steps/Step1";
 
-function Step({ stepNumber, stepName, selected, disabled, onClick }) {
+function Step({ stepNumber, stepName, selected }) {
   return (
     <Box
       sx={{
@@ -28,15 +28,12 @@ function Step({ stepNumber, stepName, selected, disabled, onClick }) {
           borderRadius: "50%",
           textAlign: "center",
           mr: 1,
-          cursor: !disabled ? "pointer" : "default",
         }}
-        color={selected ? "#5A9AE5" : disabled ? "#ccc" : "#3F5267"}
-        onClick={!disabled ? onClick : null}
       >
         {stepNumber}
       </Typography>
       <Typography
-        color={selected ? "#5A9AE5" : disabled ? "#ccc" : "#3F5267"}
+        color={selected ? "#5A9AE5" : "#3F5267"}
         sx={{ fontWeight: "bold" }}
       >
         {stepName}
@@ -45,37 +42,7 @@ function Step({ stepNumber, stepName, selected, disabled, onClick }) {
   );
 }
 
-const stepHeaders = [
-  { stepNo: 1, heading: "Get Started" },
-  { stepNo: 2, heading: "Fundraiser Story" },
-  { stepNo: 3, heading: "Payment Methods" },
-];
-
-const stepDoneInit = { step1: false, step2: false, step3: false };
-
 function NewCompaign() {
-  const [stepNo, setStepNo] = useState(1);
-  const [stepDone, setStepDone] = useState(stepDoneInit);
-
-  const [state, setState] = useState({
-    title: "",
-    category: "",
-    country: "",
-    city: "",
-    amountNeeded: "",
-    endDate: "",
-    status: 'Pending',
-    bankName: 'National Bank of Pakistan',
-    bankAccountNo: 1234567890123456,
-    donationType: "",
-    story: "",
-    videoURL: "",
-
-  });
-
-  
-
-  console.log(state);
   return (
     <Box>
       <Box>
@@ -103,26 +70,13 @@ function NewCompaign() {
           my: 2,
         }}
       >
-        {stepHeaders.map((stepHeader) => (
-          <Step
-            stepNumber={stepHeader.stepNo}
-            stepName={stepHeader.heading}
-            stepDone={stepHeader.done}
-            selected={stepNo === stepHeader.stepNo}
-            disabled={!stepDone[`step${stepHeader.stepNo}`]}
-            // disabled={false}
-            onClick={() => setStepNo(stepHeader.stepNo)}
-          />
-        ))}
+        <Step stepNumber={1} stepName={"Get Started"} selected={true} />
+        <Step stepNumber={2} stepName={"Fundraiser Story"} />
+        <Step stepNumber={3} stepName={"Final Details"} />
+        <Step stepNumber={4} stepName={"Payment Methods"} />
       </Box>
       <Divider sx={{ mb: 2 }} />
-      <StartFundraiseStep
-        stepNo={stepNo}
-        setStepNo={setStepNo}
-        state={state}
-        setState={setState}
-        setStepDone={setStepDone}
-      />
+      <Step1 />
     </Box>
   );
 }

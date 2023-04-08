@@ -51,10 +51,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import jwtDecode from "jwt-decode";
-import { campaignApiSlice } from "../../../features/campaign/campaignApiSlice";
-import { useGetFundraiserDetailsQuery } from "../../../features/fundraiser/fundraiserApiSlice";
-import CircularLoader from "../../general/CircularLoader";
+import jwtDecode from 'jwt-decode'
 
 const drawerWidth = 250;
 
@@ -85,13 +82,9 @@ function AppbarComponent({ open, toggleDrawer }) {
 
   const token = useSelector(selectCurrentToken);
   const { name, role } = jwtDecode(token);
-  const { data } = useGetFundraiserDetailsQuery();
 
   const onLogout = () => {
-    dispatch(campaignApiSlice.util.resetApiState());
-
     dispatch(logOut());
-
     navigate("/login");
   };
 
@@ -150,7 +143,7 @@ function AppbarComponent({ open, toggleDrawer }) {
             <Avatar
               size="large"
               alt="Profile Picture"
-              src={data?.fundraiser?.image}
+              src={default_DP}
               sx={{
                 height: "24px",
                 width: "24px",
@@ -232,7 +225,7 @@ function AppbarComponent({ open, toggleDrawer }) {
                       <Avatar
                         // size="large"
                         alt="Profile Picture"
-                        src={data?.fundraiser?.image}
+                        src={default_DP}
                         sx={{
                           height: "80px",
                           width: "80px",
@@ -240,7 +233,9 @@ function AppbarComponent({ open, toggleDrawer }) {
                         }}
                       />
                     </Box>
-                    <Typography sx={{ fontSize: 18 }}>{name}</Typography>
+                    <Typography sx={{ fontSize: 18 }}>
+                      {name}
+                    </Typography>
                     <Typography>{role}</Typography>
                   </Box>
                 </Box>

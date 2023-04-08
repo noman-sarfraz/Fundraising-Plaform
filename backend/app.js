@@ -37,6 +37,8 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
 
 // extra required packages
 const cors = require("cors");
+const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
 
 // MAIN WORK
 
@@ -46,19 +48,22 @@ app.use(
     useTempFiles: true,
   })
 );
+
 app.use(express.json());
+app.use(morgan("tiny"));
+app.use(cookieParser(process.env.JWT_SECRET));
 
 app.get("/", (req, res) => {
   res.send("Fundaising Platform API");
 });
 
 app.use("/api/v1/", authRoutes);
-app.use("/api/v1/fundraisers", authenticateFundraiser, fundraiserRoutes);
+app.use("/api/v1/fundraisers", fundraiserRoutes);
 app.use("/api/v1/donors", authenticateDonor, donorRoutes);
 app.use("/api/v1/admins", authenticateAdmin, adminRoutes);
 app.use("/api/v1/banks", bankRoutes);
 app.use("/api/v1/campaigns", campaignRoutes);
-app.use("/api/v1/uploads",uploadsRoutes)
+app.use("/api/v1/uploads", uploadsRoutes);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

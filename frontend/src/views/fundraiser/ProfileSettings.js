@@ -25,9 +25,6 @@ import {
   useGetFundraiserDetailsQuery,
   useUpdateFundraiserDetailsMutation,
 } from "../../features/fundraiser/fundraiserApiSlice";
-import PageHeader from "../../components/general/PageHeader";
-import StyledFileInput from "../../components/general/StyledFileInput";
-import { useUploadImageMutation } from "../../features/uploads/uploadsApiSlice";
 
 const StyledTextField = styled(TextField).attrs((props) => ({
   fullWidth: true,
@@ -94,10 +91,6 @@ const StyledHead = styled(Typography).attrs((props) => ({
 // }
 
 function ProfileSettings() {
-  const [uploadImage, { isLoading: isImageLoading }] = useUploadImageMutation();
-  const [image, setImage] = useState(null);
-  
-
   const {
     register,
     handleSubmit,
@@ -109,7 +102,7 @@ function ProfileSettings() {
   const [openPasswordDialogue, setOpenPasswordDialogue] = useState(false);
 
   let fundraiser = null;
- 
+
   const { data: details, isLoading: areDetailsLoading } =
     useGetFundraiserDetailsQuery();
   const [updateFundraiserDetails, { isLoading }] =
@@ -117,10 +110,7 @@ function ProfileSettings() {
 
   const saveDetails = async (data) => {
     try {
-      const res = await updateFundraiserDetails({
-        ...data,
-        image: image,
-      }).unwrap();
+      const res = await updateFundraiserDetails(data).unwrap();
       if (res?.fundraiser) {
         setOpenUpdateNotification(true);
         // toast.success("Details saved successfully!");
@@ -149,27 +139,23 @@ function ProfileSettings() {
     fundraiser = details.fundraiser;
   }
 
-  if (!image && fundraiser?.image) {
-    setImage(fundraiser.image);
-  }
-
-  const addProfilePicture = async (e) => {
-    const formData = new FormData();
-    formData.append("image", e.target.files[0]);
-    try {
-      const { data } = await uploadImage(formData);
-      setImage(data.image.src);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <>
-      <PageHeader
-        header={"Profile Settings"}
-        text={"Manage your profile settings"}
-      />
+      <Typography
+        color={"#1D548F"}
+        sx={{
+          fontSize: "28px",
+          fontWeight: "bold",
+          px: {
+            xs: 2,
+            md: 6,
+          },
+          pt: 2,
+          mb: 3,
+        }}
+      >
+        Profile Settings
+      </Typography>
 
       <Box
         sx={{
@@ -214,11 +200,10 @@ function ProfileSettings() {
             <StyledLabel>Email</StyledLabel>
             <StyledTextField
               defaultValue={fundraiser.email}
-              // {...register("email", { required: true })}
-              // required
-              // type="email"
-              // placeholder="Enter Email"
-              disabled
+              {...register("email", { required: true })}
+              required
+              type="email"
+              placeholder="Enter Email"
             />
             <StyledLabel>About Me</StyledLabel>
             <StyledTextField
@@ -228,6 +213,27 @@ function ProfileSettings() {
               multiline
               rows={4}
             />
+          </Box>
+          <Box sx={{ mb: 8 }}>
+            <StyledHead>Password</StyledHead>
+            <Button
+              variant="contained"
+              disableElevation
+              size="small"
+              // color="error"
+              sx={{
+                // width: "100%",
+                py: 1,
+                px: 3,
+                mt: 1,
+                borderRadius: 10,
+                textTransform: "none",
+              }}
+              startIcon={<RiLockPasswordFill />}
+              onClick={handleChangePassword}
+            >
+              Change Password
+            </Button>
           </Box>
           <Box sx={{ mb: 5 }}>
             <StyledHead>Location</StyledHead>
@@ -243,38 +249,6 @@ function ProfileSettings() {
               {...register("country")}
               placeholder="Enter Country"
             />
-          </Box>
-
-          <Box sx={{ mb: 8 }}>
-            <StyledHead>Profile Picture</StyledHead>
-            {isImageLoading ? (
-              <CircularLoader />
-            ) : image ? (
-              <Box sx={{ my: 2 }}>
-                <img
-                  src={image}
-                  alt="Profile"
-                  style={{
-                    borderRadius: "10px",
-                    width: "100%",
-                    height: "250px",
-                    objectFit: "cover",
-                  }}
-                />
-              </Box>
-            ) : (
-              <Typography
-                sx={{
-                  textAlign: "center",
-                  fontSize: 14,
-                  fontStyle: "italic",
-                  mb: 2,
-                }}
-              >
-                No Profile Picture.
-              </Typography>
-            )}
-            <StyledFileInput onChange={addProfilePicture} />
           </Box>
 
           <LoadingButton
@@ -293,29 +267,7 @@ function ProfileSettings() {
             Save
           </LoadingButton>
         </form>
-        <Box sx={{ mb: 8 }}>
-          <StyledHead>Password</StyledHead>
-          <Button
-            variant="contained"
-            disableElevation
-            size="small"
-            // color="error"
-            sx={{
-              // width: "100%",
-              py: 1,
-              px: 3,
-              mt: 1,
-              borderRadius: 10,
-              textTransform: "none",
-            }}
-            startIcon={<RiLockPasswordFill />}
-            onClick={handleChangePassword}
-          >
-            Change Password
-          </Button>
-        </Box>
-
-        <Box sx={{ mb: 5 }}>
+        <Box sx={{mb: 5}}>
           <StyledHead color="red">Danger Zone</StyledHead>
           <LoadingButton
             variant="contained"

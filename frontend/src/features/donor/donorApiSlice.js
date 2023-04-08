@@ -1,13 +1,12 @@
 import { apiSlice } from "../../app/api/apiSlice";
 
-export const donorApiSlice = apiSlice.injectEndpoints({
+export const studentsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getDetails: builder.query({
       query: () => ({
         url: "/donors",
         method: "GET",
       }),
-      providesTags: ["donors"],
     }),
     updateDetails: builder.mutation({
       query: (body) => ({
@@ -15,7 +14,6 @@ export const donorApiSlice = apiSlice.injectEndpoints({
         method: "PATCH",
         body,
       }),
-      invalidatesTags: ["donors"],
     }),
     changePassword: builder.mutation({
       query: (body) => ({
@@ -23,14 +21,12 @@ export const donorApiSlice = apiSlice.injectEndpoints({
         method: "PATCH",
         body,
       }),
-      invalidatesTags: ["donors"],
     }),
     deleteAccont: builder.mutation({
       query: () => ({
         url: "/donors",
         method: "DELETE",
       }),
-      invalidatesTags: ["donors"],
     }),
   }),
 });
@@ -39,5 +35,6 @@ export const {
   useGetDetailsQuery,
   useUpdateDetailsMutation,
   useChangePasswordMutation,
-  useDeleteAccontMutation,
-} = donorApiSlice;
+  useDeleteAccontMutation
+
+} = studentsApiSlice;

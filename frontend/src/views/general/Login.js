@@ -33,28 +33,14 @@ const StyledTextField = styled(TextField).attrs((props) => ({
   },
 }))``;
 
-
 const StyledSelect = styled(Select).attrs((props) => ({
   fullWidth: true,
   size: "small",
-  MenuProps: {
-    PaperProps: {
-      sx: {
-        "& .MuiMenuItem-root": {
-          fontSize: 14,
-          // padding: 0,
-        },
-        "& .MuiList-padding": {
-          padding: 0,
-        },
-      },
-    },
+  sx: {
+    fontSize: 14,
+    mb: 1,
   },
-}))`
-  font-size: 14px !important;
-  margin-bottom: 8px !important;
-`;
-
+}))``;
 
 function Login() {
   const {
@@ -82,10 +68,8 @@ function Login() {
         dispatch(setCredentials({ token }));
         if (data.role === "Fundraiser") {
           navigate("/fr_account");
-        } else if (data.role === "Donor") {
+        } else {
           navigate("/don_account");
-        } else if (data.role === "Admin") {
-          navigate("/admin");
         }
       }
     } catch (err) {
@@ -93,6 +77,7 @@ function Login() {
       toast.error(err.data?.msg ? err.data.msg : "Could not login user!");
       return;
     }
+    
   };
 
   return (
@@ -174,7 +159,6 @@ function Login() {
             <MenuItem value={"none"} disabled>
               Login As
             </MenuItem>
-            <MenuItem value={"Admin"}>Admin</MenuItem>
             <MenuItem value={"Fundraiser"}>Fundraiser</MenuItem>
             <MenuItem value={"Donor"}>Donor</MenuItem>
           </StyledSelect>

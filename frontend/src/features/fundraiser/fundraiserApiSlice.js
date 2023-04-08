@@ -1,13 +1,12 @@
 import { apiSlice } from "../../app/api/apiSlice";
 
-export const fundraiserApiSlice = apiSlice.injectEndpoints({
+export const studentsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getFundraiserDetails: builder.query({
       query: () => ({
         url: "/fundraisers",
         method: "GET",
       }),
-      providesTags: ["fundraisers"],
     }),
     updateFundraiserDetails: builder.mutation({
       query: (body) => ({
@@ -15,7 +14,6 @@ export const fundraiserApiSlice = apiSlice.injectEndpoints({
         method: "PATCH",
         body,
       }),
-      invalidatesTags: ["fundraisers"],
     }),
     changeFundraiserPassword: builder.mutation({
       query: (body) => ({
@@ -23,14 +21,12 @@ export const fundraiserApiSlice = apiSlice.injectEndpoints({
         method: "PATCH",
         body,
       }),
-      invalidatesTags: ["fundraisers"],
     }),
     deleteFundraiserAccont: builder.mutation({
       query: () => ({
         url: "/fundraisers",
         method: "DELETE",
       }),
-      invalidatesTags: ["fundraisers"],
     }),
   }),
 });
@@ -39,5 +35,5 @@ export const {
   useGetFundraiserDetailsQuery,
   useChangeFundraiserPasswordMutation,
   useDeleteFundraiserAccontMutation,
-  useUpdateFundraiserDetailsMutation,
-} = fundraiserApiSlice;
+  useUpdateFundraiserDetailsMutation
+} = studentsApiSlice;

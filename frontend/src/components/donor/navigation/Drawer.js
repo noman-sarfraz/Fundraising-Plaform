@@ -55,7 +55,6 @@ import AddIcon from "@mui/icons-material/Add";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import { logOut } from "../../../features/auth/authSlice";
-import { campaignApiSlice } from "../../../features/campaign/campaignApiSlice";
 
 // drawer width
 const drawerWidth = 250;
@@ -76,15 +75,8 @@ var navItems = [
   },
   {
     name: "search-fundraisers",
-    text: "Search Fundraises",
+    text: "Search Fundraisers",
     link: "/don_account/search-fundraisers",
-    icon: <FontAwesomeIcon icon={faDashboard} />,
-    children: null,
-  },
-  {
-    name: "profile-settings",
-    text: "Profile Settings",
-    link: "/don_account/profile-settings",
     icon: <FontAwesomeIcon icon={faDashboard} />,
     children: null,
   },
@@ -94,7 +86,6 @@ var navItems = [
     link: "/don_account/saved-fundraisers",
     icon: <FontAwesomeIcon icon={faDashboard} />,
     children: null,
-    disabled: true,
   },
   {
     name: "recurring-donations",
@@ -102,7 +93,13 @@ var navItems = [
     link: "/don_account/recurring-donations",
     icon: <FontAwesomeIcon icon={faDashboard} />,
     children: null,
-    disabled: true,
+  },
+  {
+    name: "profile-settings",
+    text: "Profile Settings",
+    link: "/don_account/profile-settings",
+    icon: <FontAwesomeIcon icon={faDashboard} />,
+    children: null,
   },
 ];
 
@@ -140,7 +137,6 @@ function DrawerComponent({ open, toggleDrawer }) {
 
   const onLogout = () => {
     dispatch(logOut());
-    dispatch(campaignApiSlice.util.resetApiState());
     navigate("/login");
   };
 
@@ -195,7 +191,7 @@ function DrawerComponent({ open, toggleDrawer }) {
               >
                 <ListItemButton
                   href={item.link}
-                  disabled={item.disabled}
+                  disabled={item.disable}
                   selected={
                     item.link === location.pathname ||
                     (item.link === "/don_account/donation-history" &&
@@ -266,7 +262,7 @@ function DrawerComponent({ open, toggleDrawer }) {
                   {...(item.name === "logout"
                     ? { onClick: onLogout }
                     : { href: item.link })}
-                  disabled={item.disabled}
+                  disabled={item.disable}
                   selected={item.link === location.pathname ? true : false}
                   // // onLoad={item.children ? checkOpenedParent(item) : undefined}
                   // onClick={

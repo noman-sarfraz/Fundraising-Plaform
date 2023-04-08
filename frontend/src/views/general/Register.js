@@ -68,7 +68,7 @@ function Register() {
       toast.error("Please select a role");
       return;
     }
-    if(data.password !== data.confirmPassword) {
+    if(data.password !== data.confirmPassword){
       toast.error("Passwords do not match!");
       return;
     }
