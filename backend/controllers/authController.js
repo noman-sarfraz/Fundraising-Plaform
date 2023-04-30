@@ -40,7 +40,7 @@ const register = async (req, res) => {
   const user = await User.create({ ...req.body });
 
   // send verification email
-  const origin = "front end link";
+  const origin = "http://localhost:3000";
   await sendVerificationEmail({
     name: user.name,
     email: user.email,
@@ -48,10 +48,8 @@ const register = async (req, res) => {
     origin,
   });
 
-  // send verification passwordToken back only while testing in postman!!!
   res.status(StatusCodes.CREATED).json({
-    verificationToken,
-    // msg: 'Success! Please check your email to verify account',
+    msg: "Success! Please check your email to verify account",
   });
 };
 
