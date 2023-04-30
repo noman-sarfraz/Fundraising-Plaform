@@ -23,13 +23,14 @@ const authenticateAdmin = require("./middleware/Authentication/adminAuthenticati
 const fileUpload = require("express-fileupload");
 
 // import routes
-const authRoutes = require("./routes/auth");
+const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
 const fundraiserRoutes = require("./routes/fundraiser");
 const donorRoutes = require("./routes/donor");
 const adminRoutes = require("./routes/adminRouter");
-const bankRoutes = require("./routes/bankRouter");
-const campaignRoutes = require("./routes/campaignRouter");
-const uploadsRoutes = require("./routes/uploadsRouter");
+const bankRoutes = require("./routes/bankRoutes");
+const campaignRoutes = require("./routes/campaignRoutes");
+const uploadsRoutes = require("./routes/uploadsRoutes");
 
 // error handlers
 const notFoundMiddleware = require("./middleware/not-found");

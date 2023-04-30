@@ -1,15 +1,13 @@
 const sendEmail = require("./sendEmail");
 
-const sendVerificationEmail = async (
+const sendVerificationEmail = async ({
   name,
   email,
-  role,
   verificationToken,
-  origin
-) => {
+  origin,
+}) => {
   const message = `Click the following link to verify your email: localhost:5000/api/v1/verify-email
   {
-    "role":"${role}",
     "verificationToken":"${verificationToken}",
     "email":"${email}"
   }`;
