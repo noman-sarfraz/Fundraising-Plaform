@@ -40,6 +40,7 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
 const cors = require("cors");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
+const { authenticateUser } = require("./middleware/authenticate-user");
 
 // MAIN WORK
 
@@ -62,6 +63,7 @@ app.use("/api/v1/", authRoutes);
 app.use("/api/v1/fundraisers", fundraiserRoutes);
 app.use("/api/v1/donors", authenticateDonor, donorRoutes);
 app.use("/api/v1/admins", authenticateAdmin, adminRoutes);
+app.use("/api/v1/users", authenticateUser, userRoutes);
 app.use("/api/v1/banks", bankRoutes);
 app.use("/api/v1/campaigns", campaignRoutes);
 app.use("/api/v1/uploads", uploadsRoutes);

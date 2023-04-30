@@ -29,7 +29,7 @@ const register = async (req, res) => {
   // error if email already exists
   const emailAlreadyExists = await User.findOne({ email });
   if (emailAlreadyExists) {
-    throw new CustomError.BadRequestError("Email already exists");
+    throw new BadRequestError("Email already exists");
   }
 
   // create verification passwordToken
