@@ -43,6 +43,11 @@ const updateUser = async (req, res) => {
   if (req.body.password) {
     throw new BadRequestError("Password cannot be updated from this route");
   }
+  if (req.body.email) {
+    // create verification token
+    const verificationToken = crypto.randomBytes(40).toString("hex");
+    req.body.verificationToken = verificationToken;
+  }
   //update user and return updated user
   const user = await User.findByIdAndUpdate(
     { _id: req.user.userId },
@@ -52,6 +57,17 @@ const updateUser = async (req, res) => {
       runValidators: true,
     }
   );
+
+  if (user.email != req.user.email) {
+    // send verification email
+    const origin = "front end link";
+    await sendVerificationEmail({
+      name: user.name,
+      email: user.email,
+      verificationToken: user.verificationToken,
+      origin,
+    });
+  }
   //error if user not found
   if (!user) {
     throw new NotFoundError(`No user with id: ${donorId}`);
@@ -84,18 +100,12 @@ const updateUserPassword = async (req, res) => {
 };
 
 const createAdmin = async (req, res) => {
-  const { role } = req.body;
-
   // create verification token
   const verificationToken = crypto.randomBytes(40).toString("hex");
   req.body.verificationToken = verificationToken;
 
-  let user;
-  if (role === "Admin") {
-    user = await User.create({ ...req.body });
-  } else {
-    throw new BadRequestError("Please provide a valid role.");
-  }
+  req.body.role = "Admin";
+  const user = await User.create({ ...req.body });
 
   // send verification email
   const origin = "front end link";
