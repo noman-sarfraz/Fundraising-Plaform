@@ -198,7 +198,7 @@ const forgotPassword = async (req, res) => {
   res
     .status(StatusCodes.OK)
     .json({ msg: "Please check your email for reset password link" });
-};
+};  
 
 const resetPassword = async (req, res) => {
   // throw bad request error if any of the values is empty
