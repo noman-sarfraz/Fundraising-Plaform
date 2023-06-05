@@ -1,7 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import { Navigate } from "react-router-dom";
-import { selectCurrentToken } from "../../features/auth/authSlice";
+import { selectCurrentUser } from "../../features/auth/authSlice";
 import { useSelector } from "react-redux";
 import jwtDecode from "jwt-decode";
 import AdminLayout from "../AdminLayout";
@@ -48,15 +48,12 @@ function LayoutDeterminer() {
 
   const [role, setRole] = React.useState("");
 
-  const token = useSelector(selectCurrentToken);
-  if (!role && localStorage.getItem("token")) {
-    try {
-      const decodedToken = token ? jwtDecode(token) : null;
-      const role = decodedToken ? decodedToken.role : null;
-      if (role === "Admin") setRole("Admin");
-      else if (role === "Fundraiser") setRole("Fundraiser");
-      else if (role === "Donor") setRole("Donor");
-    } catch (error) {}
+  const user = useSelector(selectCurrentUser);
+  if (!role && localStorage.getItem("user")) {
+    const role = user.role;
+    if (role === "Admin") setRole("Admin");
+    else if (role === "Fundraiser") setRole("Fundraiser");
+    else if (role === "Donor") setRole("Donor");
   }
 
   return (

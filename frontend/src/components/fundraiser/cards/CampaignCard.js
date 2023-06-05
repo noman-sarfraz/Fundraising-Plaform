@@ -88,11 +88,18 @@ function CampaignCard({
     <Box
       sx={{
         display: "flex",
+        flexDirection: {
+          xs: "column",
+          md: "row",
+        },
         borderRadius: 5,
         // boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
         // boxShadow: "rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px",
         boxShadow: "rgba(0, 0, 0, 0.09) 0px 3px 12px",
-        width: "70%",
+        width: {
+          xs: "100%",
+          md: "70%",
+        },
         mb: 10,
       }}
     >
@@ -121,8 +128,14 @@ function CampaignCard({
 
       <Box
         sx={{
-          width: "70%",
-          px: 3,
+          width: {
+            xs: "100%",
+            md: "70%",
+          },
+          px: {
+            xs: 2,
+            md: 3,
+          },
           pt: 2,
           pb: 4,
         }}
@@ -239,7 +252,10 @@ function CampaignCard({
       <Box
         sx={{
           bgcolor: "#EEF5FE",
-          width: "30%",
+          width: {
+            xs: "100%",
+            md: "30%",
+          },
           py: 1,
           borderTopRightRadius: 5,
           borderBottomRightRadius: 5,
@@ -249,7 +265,7 @@ function CampaignCard({
           <CampaignSideButton startIcon={<AiOutlineEye color="#0D54BC" />}>
             <SideButtonText
               color="#0D54BC"
-              onClick={() => navigate(`../campaign/${_id}`)}
+              onClick={() => navigate(`../../campaign/${_id}`)}
             >
               View Campaign
             </SideButtonText>

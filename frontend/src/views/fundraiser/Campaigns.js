@@ -48,9 +48,6 @@ function Campaigns() {
     isSuccess: banksIsSuccess,
   } = useGetAllBanksQuery();
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
   if (isLoading || banksLoading) {
     return <CircularLoader />;
   }

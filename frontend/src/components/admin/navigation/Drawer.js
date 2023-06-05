@@ -57,16 +57,20 @@ import { useDispatch } from "react-redux";
 import { logOut } from "../../../features/auth/authSlice";
 import { campaignApiSlice } from "../../../features/campaign/campaignApiSlice";
 
-// drawer width
+import { AiOutlineHome } from "react-icons/ai";
+import { FiLogOut } from "react-icons/fi";
 
+
+// drawer width
 const drawerWidth = 250;
+
 var navItems = [
   {
     name: "dashboard",
     text: "Home",
     link: "/admin",
     // link2: "/admin/dashboard",
-    icon: <FontAwesomeIcon icon={faDashboard} />,
+    icon: <AiOutlineHome  />,
     children: null,
   },
   // {
@@ -82,7 +86,7 @@ var navItems2 = [
   {
     name: "logout",
     text: "Logout",
-    icon: <FontAwesomeIcon icon={faDashboard} />,
+    icon: <FiLogOut />,
     children: null,
   },
 ];

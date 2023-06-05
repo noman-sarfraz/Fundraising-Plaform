@@ -165,7 +165,7 @@ function Step3({ state, setState, stepNo, setStepNo, setStepDone, banks }) {
         toast.error("Could not send for approval!");
         return;
       } else {
-        // dispatch(setCredentials({ token }));
+        // dispatch(setCredentials({ user }));
         toast.success("Campaign sent for approval!");
         // setRequestSent(true);
         navigate("/fr_account");

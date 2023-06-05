@@ -33,7 +33,6 @@ const StyledTextField = styled(TextField).attrs((props) => ({
   },
 }))``;
 
-
 const StyledSelect = styled(Select).attrs((props) => ({
   fullWidth: true,
   size: "small",
@@ -42,7 +41,6 @@ const StyledSelect = styled(Select).attrs((props) => ({
       sx: {
         "& .MuiMenuItem-root": {
           fontSize: 14,
-          // padding: 0,
         },
         "& .MuiList-padding": {
           padding: 0,
@@ -55,7 +53,6 @@ const StyledSelect = styled(Select).attrs((props) => ({
   margin-bottom: 8px !important;
 `;
 
-
 function Login() {
   const {
     register,
@@ -66,7 +63,7 @@ function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [login, { isLoading, error }] = useLoginMutation();
+  const [login, { isLoading, isSuccessful, isError, error }] = useLoginMutation();
 
   const onSubmit = async (data) => {
     if (data.role === "none") {
@@ -74,12 +71,15 @@ function Login() {
       return;
     }
     try {
-      const { token } = await login(data).unwrap();
-      if (!token) {
-        toast.error("Could not login user!");
+      const { user } = await login(data).unwrap();
+      if (!user) {
+        // toast.error("Could not login user!");
+        // console.log(error.status)
         return;
       } else {
-        dispatch(setCredentials({ token }));
+        console.log(user);
+        toast.success("Login Successful!");
+        dispatch(setCredentials({ user }));
         if (data.role === "Fundraiser") {
           navigate("/fr_account");
         } else if (data.role === "Donor") {
@@ -89,7 +89,8 @@ function Login() {
         }
       }
     } catch (err) {
-      // console.log(err.data?.msg ? err.data.msg : "Could not login user!");
+      console.log(err);
+      console.log({ isLoading, isSuccessful, isError, error });
       toast.error(err.data?.msg ? err.data.msg : "Could not login user!");
       return;
     }
@@ -192,13 +193,29 @@ function Login() {
           </LoadingButton>
 
           <Typography
+            component={Link}
+            to="/forgot-password"
+            variant="body2"
+            sx={{
+              textAlign: "center",
+              mt: 2,
+              textDecoration: "none",
+            }}
+          >
+            Forgot Password?
+          </Typography>
+
+          <Typography
             variant="body2"
             sx={{
               textAlign: "center",
               my: 2,
             }}
           >
-            Don't have an account? <Link to="/register">register now</Link>
+            Don't have an account?{" "}
+            <Typography component={Link} to="/register">
+              register now
+            </Typography>
           </Typography>
         </Box>
       </Box>

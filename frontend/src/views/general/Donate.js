@@ -131,39 +131,41 @@ function Donate() {
         <Grid container spacing={2}>
           <Grid item xs={12} md={7}>
             <Box>
-            <form onSubmit={handleSubmit((data) => console.log(data))}>
-              <StyledHead>Enter Donation Amount</StyledHead>
-              <StyledTextField
-                placeholder="Enter Amount"
-                type="number"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Box sx={{ fontWeight: 600, color: "#0d54a9" }}>PKR</Box>
-                    </InputAdornment>
-                  ),
-                }}
-                {...register("amount", { required: true, min: 1 })}
-                error={errors.amount ? true : false}
-              />
+              <form onSubmit={handleSubmit((data) => console.log(data))}>
+                <StyledHead>Enter Donation Amount</StyledHead>
+                <StyledTextField
+                  placeholder="Enter Amount"
+                  type="number"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Box sx={{ fontWeight: 600, color: "#0d54a9" }}>
+                          PKR
+                        </Box>
+                      </InputAdornment>
+                    ),
+                  }}
+                  {...register("amount", { required: true, min: 1 })}
+                  error={errors.amount ? true : false}
+                />
 
-              <StyledHead sx={{ mt: 5 }}>Leave a Comment</StyledHead>
-              <StyledTextArea {...register("comment")} />
+                <StyledHead sx={{ mt: 5 }}>Leave a Comment</StyledHead>
+                <StyledTextArea {...register("comment")} />
 
-              <Button
-                variant="contained"
-                disableElevation
-                type="submit"
-                sx={{
-                  mt: 5,
-                  width: "90%",
-                  py: 1,
-                  borderRadius: 10,
-                  textTransform: "none",
-                }}
-              >
-                Donate
-              </Button>
+                <Button
+                  variant="contained"
+                  disableElevation
+                  type="submit"
+                  sx={{
+                    mt: 5,
+                    width: "90%",
+                    py: 1,
+                    borderRadius: 10,
+                    textTransform: "none",
+                  }}
+                >
+                  Donate
+                </Button>
               </form>
             </Box>
           </Grid>

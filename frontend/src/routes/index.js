@@ -40,6 +40,12 @@ import Donate from "../views/general/Donate";
 import CampaignStatistics from "../views/fundraiser/CampaignStatistics";
 import LayoutDeterminer from "../layouts/layout-determiner/LayoutDeterminer";
 import PaymentMethod from "../views/general/PaymentMethod";
+import VerifyEmail from "../views/general/VerifyEmail";
+import ConfirmEmailMessage from "../views/general/ConfirmEmailMessage";
+import ForgotPassword from "../views/general/ForgotPassword";
+import ForgotPasswordMessage from "../views/general/ForgotPasswordMessage";
+import ResetPassword from "../views/general/ResetPassword";
+import ResetPasswordMessage from "../views/general/ResetPasswordMessage";
 
 function MainRoutes() {
   return (
@@ -48,7 +54,7 @@ function MainRoutes() {
         <Route path="fr_account" element={<FundraiserLayout />}>
           <Route index element={<Campaigns />} />
           <Route path="campaigns" element={<Campaigns />} />
-          <Route path="campaign/:id" element={<Campaign />} />
+          {/* <Route path="campaign/:id" element={<Campaign />} /> */}
           <Route path="new-campaign" element={<Newcampaign />} />
           <Route path="edit-campaign/:id" element={<Editcampaign />} />
           <Route path="donation-history" element={<FRDonationHistory />} />
@@ -88,9 +94,17 @@ function MainRoutes() {
         <Route index element={<Navigate to="login" />} />
         <Route path="register" element={<Register />} />
         <Route path="login" element={<Login />} />
-        {/* <Route path="campaign/:id" element={<Publiccampaign />} /> */}
+        <Route path="confirm-email" element={<ConfirmEmailMessage />} />
+        <Route path="verify-email" element={<VerifyEmail />} />
+        <Route path="forgot-password" element={<ForgotPassword />} />
+        <Route
+          path="forgot-password-message"
+          element={<ForgotPasswordMessage />}
+        />
+        <Route path="reset-password" element={<ResetPassword />} />
+        <Route path="reset-password-message" element={<ResetPasswordMessage />} />
 
-        <Route path="*" element={<NotFound />} />
+        {/* <Route path="*" element={<NotFound />} /> */}
       </Route>
       <Route path="/" element={<LayoutDeterminer />}>
         <Route path="campaign/:id" element={<Publiccampaign />} />

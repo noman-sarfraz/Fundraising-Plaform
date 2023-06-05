@@ -56,30 +56,49 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import { logOut } from "../../../features/auth/authSlice";
 import { campaignApiSlice } from "../../../features/campaign/campaignApiSlice";
-// drawer width
 
+import { MdCampaign } from "react-icons/md";
+import { IoMdAdd } from "react-icons/io";
+import { FiSettings } from "react-icons/fi";
+import { FiLogOut } from "react-icons/fi";
+
+import { FaQuestionCircle } from "react-icons/fa";
+import { AiFillInfoCircle, AiOutlineHistory } from "react-icons/ai";
+import { BsInfoCircleFill, BsInfoSquare, BsInfoCircle } from "react-icons/bs";
+
+import { ImStatsBars2 } from "react-icons/im";
+
+
+import { GrCircleInformation } from "react-icons/gr";
+import { VscAdd } from "react-icons/vsc";
+
+import { IoSettings, IoInformationCircle } from "react-icons/io5";
+
+import { CiSettings } from "react-icons/ci";
+
+// drawer width
 const drawerWidth = 250;
 var navItems = [
   {
-    name: "Campaigns",
-    text: "campaigns",
+    name: "campaigns",
+    text: "Campaigns",
     link: "/fr_account/campaigns",
     link2: "/fr_account",
-    icon: <FontAwesomeIcon icon={faDashboard} />,
+    icon: <MdCampaign />,
     children: null,
   },
   {
     name: "new-campaign",
     text: "New campaign",
     link: "/fr_account/new-campaign",
-    icon: <FontAwesomeIcon icon={faDashboard} />,
+    icon: <IoMdAdd />,
     children: null,
   },
   {
     name: "profile-settings",
     text: "Profile Settings",
     link: "/fr_account/profile-settings",
-    icon: <FontAwesomeIcon icon={faDashboard} />,
+    icon: <FiSettings />,
     children: null,
   },
 
@@ -87,7 +106,7 @@ var navItems = [
     name: "campaign-statistics",
     text: "Campaign Statistics",
     link: "/fr_account/campaign-statistics",
-    icon: <FontAwesomeIcon icon={faDashboard} />,
+    icon: <ImStatsBars2 />,
     children: null,
     disabled: true,
   },
@@ -95,7 +114,7 @@ var navItems = [
     name: "donation-history",
     text: "Donation History",
     link: "/fr_account/donation-history",
-    icon: <FontAwesomeIcon icon={faDashboard} />,
+    icon: <AiOutlineHistory />,
     children: null,
     disabled: true,
   },
@@ -106,20 +125,20 @@ var navItems2 = [
     name: "FAQs",
     text: "FAQs",
     link: "/fr_account/faqs",
-    icon: <FontAwesomeIcon icon={faDashboard} />,
+    icon: <FaQuestionCircle />,
     children: null,
   },
   {
     name: "how-it-works",
     text: "How it works",
     link: "/fr_account/how-it-works",
-    icon: <FontAwesomeIcon icon={faDashboard} />,
+    icon: <BsInfoCircleFill />,
     children: null,
   },
   {
     name: "logout",
     text: "Logout",
-    icon: <FontAwesomeIcon icon={faDashboard} />,
+    icon: <FiLogOut />,
     children: null,
   },
 ];

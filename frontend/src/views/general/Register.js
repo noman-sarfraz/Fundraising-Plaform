@@ -68,30 +68,34 @@ function Register() {
       toast.error("Please select a role");
       return;
     }
-    if(data.password !== data.confirmPassword) {
+    if (data.password !== data.confirmPassword) {
       toast.error("Passwords do not match!");
       return;
     }
     try {
       const res = await registerUser(data).unwrap();
-      if (!res?.token) {
+      if (!res?.msg) {
         toast.error("Could not login user!");
-        console.log(res)
+        console.log(res);
         return;
       } else {
-        dispatch(setCredentials({ token:res.token }));
-        if (data.role === "Fundraiser") {
-          navigate("/fr_account");
-        } else {
-          navigate("/don_account");
-        }
+        console.log(res);
+        // toast.success(
+        //   "User registered successfully! Verify your email to login."
+        // );
+        navigate("/confirm-email");
+        // dispatch(setCredentials({ token:res.token }));
+        // if (data.role === "Fundraiser") {
+        //   navigate("/fr_account");
+        // } else {
+        //   navigate("/don_account");
+        // }
       }
     } catch (err) {
+      console.log(err);
       toast.error(err.data?.msg ? err.data.msg : "Could not login user!");
-      console.log(err)
       return;
     }
-    
   };
 
   return (

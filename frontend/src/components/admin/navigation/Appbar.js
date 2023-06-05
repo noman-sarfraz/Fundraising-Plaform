@@ -21,7 +21,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import AppsIcon from "@mui/icons-material/Apps";
-import { logOut, selectCurrentToken } from "../../../features/auth/authSlice";
+import { logOut, selectCurrentUser } from "../../../features/auth/authSlice";
 import {
   Avatar,
   Button,
@@ -81,8 +81,8 @@ function AppbarComponent({ open, toggleDrawer }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const token = useSelector(selectCurrentToken);
-  const { name, role } = jwtDecode(token);
+  const user = useSelector(selectCurrentUser);
+  const { name, role } = user;
 
   const onLogout = () => {
     dispatch(logOut());

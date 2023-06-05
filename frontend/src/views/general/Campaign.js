@@ -113,134 +113,282 @@ function Campaign() {
             <b style={{ color: "#F71616" }}>{campaign.category}</b>
           </Typography>
         </Box>
-        <Box sx={{ display: "flex" }}>
-          <Box sx={{ width: "60%" }}>
+        <Box>
+          <Box sx={{}}>
             <Box
               sx={{
-                width: "100%",
                 display: "flex",
-                justifyContent: "center",
-                mb: 10,
+                flexDirection: {
+                  xs: "column",
+                  md: "row",
+                },
               }}
             >
-              <img
-                src={campaign.image}
-                alt="Paris"
-                style={{
-                  borderRadius: "10px",
-                  width: "80%",
-                  height: "250px",
-                  objectFit: "cover",
-                }}
-              />
-            </Box>
-            <Box sx={{ px: 5, mb: 10 }}>
-              <Typography
-                color="#0D54A9"
-                sx={{ fontSize: 22, fontWeight: 600, mb: 2 }}
-              >
-                Campaign Story
-              </Typography>
-              <Typography
-                variant="caption"
-                color="#798798"
-                // sx={{ lineHeight: "20px" }}
-              >
-                {campaign.story}
-              </Typography>
-            </Box>
-            <Box sx={{ px: 5, mb: 10 }}>
-              <Typography
-                color="#0D54A9"
-                sx={{ fontSize: 22, fontWeight: 600, mb: 2 }}
-              >
-                Organizer
-              </Typography>
               <Box
                 sx={{
+                  width: {
+                    xs: "100%",
+                    md: "60%",
+                  },
                   display: "flex",
-                  border: "1px solid #eee",
-                  borderRadius: 2,
-                  p: 2,
+                  justifyContent: "center",
+                  mb: 10,
                 }}
               >
-                <Avatar
-                  alt="Organizer"
-                  src={null}
-                  sx={{ width: 60, height: 60, mr: 2 }}
+                <img
+                  src={campaign.image}
+                  alt="Paris"
+                  style={{
+                    borderRadius: "10px",
+                    width: "80%",
+                    height: "250px",
+                    objectFit: "cover",
+                  }}
                 />
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Typography
-                    sx={{ fontSize: 16, fontWeight: 600, color: "#F7162C" }}
-                  >
-                    {campaign.organizerName}
-                  </Typography>
-                </Box>
               </Box>
-            </Box>
-            <Box sx={{ px: 5, mb: 10 }}>
-              <Typography
-                color="#0D54A9"
-                sx={{ fontSize: 22, fontWeight: 600, mb: 2 }}
+
+              {/* Campaign Short Progress Card */}
+              <Box
+                sx={{
+                  width: {
+                    xs: "100%",
+                    md: "30%",
+                  },
+                  mb: {
+                    xs: 5,
+                    md: 0,
+                  },
+                }}
               >
-                Donors
-              </Typography>
-              <Box sx={{ display: "flex", flexDirection: "column" }}>
-                <Typography
+                <Box
                   sx={{
-                    textTransform: "none",
-                    fontSize: 14,
-                    fontWeight: 600,
-                    color: "#F7162C",
+                    display: "flex",
+                    flexDirection: "column",
+                    width: "100%",
+                    // border: "1px solid #ccc",
+                    p: 3,
+                    borderRadius: 5,
+                    boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                    // boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
                   }}
                 >
-                  No Donors Yet
-                </Typography>
-                {[].map((item) => (
-                  <Box
+                  <Typography
                     sx={{
-                      display: "flex",
-                      border: "1px solid #eee",
-                      borderRadius: 2,
-                      p: 2,
+                      fontSize: 28,
+                      fontWeight: 700,
+                      color: "#F51616",
+                      textAlign: "center",
+                    }}
+                  >
+                    PKR 00.00
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: 12,
+                      // fontWeight: 700,
+                      color: "#8F8798",
+                      textAlign: "center",
                       mb: 2,
                     }}
                   >
-                    <Avatar
-                      alt="Maria Younus"
-                      src={UnknownPersonPic}
-                      sx={{ width: 45, height: 45, mr: 2 }}
-                    />
+                    {`raised of PKR ${campaign.amountNeeded.toFixed(2)} goal`}
+                  </Typography>
+                  <StyledLinearProgress
+                    variant="determinate"
+                    value={0}
+                    sx={{
+                      "& .MuiLinearProgress-bar1Determinate": {
+                        backgroundColor: "#F51616",
+                      },
+                      mb: 0.5,
+                    }}
+                  />
+                  <Box sx={{ display: "flex" }}>
+                    <Typography
+                      sx={{ color: "#F51616", fontSize: 12, fontWeight: 700 }}
+                    >
+                      {`${0}% Funded`}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        marginLeft: "auto",
+                        color: "#798798",
+                        fontSize: 12,
+                        fontWeight: 700,
+                      }}
+                    >
+                      {`${0} Donors`}
+                    </Typography>
+                  </Box>
+                  {/* <Box
+              sx={{
+                bgcolor: "#F51616",
+                // bgcolor: "teal",
+                color: "white",
+                fontWeight: 700,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 2,
+                py: 2,
+                my: 2,
+              }}
+            >
+              Getting Funded!
+            </Box> */}
+                  <Button
+                    component={Link}
+                    href={`/donate/payment-method/${campaign._id}`}
+                    sx={{
+                      // bgcolor: "#F51616",
+                      // color: "white",
+                      fontWeight: 700,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: 2,
+                      py: 2,
+                      my: 2,
+                    }}
+                    // color="success"
+                    variant="contained"
+                  >
+                    Donate Now
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    sx={{
+                      textTransform: "none",
+                      fontSize: 14,
+                      fontWeight: 600,
+                      borderRadius: 2,
+                      color: "#F7162C",
+                      py: 1.5,
+                    }}
+                    startIcon={<AiOutlineLink />}
+                  >
+                    Share link with friends
+                  </Button>
+                </Box>
+              </Box>
+            </Box>
+
+            <Box
+              sx={{
+                width: {
+                  xs: "100%",
+                  md: "60%",
+                },
+              }}
+            >
+              <Box sx={{ px: 5, mb: 10 }}>
+                <Typography
+                  color="#0D54A9"
+                  sx={{ fontSize: 22, fontWeight: 600, mb: 2 }}
+                >
+                  Campaign Story
+                </Typography>
+                <Typography
+                  variant="caption"
+                  color="#798798"
+                  // sx={{ lineHeight: "20px" }}
+                >
+                  {campaign.story}
+                </Typography>
+              </Box>
+              <Box sx={{ px: 5, mb: 10 }}>
+                <Typography
+                  color="#0D54A9"
+                  sx={{ fontSize: 22, fontWeight: 600, mb: 2 }}
+                >
+                  Organizer
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    border: "1px solid #eee",
+                    borderRadius: 2,
+                    p: 2,
+                  }}
+                >
+                  <Avatar
+                    alt="Organizer"
+                    src={null}
+                    sx={{ width: 60, height: 60, mr: 2 }}
+                  />
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Typography
+                      sx={{ fontSize: 16, fontWeight: 600, color: "#F7162C" }}
+                    >
+                      {campaign.organizerName}
+                    </Typography>
+                  </Box>
+                </Box>
+              </Box>
+              <Box sx={{ px: 5, mb: 10 }}>
+                <Typography
+                  color="#0D54A9"
+                  sx={{ fontSize: 22, fontWeight: 600, mb: 2 }}
+                >
+                  Donors
+                </Typography>
+                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                  <Typography
+                    sx={{
+                      textTransform: "none",
+                      fontSize: 14,
+                      fontWeight: 600,
+                      color: "#F7162C",
+                    }}
+                  >
+                    No Donors Yet
+                  </Typography>
+                  {[].map((item) => (
                     <Box
                       sx={{
                         display: "flex",
-                        flexDirection: "column",
-                        // alignItems: "center",
-                        mr: "auto",
+                        border: "1px solid #eee",
+                        borderRadius: 2,
+                        p: 2,
+                        mb: 2,
                       }}
                     >
-                      <Typography sx={{ fontSize: 14, fontWeight: 600 }}>
-                        Anonymous
-                      </Typography>
-                      <Typography sx={{ fontSize: 12 }}>
-                        Donated on Jan 16, 2023
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <Typography
+                      <Avatar
+                        alt="Maria Younus"
+                        src={UnknownPersonPic}
+                        sx={{ width: 45, height: 45, mr: 2 }}
+                      />
+                      <Box
                         sx={{
-                          fontSize: 18,
-                          fontWeight: 600,
-                          color: "#F51616",
+                          display: "flex",
+                          flexDirection: "column",
+                          // alignItems: "center",
+                          mr: "auto",
                         }}
                       >
-                        $170.00
-                      </Typography>
+                        <Typography sx={{ fontSize: 14, fontWeight: 600 }}>
+                          Anonymous
+                        </Typography>
+                        <Typography sx={{ fontSize: 12 }}>
+                          Donated on Jan 16, 2023
+                        </Typography>
+                      </Box>
+                      <Box sx={{ display: "flex", alignItems: "center" }}>
+                        <Typography
+                          sx={{
+                            fontSize: 18,
+                            fontWeight: 600,
+                            color: "#F51616",
+                          }}
+                        >
+                          $170.00
+                        </Typography>
+                      </Box>
                     </Box>
-                  </Box>
-                ))}
-              </Box>
-              {/* <Box
+                  ))}
+                </Box>
+                {/* <Box
               sx={{ display: "flex", justifyContent: "center", mt: 2, mb: 5 }}
             >
               <Button
@@ -260,120 +408,7 @@ function Campaign() {
                 See all donors (13)
               </Button>
             </Box> */}
-            </Box>
-          </Box>
-          {/* Campaign Short Progress Card */}
-          <Box sx={{ width: "30%" }}>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                width: "100%",
-                // border: "1px solid #ccc",
-                p: 3,
-                borderRadius: 5,
-                boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-                // boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: 28,
-                  fontWeight: 700,
-                  color: "#F51616",
-                  textAlign: "center",
-                }}
-              >
-                PKR 00.00
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: 12,
-                  // fontWeight: 700,
-                  color: "#8F8798",
-                  textAlign: "center",
-                  mb: 2,
-                }}
-              >
-                {`raised of PKR ${campaign.amountNeeded.toFixed(2)} goal`}
-              </Typography>
-              <StyledLinearProgress
-                variant="determinate"
-                value={0}
-                sx={{
-                  "& .MuiLinearProgress-bar1Determinate": {
-                    backgroundColor: "#F51616",
-                  },
-                  mb: 0.5,
-                }}
-              />
-              <Box sx={{ display: "flex" }}>
-                <Typography
-                  sx={{ color: "#F51616", fontSize: 12, fontWeight: 700 }}
-                >
-                  {`${0}% Funded`}
-                </Typography>
-                <Typography
-                  sx={{
-                    marginLeft: "auto",
-                    color: "#798798",
-                    fontSize: 12,
-                    fontWeight: 700,
-                  }}
-                >
-                  {`${0} Donors`}
-                </Typography>
               </Box>
-              {/* <Box
-              sx={{
-                bgcolor: "#F51616",
-                // bgcolor: "teal",
-                color: "white",
-                fontWeight: 700,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: 2,
-                py: 2,
-                my: 2,
-              }}
-            >
-              Getting Funded!
-            </Box> */}
-              <Button
-                component={Link}
-                href={`/donate/payment-method/${campaign._id}`}
-                sx={{
-                  // bgcolor: "#F51616",
-                  // color: "white",
-                  fontWeight: 700,
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRadius: 2,
-                  py: 2,
-                  my: 2,
-                }}
-                // color="success"
-                variant="contained"
-              >
-                Donate Now
-              </Button>
-              <Button
-                variant="outlined"
-                color="error"
-                sx={{
-                  textTransform: "none",
-                  fontSize: 14,
-                  fontWeight: 600,
-                  borderRadius: 2,
-                  color: "#F7162C",
-                  py: 1.5,
-                }}
-                startIcon={<AiOutlineLink />}
-              >
-                Share link with friends
-              </Button>
             </Box>
           </Box>
         </Box>

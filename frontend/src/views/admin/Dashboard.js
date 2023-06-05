@@ -8,7 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Box } from "@mui/system";
-import { Button, Link, Typography } from "@mui/material";
+import { Button, Chip, Link, Typography } from "@mui/material";
 import styled from "styled-components";
 import { FaBan } from "react-icons/fa";
 import { FcApprove } from "react-icons/fc";
@@ -160,7 +160,19 @@ export default function Dashboard() {
                 </StyledTableCell>
                 <StyledTableCell id={`status-${campaign._id}`}>
                   <StyledStatus status={campaign.status}>
-                    {campaign.status}
+                    {campaign.status === "Pending" ? (
+                      <Chip label="Pending" color="warning" />
+                    ) : campaign.status === "Approved" ? (
+                      <Chip label="Approved" color="success" />
+                    ) : campaign.status === "Rejected" ? (
+                      <Chip label="Rejected" color="error" />
+                    ) : campaign.status === "Stopped" ? (
+                      <Chip label="Stopped" />
+                    ) : campaign.status === "Completed" ? (
+                      <Chip label="Completed" color="info" />
+                    ) : (
+                      ""
+                    )}
                   </StyledStatus>
                 </StyledTableCell>
                 <StyledTableCell align="right">
@@ -180,7 +192,7 @@ export default function Dashboard() {
                         Approve
                       </StyledButton>
                       <StyledButton
-                        color="warning"
+                        color="error"
                         startIcon={<FaBan color="#fff" size="14px" />}
                         onClick={() => changeStatus(campaign._id, "Rejected")}
                       >

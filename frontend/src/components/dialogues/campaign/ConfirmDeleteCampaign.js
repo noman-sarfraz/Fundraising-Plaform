@@ -12,13 +12,16 @@ import { useDispatch } from "react-redux";
 import { logOut } from "../../../features/auth/authSlice";
 import { useDeleteCampaignMutation } from "../../../features/campaign/campaignApiSlice";
 import { LoadingButton } from "@mui/lab";
+import { Box, Typography } from "@mui/material";
+
+import { BsQuestionCircle } from "react-icons/bs";
 
 export default function DeleteCampaignDialogue({
   open,
   setOpen,
   id,
   title,
-  message
+  message,
 }) {
   // console.log("DeleteCampaignDialogue ", id);
   // const [deleteAccount, { isLoading }] = useDeleteAccontMutation();
@@ -54,15 +57,71 @@ export default function DeleteCampaignDialogue({
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">
+      {/* <DialogTitle id="alert-dialog-title">
         {title ? title : "Alert"}
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           {message ? message : "Are you sure?"}
         </DialogContentText>
-      </DialogContent>
-      <DialogActions>
+      </DialogContent> */}
+      <Box>
+        <Box
+          sx={{
+            bgcolor: "skyblue",
+            px: {
+              xs: 15,
+              sm: 20,
+            },
+            py: {
+              xs: 6,
+              sm: 8,
+            },
+            textAlign: "center",
+            color: "white",
+          }}
+        >
+          <BsQuestionCircle size={62} />
+        </Box>
+        <Box>
+          <Typography
+            sx={{ fontSize: 20, m: 2, fontWeight: 600, textAlign: "center" }}
+          >
+            Delete Campaign
+          </Typography>
+        </Box>
+        <Box>
+          <Typography sx={{ mb: 4, fontSize: 12, textAlign: "center" }}>
+            Are you sure you want to delete this campaign?
+          </Typography>
+        </Box>
+        <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
+          <LoadingButton
+            color="error"
+            variant="contained"
+            disableElevation
+            sx={{
+              width: "30%",
+              borderRadius: 15,
+              m: 0.5,
+            }}
+            loading={isLoading}
+            onClick={handleDeleteCampaign}
+          >
+            Yes
+          </LoadingButton>
+          <Button
+            variant="contained"
+            disableElevation
+            sx={{ width: "30%", borderRadius: 15, m: 0.5 }}
+            onClick={handleClose}
+            autoFocus
+          >
+            No
+          </Button>
+        </Box>
+      </Box>
+      {/* <DialogActions>
         <LoadingButton
           color="error"
           variant="contained"
@@ -82,7 +141,7 @@ export default function DeleteCampaignDialogue({
         >
           No
         </Button>
-      </DialogActions>
+      </DialogActions> */}
     </Dialog>
   );
 }

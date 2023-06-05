@@ -57,6 +57,36 @@ import { useDispatch } from "react-redux";
 import { logOut } from "../../../features/auth/authSlice";
 import { campaignApiSlice } from "../../../features/campaign/campaignApiSlice";
 
+
+import { MdCampaign, MdAddToPhotos, MdEventRepeat } from "react-icons/md";
+import { IoMdAdd } from "react-icons/io";
+import { FiSettings } from "react-icons/fi";
+import { FiLogOut } from "react-icons/fi";
+
+import { FaQuestionCircle } from "react-icons/fa";
+import {
+  AiFillInfoCircle,
+  AiOutlineHistory,
+  AiOutlineSearch,
+} from "react-icons/ai";
+import {
+  BsInfoCircleFill,
+  BsInfoSquare,
+  BsInfoCircle,
+  BsArrowRepeat,
+} from "react-icons/bs";
+
+import { ImStatsBars2 } from "react-icons/im";
+
+import { GrCircleInformation } from "react-icons/gr";
+import { VscAdd } from "react-icons/vsc";
+
+import { IoSettings, IoInformationCircle } from "react-icons/io5";
+
+import { CiSettings } from "react-icons/ci";
+
+
+
 // drawer width
 const drawerWidth = 250;
 var navItems = [
@@ -64,35 +94,35 @@ var navItems = [
     name: "donation-history",
     text: "Donation History",
     link: "/don_account/donation-history",
-    icon: <FontAwesomeIcon icon={faDashboard} />,
+    icon: <AiOutlineHistory />,
     children: null,
   },
   {
     name: "new-donation",
     text: "New Donation",
     link: "/don_account/new-donation",
-    icon: <FontAwesomeIcon icon={faDashboard} />,
+    icon: <IoMdAdd />,
     children: null,
   },
   {
     name: "search-fundraisers",
     text: "Search Fundraises",
     link: "/don_account/search-fundraisers",
-    icon: <FontAwesomeIcon icon={faDashboard} />,
+    icon: <AiOutlineSearch />,
     children: null,
   },
   {
     name: "profile-settings",
     text: "Profile Settings",
     link: "/don_account/profile-settings",
-    icon: <FontAwesomeIcon icon={faDashboard} />,
+    icon: <FiSettings />,
     children: null,
   },
   {
     name: "saved-fundraisers",
     text: "Saved Fundraisers",
     link: "/don_account/saved-fundraisers",
-    icon: <FontAwesomeIcon icon={faDashboard} />,
+    icon: <MdAddToPhotos />,
     children: null,
     disabled: true,
   },
@@ -100,7 +130,7 @@ var navItems = [
     name: "recurring-donations",
     text: "Recurring Donations",
     link: "/don_account/recurring-donations",
-    icon: <FontAwesomeIcon icon={faDashboard} />,
+    icon: <BsArrowRepeat />,
     children: null,
     disabled: true,
   },
@@ -111,20 +141,20 @@ var navItems2 = [
     name: "FAQs",
     text: "FAQs",
     link: "/don_account/faqs",
-    icon: <FontAwesomeIcon icon={faDashboard} />,
+    icon: <FaQuestionCircle />,
     children: null,
   },
   {
     name: "how-it-works",
     text: "How it works",
     link: "/don_account/how-it-works",
-    icon: <FontAwesomeIcon icon={faDashboard} />,
+    icon: <BsInfoCircleFill />,
     children: null,
   },
   {
     name: "logout",
     text: "Logout",
-    icon: <FontAwesomeIcon icon={faDashboard} />,
+    icon: <FiLogOut />,
     children: null,
   },
 ];

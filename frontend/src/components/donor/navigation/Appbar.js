@@ -50,7 +50,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { logOut, selectCurrentToken } from "../../../features/auth/authSlice";
+import { logOut, selectCurrentUser } from "../../../features/auth/authSlice";
 import jwtDecode from "jwt-decode";
 import { campaignApiSlice } from "../../../features/campaign/campaignApiSlice";
 import { useGetDetailsQuery } from "../../../features/donor/donorApiSlice";
@@ -82,8 +82,8 @@ function AppbarComponent({ open, toggleDrawer }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const token = useSelector(selectCurrentToken);
-  const { name, role } = jwtDecode(token);
+  const user = useSelector(selectCurrentUser);
+  const { name, role } = user;
   const { data, isLoading } = useGetDetailsQuery();
 
   const onLogout = () => {
