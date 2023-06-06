@@ -14,21 +14,13 @@ cloudinary.config({
   api_secret: process.env.CLOUD_API_SECRET,
 });
 
-// authenticators
-const authenticateFundraiser = require("./middleware/Authentication/fundraiserAuthentication");
-const authenticateDonor = require("./middleware/Authentication/donorAuthentication");
-const authenticateAdmin = require("./middleware/Authentication/adminAuthentication");
-
 // fileupload
 const fileUpload = require("express-fileupload");
 
 // import routes
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
-const fundraiserRoutes = require("./routes/fundraiser");
-const donorRoutes = require("./routes/donor");
-const adminRoutes = require("./routes/adminRouter");
-const bankRoutes = require("./routes/bankRoutes");
+const categoryRoutes = require("./routes/categoryRoutes");
 const campaignRoutes = require("./routes/campaignRoutes");
 const uploadsRoutes = require("./routes/uploadsRoutes");
 
@@ -40,6 +32,8 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
 const cors = require("cors");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
+
+// authenticator
 const { authenticateUser } = require("./middleware/authenticate-user");
 
 // MAIN WORK
@@ -64,15 +58,14 @@ app.get("/", (req, res) => {
   res.send("Fundaising Platform API");
 });
 
+// routes
 app.use("/api/v1/", authRoutes);
-app.use("/api/v1/fundraisers", fundraiserRoutes);
-app.use("/api/v1/donors", authenticateDonor, donorRoutes);
-app.use("/api/v1/admins", authenticateAdmin, adminRoutes);
 app.use("/api/v1/users", authenticateUser, userRoutes);
-app.use("/api/v1/banks", bankRoutes);
+app.use("/api/v1/categories", authenticateUser, categoryRoutes);
+app.use("/api/v1/uploads", authenticateUser, uploadsRoutes);
 app.use("/api/v1/campaigns", campaignRoutes);
-app.use("/api/v1/uploads", uploadsRoutes);
 
+// using middlewares
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 

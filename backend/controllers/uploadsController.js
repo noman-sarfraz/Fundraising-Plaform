@@ -1,6 +1,4 @@
 const { StatusCodes } = require("http-status-codes");
-const CustomError = require("../errors");
-const path = require("path");
 const cloudinary = require("cloudinary").v2;
 const fs = require("fs");
 
@@ -17,5 +15,5 @@ const uploadImage = async (req, res) => {
 };
 
 module.exports = {
-    uploadImage,
+  uploadImage,
 };
