@@ -1,29 +1,62 @@
 const express = require("express");
 const router = express.Router();
 
-const Authentication = require("../middleware/Authentication");
+// Middleware
+const {
+  authenticateUser,
+  authorizePermissions,
+} = require("../middleware/authenticate-user");
 
+// Campaign Admin Controller Routes
 const {
   getAllCampaigns,
-  getMyCampaigns,
+  changeStatus,
+} = require("../controllers/campaign/campaignAdminController");
+
+router
+  .route("/get-all")
+  .get(authenticateUser, authorizePermissions("Admin"), getAllCampaigns);
+
+router
+  .route("/change-status/:id")
+  .patch(authenticateUser, authorizePermissions("Admin"), changeStatus);
+
+// Campaign General Controller Routes
+const {
+  addDonationAmount,
   getCampaign,
+  getApproved,
+  getFundraiserInfo,
+} = require("../controllers/campaign/campaignGeneralController");
+
+router.route("/get-approved").get(getApproved);
+router.route("/fundraiser-info/:id").get(getFundraiserInfo);
+router.route("/add-donation/:id").patch(authenticateUser, addDonationAmount);
+
+// Campaign CRUD Controller Routes
+const {
+  getMyCampaigns,
   createCampaign,
   updateCampaign,
   deleteCampaign,
-  changeStatus,
-} = require("../controllers/campaignController");
+  changeIsStopped,
+} = require("../controllers/campaign/campaignCrudController");
+
+router
+  .route("/is-stopped/:id")
+  .patch(authenticateUser, authorizePermissions("Fundraiser"), changeIsStopped);
 
 router
   .route("/")
-  .get(Authentication.fundraiser, getMyCampaigns)
-  .post(Authentication.fundraiser, createCampaign);
-router.route("/get-all").get(getAllCampaigns);
+  .get(authenticateUser, authorizePermissions("Fundraiser"), getMyCampaigns)
+  .post(authenticateUser, authorizePermissions("Fundraiser"), createCampaign);
 
 router
   .route("/:id")
-  .get(getCampaign)
-  .patch(Authentication.fundraiser, updateCampaign)
-  .delete(Authentication.fundraiser, deleteCampaign);
-router.route("/change-status/:id").patch(Authentication.admin, changeStatus);
+  .patch(authenticateUser, authorizePermissions("Fundraiser"), updateCampaign)
+  .delete(authenticateUser, authorizePermissions("Fundraiser"), deleteCampaign);
+
+// Campaign General Controller Routes
+router.route("/:id").get(getCampaign);
 
 module.exports = router;
