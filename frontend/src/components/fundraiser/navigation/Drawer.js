@@ -49,6 +49,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useLocation, useNavigate } from "react-router-dom";
 // import { isContentEditable } from "@testing-library/user-event/dist/utils";
+import { MdOutlineMoney } from "react-icons/md";
 
 import AddIcon from "@mui/icons-material/Add";
 
@@ -67,6 +68,7 @@ import { AiFillInfoCircle, AiOutlineHistory } from "react-icons/ai";
 import { BsInfoCircleFill, BsInfoSquare, BsInfoCircle } from "react-icons/bs";
 
 import { ImStatsBars2 } from "react-icons/im";
+import { FaRegMoneyBillAlt } from "react-icons/fa";
 
 
 import { GrCircleInformation } from "react-icons/gr";
@@ -95,20 +97,12 @@ var navItems = [
     children: null,
   },
   {
-    name: "profile-settings",
-    text: "Profile Settings",
-    link: "/fr_account/profile-settings",
-    icon: <FiSettings />,
-    children: null,
-  },
-
-  {
     name: "campaign-statistics",
     text: "Campaign Statistics",
     link: "/fr_account/campaign-statistics",
     icon: <ImStatsBars2 />,
     children: null,
-    disabled: true,
+    // disabled: true,
   },
   {
     name: "donation-history",
@@ -116,7 +110,23 @@ var navItems = [
     link: "/fr_account/donation-history",
     icon: <AiOutlineHistory />,
     children: null,
-    disabled: true,
+    // disabled: true,
+  },
+  {
+    name: "withdraw-money",
+    text: "Withdraw Money",
+    link: "/fr_account/withdraw-money",
+    icon: <FaRegMoneyBillAlt />,
+    children: null,
+    // disabled: true,
+  },
+
+  {
+    name: "profile-settings",
+    text: "Profile Settings",
+    link: "/fr_account/profile-settings",
+    icon: <FiSettings />,
+    children: null,
   },
 ];
 
@@ -171,7 +181,6 @@ function DrawerComponent({ open, toggleDrawer }) {
     }
   }, [open]);
 
-  console.log("rendering drawer");
   const drawer = (
     <Box
       sx={{
@@ -268,9 +277,8 @@ function DrawerComponent({ open, toggleDrawer }) {
         {/* down list */}
         <List>
           {navItems2.map((item, index) => (
-            <div>
+            <div key={item.name}>
               <ListItem
-                key={item.name}
                 disablePadding
                 sx={{ bgcolor: primary, color: "#b8c7ce" }}
               >

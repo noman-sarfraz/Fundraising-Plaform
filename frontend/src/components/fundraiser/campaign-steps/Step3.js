@@ -31,8 +31,6 @@ import { toast } from "react-toastify";
 import { LoadingButton } from "@mui/lab";
 import { useForm } from "react-hook-form";
 
-
-
 const Dot = () => {
   return (
     <span
@@ -69,27 +67,6 @@ const StyledTextField = styled(TextField).attrs((props) => ({
   margin-bottom: 16px !important;
 `;
 
-const StyledSelect = styled(Select).attrs((props) => ({
-  fullWidth: true,
-  size: "small",
-
-  MenuProps: {
-    PaperProps: {
-      sx: {
-        "& .MuiMenuItem-root": {
-          fontSize: 14,
-          // padding: 0,
-        },
-        "& .MuiList-padding": {
-          padding: 0,
-        },
-      },
-    },
-  },
-}))`
-  font-size: 14px !important;
-`;
-
 const StyledAutoComplete = styled(Autocomplete).attrs({
   disablePortal: true,
   size: "small",
@@ -117,20 +94,18 @@ const StyledHead = styled(Typography).attrs((props) => ({}))`
   margin-bottom: 16px !important;
 `;
 
+const StyledText = styled(Typography).attrs((props) => ({
+  variant: "caption",
+}))`
+  color: #798798;
+`;
+
 function Step3({ state, setState, stepNo, setStepNo, setStepDone, banks }) {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-
-  const bankNames = banks.map((bank) => bank.name);
-
-
-  const [bankNameValue, setBankNameValue] = useState(
-    state.bankName ? state.bankName : bankNames[0]
-  );
-  const [bankNameInput, setBankNameInput] = useState("");
 
   const visited = () => {
     setStepDone((stepDone) => ({ ...stepDone, [`step${stepNo}`]: true }));
@@ -142,7 +117,6 @@ function Step3({ state, setState, stepNo, setStepNo, setStepDone, banks }) {
     };
   }, []);
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // const [requestSent, setRequestSent] = React.useState(false);
@@ -150,15 +124,14 @@ function Step3({ state, setState, stepNo, setStepNo, setStepDone, banks }) {
   const [createCampaign, { isLoading, error }] = useCreateCampaignMutation();
 
   const sendForApproval = async (data) => {
-    const campaignData = {
-      ...state,
-      ...data,
-      bankName: banks.find((bank) => bank.name === bankNameValue)._id,
-    }
-    setState(campaignData);
+    // const campaignData = {
+    //   ...state,
+    //   ...data,
+    // };
+    // setState(campaignData);
     try {
       // console.log('before createCampaign request:', campaignData)
-      const { campaign } = await createCampaign(campaignData).unwrap();
+      const { campaign } = await createCampaign(state).unwrap();
       // console.log('after createCampaign request:', campaignData)
       // console.log("done");
       if (!campaign) {
@@ -199,12 +172,47 @@ function Step3({ state, setState, stepNo, setStepNo, setStepDone, banks }) {
             },
           }}
         >
-          <Box sx={{ mb: 5 }}>
-            <StyledHead>Payment Details</StyledHead>
+          <Box sx={{ mb: 1 }}>
+            <StyledHead>Approval Request</StyledHead>
           </Box>
 
+          <StyledText>
+            Great! You have entered all the information needed to create your
+            campaign. Now the last step is to send request to admin for approval
+            of your campaign. If it gets approved, your campaign will be public
+            and anyone can see it.
+          </StyledText>
+
           <form onSubmit={handleSubmit((data) => sendForApproval(data))}>
-            <Box sx={{ mb: 5 }}>
+            <LoadingButton
+              id="send-for-approval-button"
+              variant="contained"
+              disableElevation
+              sx={{
+                width: "100%",
+                py: 1,
+                borderRadius: 10,
+                textTransform: "none",
+                mt: 5,
+                // bgcolor: requestSent ? "#eee" : null,
+              }}
+              // disabled={requestSent}
+              loading={isLoading}
+              type="submit"
+            >
+              Send for Approval
+            </LoadingButton>
+          </form>
+        </Box>
+      </Box>
+    </Box>
+  );
+}
+
+export default Step3;
+
+/*
+<Box sx={{ mb: 5 }}>
               <StyledLabel>Bank Name</StyledLabel>
               <StyledAutoComplete
                 value={bankNameValue}
@@ -231,28 +239,4 @@ function Step3({ state, setState, stepNo, setStepNo, setStepDone, banks }) {
                 })}
               />
             </Box>
-            <LoadingButton
-              id="send-for-approval-button"
-              variant="contained"
-              disableElevation
-              sx={{
-                width: "100%",
-                py: 1,
-                borderRadius: 10,
-                textTransform: "none",
-                // bgcolor: requestSent ? "#eee" : null,
-              }}
-              // disabled={requestSent}
-              loading={isLoading}
-              type="submit"
-            >
-              Send for Approval
-            </LoadingButton>
-          </form>
-        </Box>
-      </Box>
-    </Box>
-  );
-}
-
-export default Step3;
+ */

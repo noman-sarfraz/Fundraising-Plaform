@@ -85,6 +85,7 @@ function AppbarComponent({ open, toggleDrawer }) {
 
   const user = useSelector(selectCurrentUser);
   const { name, role } = user;
+  
   const { data } = useGetFundraiserDetailsQuery();
 
   const onLogout = () => {

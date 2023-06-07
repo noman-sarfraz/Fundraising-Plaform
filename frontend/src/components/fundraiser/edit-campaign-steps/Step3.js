@@ -118,22 +118,18 @@ const StyledHead = styled(Typography).attrs((props) => ({}))`
   margin-bottom: 16px !important;
 `;
 
-function Step3({ state, setState, stepNo, setStepNo, setStepDone, banks }) {
+const StyledText = styled(Typography).attrs((props) => ({
+  variant: "caption",
+}))`
+  color: #798798;
+`;
+
+function Step3({ state, setState, stepNo, setStepNo, setStepDone }) {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-
-  const bankNames = banks.map((bank) => bank.name);
-  // console.log("bankNames:", bankNames);
-
-  const [bankNameValue, setBankNameValue] = useState(
-    state.bankName
-      ? banks.find((bank) => bank._id === state.bankName).name
-      : bankNames[0]
-  );
-  const [bankNameInput, setBankNameInput] = useState("");
 
   const visited = () => {
     setStepDone((stepDone) => ({ ...stepDone, [`step${stepNo}`]: true }));
@@ -154,15 +150,14 @@ function Step3({ state, setState, stepNo, setStepNo, setStepDone, banks }) {
 
   const handleUpdateCampaign = async (data) => {
     // console.log("banks:", banks, "bankname", bankNameValue);
-    const campaignData = {
-      ...state,
-      ...data,
-      bankName: banks.find((bank) => bank.name === bankNameValue)._id,
-    };
-    setState(campaignData);
+    // const campaignData = {
+    //   ...state,
+    //   ...data,
+    // };
+    // setState(campaignData);
     try {
       // console.log('before createCampaign request:', campaignData)
-      const { campaign } = await updateCampaign(campaignData).unwrap();
+      const { campaign } = await updateCampaign(state).unwrap();
       // console.log('after createCampaign request:', campaignData)
       // console.log("done");
       if (!campaign) {
@@ -203,12 +198,45 @@ function Step3({ state, setState, stepNo, setStepNo, setStepDone, banks }) {
             },
           }}
         >
-          <Box sx={{ mb: 5 }}>
-            <StyledHead>Payment Details</StyledHead>
+          <Box sx={{ mb: 1 }}>
+            <StyledHead>Save Changes</StyledHead>
           </Box>
 
+          <StyledText>
+            Finally press the below button to save changes and update your
+            campaign.
+          </StyledText>
+
           <form onSubmit={handleSubmit((data) => handleUpdateCampaign(data))}>
-            <Box sx={{ mb: 5 }}>
+            <LoadingButton
+              id="send-for-approval-button"
+              variant="contained"
+              disableElevation
+              sx={{
+                width: "100%",
+                py: 1,
+                borderRadius: 10,
+                textTransform: "none",
+                mt: 5,
+                // bgcolor: requestSent ? "#eee" : null,
+              }}
+              // disabled={requestSent}
+              loading={isLoading}
+              type="submit"
+            >
+              Update Campaign
+            </LoadingButton>
+          </form>
+        </Box>
+      </Box>
+    </Box>
+  );
+}
+
+export default Step3;
+
+/*
+<Box sx={{ mb: 5 }}>
               <StyledLabel>Bank Name</StyledLabel>
               <StyledAutoComplete
                 value={bankNameValue}
@@ -235,28 +263,4 @@ function Step3({ state, setState, stepNo, setStepNo, setStepDone, banks }) {
                 })}
               />
             </Box>
-            <LoadingButton
-              id="send-for-approval-button"
-              variant="contained"
-              disableElevation
-              sx={{
-                width: "100%",
-                py: 1,
-                borderRadius: 10,
-                textTransform: "none",
-                // bgcolor: requestSent ? "#eee" : null,
-              }}
-              // disabled={requestSent}
-              loading={isLoading}
-              type="submit"
-            >
-              Update Campaign
-            </LoadingButton>
-          </form>
-        </Box>
-      </Box>
-    </Box>
-  );
-}
-
-export default Step3;
+*/

@@ -25,6 +25,29 @@ const StyledTextField = styled(TextField).attrs((props) => ({
   margin-bottom: 16px !important;
 `;
 
+const StyledDatePicker = styled(TextField).attrs((props) => ({
+  fullWidth: true,
+  size: "small",
+  type: "date",
+  inputProps: {
+    style: {
+      fontSize: 14,
+      // padding: "12px 12px 12px 12px",
+    },
+  },
+  required: true,
+  // sx: {
+  //   width: "98%",
+  //   "& .MuiOutlinedInput-root": {
+  //     borderRadius: 0,
+  //     "&.Mui-focused fieldset": {
+  //       // borderColor: "red",
+  //       border: "1px solid #1976d2",
+  //     },
+  //   },
+  // },
+}))``;
+
 const StyledSelect = styled(Select).attrs((props) => ({
   fullWidth: true,
   size: "small",
@@ -113,6 +136,7 @@ function Step1({
   setStepNo,
   setStepDone,
   selectOptions,
+  categories,
 }) {
   // console.log("setState:", setState);
   // setState({ a: "aaa" });
@@ -132,6 +156,8 @@ function Step1({
     };
   }, []);
 
+  selectOptions.categories = categories.map((category) => category.name);
+
   const onContinue = (data) => {
     setState((state) => ({
       ...state,
@@ -139,8 +165,11 @@ function Step1({
       city: cityValue,
       country: countryValue,
       donationType: typeValue,
-      category: categoryValue,
+      category: categories.find((category) => category.name === categoryValue)
+        ._id,
+      endDate: typeValue === "With End Date" ? endDate : null,
     }));
+
     setStepNo((stepNo) => stepNo + 1);
     // setStepDone((stepDone) => ({...stepDone, [`step${stepNo}`]: true}));
     // console.log({
@@ -169,14 +198,16 @@ function Step1({
   const [countryInput, setCountryInput] = useState("");
 
   const [categoryValue, setCategoryValue] = useState(
-    state.category ? state.category : selectOptions.categories[0]
+    categories.find((category) => category._id === state.category).name
   );
   const [categoryInput, setCategoryInput] = useState("");
 
   const [typeValue, setTypeValue] = useState(
     state.donationType ? state.donationType : selectOptions.types[0]
   );
+
   const [typeInput, setTypeInput] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   return (
     <Box>
@@ -276,6 +307,15 @@ function Step1({
                 options={selectOptions.types}
                 renderInput={(params) => <TextField {...params} />}
               />
+              {typeValue === "With End Date" ? (
+                <Box>
+                  <StyledLabel>End Date</StyledLabel>
+                  <StyledDatePicker
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                  />
+                </Box>
+              ) : null}
             </Box>
             <Button
               variant="contained"

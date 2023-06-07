@@ -21,6 +21,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import AppsIcon from "@mui/icons-material/Apps";
+
 import {
   Avatar,
   Button,
@@ -47,6 +48,8 @@ import {
   faChalkboardTeacher,
   faMoneyCheckAlt,
 } from "@fortawesome/free-solid-svg-icons";
+import { MdOutlineMoney } from "react-icons/md";
+
 import { useLocation, useNavigate } from "react-router-dom";
 // import { isContentEditable } from "@testing-library/user-event/dist/utils";
 
@@ -217,9 +220,8 @@ function DrawerComponent({ open, toggleDrawer }) {
       >
         <List sx={{ flexGrow: 1 }}>
           {navItems.map((item, index) => (
-            <div>
+            <div key={item.name}>
               <ListItem
-                key={item.name}
                 disablePadding
                 sx={{ bgcolor: primary, color: "#b8c7ce" }}
               >
@@ -286,9 +288,9 @@ function DrawerComponent({ open, toggleDrawer }) {
         {/* down list */}
         <List>
           {navItems2.map((item, index) => (
-            <div>
+            <div key={item.name}>
               <ListItem
-                key={item.name}
+                
                 disablePadding
                 sx={{ bgcolor: primary, color: "#b8c7ce" }}
               >

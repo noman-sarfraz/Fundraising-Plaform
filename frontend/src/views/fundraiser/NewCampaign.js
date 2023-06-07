@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import StartFundraiseStep from "../../components/fundraiser/campaign-steps/StartFundraiseStep";
 import CircularLoader from "../../components/general/CircularLoader";
 import { useGetAllBanksQuery } from "../../features/bank/bankApiSlice";
+import { useGetAllCategoriesQuery } from "../../features/category/categoryApiSlice";
 
 function Step({ stepNumber, stepName, selected, disabled, onClick }) {
   return (
@@ -50,7 +51,7 @@ function Step({ stepNumber, stepName, selected, disabled, onClick }) {
 const stepHeaders = [
   { stepNo: 1, heading: "Get Started" },
   { stepNo: 2, heading: "Fundraiser Story" },
-  { stepNo: 3, heading: "Payment Details" },
+  { stepNo: 3, heading: "Approval Request" },
 ];
 
 const stepDoneInit = { step1: false, step2: false, step3: false };
@@ -59,22 +60,21 @@ function Newcampaign() {
   const [stepNo, setStepNo] = useState(1);
   const [stepDone, setStepDone] = useState(stepDoneInit);
 
+  const { data, isLoading, error } = useGetAllCategoriesQuery();
+
   const [state, setState] = useState({
     title: null,
     category: null,
     country: null,
     city: null,
     amountNeeded: null,
-    endDate: null,
     status: "Pending",
-    bankName: null,
-    bankAccountNo: null,
     donationType: null,
+    endDate: null,
     story: null,
   });
 
   var selectOptions = {
-    banks: [],
     categories: [
       "Animals & Pets",
       "Business & Startups",
@@ -159,10 +159,7 @@ function Newcampaign() {
       "Attock Khurd",
       "Other",
     ],
-    types: [
-      "Ongoing (no deadline) fundraiser",
-      "Fundraiser with a specific end date",
-    ],
+    types: ["Ongoing", "With End Date"],
 
     // moreCities: [`Muzaffarabad
     // Mianwali
@@ -263,18 +260,30 @@ function Newcampaign() {
     // Dalbandin`],
   };
 
-  console.log(state);
+  // console.log(state);
 
-  const { data, isLoading, isSuccess, isError } = useGetAllBanksQuery();
   if (isLoading) {
     return <CircularLoader />;
   }
-
-  if (isError || !isSuccess || !data.banks) {
-    return <Typography>Something went wrong</Typography>;
-  } else {
-    selectOptions.banks = data.banks;
+  if (error || !data.categories) {
+    console.log(error, data);
+    return <h1>Error</h1>;
   }
+
+  // selectOptions.categories = data.categories.map((category) => category.name);
+
+  // console.log(data);
+
+  // const { data, isLoading, isSuccess, isError } = useGetAllBanksQuery();
+  // if (isLoading) {
+  //   return <CircularLoader />;
+  // }
+
+  // if (isError || !isSuccess || !data.banks) {
+  //   return <Typography>Something went wrong</Typography>;
+  // } else {
+  //   selectOptions.banks = data.banks;
+  // }
 
   return (
     <Box>
@@ -303,8 +312,9 @@ function Newcampaign() {
           my: 2,
         }}
       >
-        {stepHeaders.map((stepHeader) => (
+        {stepHeaders.map((stepHeader, index) => (
           <Step
+            key={stepHeader.stepNo}
             stepNumber={stepHeader.stepNo}
             stepName={stepHeader.heading}
             stepDone={stepHeader.done}
@@ -322,6 +332,7 @@ function Newcampaign() {
         setState={setState}
         setStepDone={setStepDone}
         selectOptions={selectOptions}
+        categories={data.categories}
       />
     </Box>
   );

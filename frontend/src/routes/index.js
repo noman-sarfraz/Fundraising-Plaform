@@ -46,6 +46,7 @@ import ForgotPassword from "../views/general/ForgotPassword";
 import ForgotPasswordMessage from "../views/general/ForgotPasswordMessage";
 import ResetPassword from "../views/general/ResetPassword";
 import ResetPasswordMessage from "../views/general/ResetPasswordMessage";
+import WithdrawMoney from "../views/fundraiser/WithdrawMoney";
 
 function MainRoutes() {
   return (
@@ -59,6 +60,7 @@ function MainRoutes() {
           <Route path="edit-campaign/:id" element={<Editcampaign />} />
           <Route path="donation-history" element={<FRDonationHistory />} />
           <Route path="campaign-statistics" element={<CampaignStatistics />} />
+          <Route path="withdraw-money" element={<WithdrawMoney />} />
           <Route
             path="profile-settings"
             element={<FundraiserProfileSettings />}
@@ -102,15 +104,16 @@ function MainRoutes() {
           element={<ForgotPasswordMessage />}
         />
         <Route path="reset-password" element={<ResetPassword />} />
-        <Route path="reset-password-message" element={<ResetPasswordMessage />} />
-
-        {/* <Route path="*" element={<NotFound />} /> */}
+        <Route
+          path="reset-password-message"
+          element={<ResetPasswordMessage />}
+        />
+        <Route path="*" element={<NotFound />} />
       </Route>
       <Route path="/" element={<LayoutDeterminer />}>
         <Route path="campaign/:id" element={<Publiccampaign />} />
         <Route path="donate/:id" element={<Donate />} />
         <Route path="donate/payment-method/:id" element={<PaymentMethod />} />
-        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   );

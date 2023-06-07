@@ -22,7 +22,11 @@ import CampaignCard from "../../components/fundraiser/cards/CampaignCard";
 import CircularLoader from "../../components/general/CircularLoader";
 import PageHeader from "../../components/general/PageHeader";
 import { useGetAllBanksQuery } from "../../features/bank/bankApiSlice";
-import { useGetCampaignsQuery } from "../../features/campaign/campaignApiSlice";
+import {
+  useGetAllcampaignsQuery,
+  useGetCampaignsQuery,
+} from "../../features/campaign/campaignApiSlice";
+import { useGetAllCategoriesQuery } from "../../features/category/categoryApiSlice";
 
 const dummyCampaign = {
   image: CampaignPic1,
@@ -41,30 +45,43 @@ const dummyCampaign = {
 function Campaigns() {
   const { data, isLoading, isError, isSuccess, error } = useGetCampaignsQuery();
   const {
-    data: banksData,
-    isLoading: banksLoading,
-    isError: banksIsError,
-    error: banksError,
-    isSuccess: banksIsSuccess,
-  } = useGetAllBanksQuery();
+    data: campaignsData,
+    isLoading: campaignLoading,
+    error: campaignError,
+  } = useGetAllCategoriesQuery();
+  // const {
+  //   data: banksData,
+  //   isLoading: banksLoading,
+  //   isError: banksIsError,
+  //   error: banksError,
+  //   isSuccess: banksIsSuccess,
+  // } = useGetAllBanksQuery();
 
-  if (isLoading || banksLoading) {
+  if (isLoading || campaignLoading) {
     return <CircularLoader />;
   }
-  if (isError || !data.campaigns || banksIsError || !banksData.banks) {
-    console.log(error, banksError);
+  if (isError || !data.campaigns || campaignError) {
+    console.log(error, campaignError);
     return <h1>Error</h1>;
   }
 
   let campaigns, count;
-  if (isSuccess && banksIsSuccess) {
+  if (isSuccess) {
+    console.log(data, campaignsData);
     campaigns = data.campaigns;
     count = data.count;
-    console.log(campaigns);
+
+    campaigns = campaigns.map((campaign) => ({
+      ...campaign,
+      category: campaignsData.categories.find(
+        (category) => category._id === campaign.category
+      ).name,
+    }));
+    // console.log(campaigns);
   }
 
   return (
-    <Box sx={{}}>
+    <Box>
       <PageHeader
         header="Your Campaigns"
         text="See all of your campaigns and manage them however you want"
@@ -89,16 +106,7 @@ function Campaigns() {
             // campaign.bankName = banksData.banks.find(
             //   (bank) => bank._id === campaign.bankName
             // ).name;
-            return (
-              <CampaignCard
-                campaign={{
-                  ...campaign,
-                  bankName: banksData.banks.find(
-                    (bank) => bank._id === campaign.bankName
-                  ).name,
-                }}
-              />
-            );
+            return <CampaignCard campaign={campaign} />;
           })
         )}
       </Box>

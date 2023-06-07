@@ -5,6 +5,7 @@ import StartFundraiseStep from "../../components/fundraiser/edit-campaign-steps/
 import CircularLoader from "../../components/general/CircularLoader";
 import { useGetAllBanksQuery } from "../../features/bank/bankApiSlice";
 import { useGetCampaignQuery } from "../../features/campaign/campaignApiSlice";
+import { useGetAllCategoriesQuery } from "../../features/category/categoryApiSlice";
 
 function Step({ stepNumber, stepName, selected, disabled, onClick }) {
   return (
@@ -52,13 +53,12 @@ function Step({ stepNumber, stepName, selected, disabled, onClick }) {
 const stepHeaders = [
   { stepNo: 1, heading: "Get Started" },
   { stepNo: 2, heading: "Fundraiser Story" },
-  { stepNo: 3, heading: "Payment Details" },
+  { stepNo: 3, heading: "Save Changes" },
 ];
 
 const stepDoneInit = { step1: true, step2: true, step3: true };
 
 var selectOptions = {
-  banks: [],
   categories: [
     "Animals & Pets",
     "Business & Startups",
@@ -143,11 +143,7 @@ var selectOptions = {
     "Attock Khurd",
     "Other",
   ],
-  types: [
-    "Fundraiser with a specific end date",
-    "Ongoing (no deadline) fundraiser",
-  ],
-
+  types: ["Ongoing", "With End Date"],
   // moreCities: [`Muzaffarabad
   // Mianwali
   // Jalalpur Jattan
@@ -250,6 +246,10 @@ var selectOptions = {
 function Editcampaign() {
   const { id: campaignId } = useParams();
 
+  const { data, isLoading, error } = useGetAllCategoriesQuery();
+  
+  
+
   const [stepNo, setStepNo] = useState(1);
   const [stepDone, setStepDone] = useState(stepDoneInit);
 
@@ -269,7 +269,8 @@ function Editcampaign() {
 
   console.log(state);
 
-  const { data, isLoading, isSuccess, isError, error } = useGetAllBanksQuery();
+  
+  // const { data, isLoading, isSuccess, isError, error } = useGetAllBanksQuery();
   const {
     data: campaignData,
     isLoading: campaignIsLoading,
@@ -278,16 +279,15 @@ function Editcampaign() {
     error: campaignError,
   } = useGetCampaignQuery(campaignId);
 
-  if (isLoading || campaignIsLoading) {
+  if (campaignIsLoading || isLoading) {
     return <CircularLoader />;
   }
 
-  if (!data.banks || !campaignData.campaign) {
-    console.log(error, campaignError);
+  if (!campaignData.campaign || campaignIsError || error) {
+    console.log(campaignError, error);
     return <Typography>Something went wrong</Typography>;
   } else {
     // console.log("selectOptions:", selectOptions, "state:", state);
-    selectOptions.banks = data.banks;
     // console.log('selectOptions after:', selectOptions)
     if (!state) {
       setState(campaignData.campaign);
@@ -307,7 +307,7 @@ function Editcampaign() {
             pt: 2,
           }}
         >
-          Start Your Fundraise
+          Edit Fundraise
         </Typography>
       </Box>
       <Box
@@ -341,6 +341,7 @@ function Editcampaign() {
         setState={setState}
         setStepDone={setStepDone}
         selectOptions={selectOptions}
+        categories={data.categories}
       />
     </Box>
   );

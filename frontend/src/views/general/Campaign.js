@@ -6,7 +6,7 @@ import {
   Link,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import CampaignPic1 from "../../assets/images/Fundraise1.jpg";
 import OrganizerPic from "../../assets/images/OrganizerPic.jpg";
@@ -17,6 +17,9 @@ import { useDispatch } from "react-redux";
 import { useGetCampaignQuery } from "../../features/campaign/campaignApiSlice";
 import CircularLoader from "../../components/general/CircularLoader";
 import LayoutDeterminer from "../../layouts/layout-determiner/LayoutDeterminer";
+import { Payment } from "@mui/icons-material";
+import PaymentDialogue from "../../components/dialogues/fundraiser/PaymentDialogue";
+import AmountDialogue from "../../components/dialogues/fundraiser/AmountDialogue";
 // import { useGetFundraiseQuery } from "../../features/temp/tempApiSlice";
 
 const StyledLinearProgress = styled(LinearProgress).attrs((props) => ({}))`
@@ -51,6 +54,10 @@ const campaign = {
 function Campaign() {
   const { id } = useParams();
 
+  const [openPaymentDialogue, setOpenPaymentDialogue] = useState(false);
+  const [openAmountDialogue, setOpenAmountDialogue] = useState(false);
+  
+
   const { data, isLoading, isError, isSuccess, error } =
     useGetCampaignQuery(id);
 
@@ -74,6 +81,10 @@ function Campaign() {
     // fundraiser = data.fundraiser;
   }
 
+  const donateNowHandler = () => {
+    setOpenPaymentDialogue(true);
+  }
+
   return (
     <>
       <Box
@@ -84,6 +95,17 @@ function Campaign() {
           py: 3,
         }}
       >
+        <PaymentDialogue
+          open={openPaymentDialogue}
+          setOpen={setOpenPaymentDialogue}
+          callback={setOpenAmountDialogue}
+        />
+        
+        <AmountDialogue 
+          open={openAmountDialogue}
+          setOpen={setOpenAmountDialogue}
+        />
+
         <Typography
           color={"#1D548F"}
           sx={{
@@ -237,8 +259,8 @@ function Campaign() {
               Getting Funded!
             </Box> */}
                   <Button
-                    component={Link}
-                    href={`/donate/payment-method/${campaign._id}`}
+                    // component={Link}
+                    // href={`/donate/payment-method/${campaign._id}`}
                     sx={{
                       // bgcolor: "#F51616",
                       // color: "white",
@@ -252,6 +274,7 @@ function Campaign() {
                     }}
                     // color="success"
                     variant="contained"
+                    onClick={donateNowHandler}
                   >
                     Donate Now
                   </Button>

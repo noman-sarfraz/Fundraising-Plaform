@@ -11,6 +11,7 @@ function StartFundraiseStep({
   setState,
   setStepDone,
   selectOptions,
+  categories,
 }) {
   const steps = [
     {
@@ -24,6 +25,7 @@ function StartFundraiseStep({
             setState,
             setStepDone,
             selectOptions,
+            categories,
           }}
         />
       ),
@@ -54,7 +56,6 @@ function StartFundraiseStep({
             state,
             setState,
             setStepDone,
-            banks: selectOptions.banks,
           }}
         />
       ),

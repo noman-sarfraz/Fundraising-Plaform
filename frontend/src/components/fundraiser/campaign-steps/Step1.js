@@ -26,6 +26,29 @@ const StyledTextField = styled(TextField).attrs((props) => ({
   margin-bottom: 16px !important;
 `;
 
+const StyledDatePicker = styled(TextField).attrs((props) => ({
+  fullWidth: true,
+  size: "small",
+  type: "date",
+  inputProps: {
+    style: {
+      fontSize: 14,
+      // padding: "12px 12px 12px 12px",
+    },
+  },
+  required: true,
+  // sx: {
+  //   width: "98%",
+  //   "& .MuiOutlinedInput-root": {
+  //     borderRadius: 0,
+  //     "&.Mui-focused fieldset": {
+  //       // borderColor: "red",
+  //       border: "1px solid #1976d2",
+  //     },
+  //   },
+  // },
+}))``;
+
 const StyledSelect = styled(Select).attrs((props) => ({
   fullWidth: true,
   size: "small",
@@ -114,6 +137,7 @@ function Step1({
   setStepNo,
   setStepDone,
   selectOptions,
+  categories,
 }) {
   // console.log("setState:", setState);
   // setState({ a: "aaa" });
@@ -133,13 +157,16 @@ function Step1({
     };
   }, []);
 
+  selectOptions.categories = categories.map((category) => category.name);
+
   const onContinue = (data) => {
     setState((state) => ({
       ...state,
       ...data,
       city: cityValue === "Other" ? otherCity : cityValue,
       donationType: donationType,
-      category: categoryValue === "Other" ? otherCategory : categoryValue,
+      category: categoryValue === "Other" ? otherCategory : categories.find(category => category.name === categoryValue)._id,
+      endDate: donationType === "With End Date" ? endDate : null,
     }));
     setStepNo((stepNo) => stepNo + 1);
     // setStepDone((stepDone) => ({...stepDone, [`step${stepNo}`]: true}));
@@ -169,6 +196,7 @@ function Step1({
   );
   const [categoryInput, setCategoryInput] = useState("");
   const [otherCategory, setOtherCategory] = useState("");
+
   // const [category, setCategory] = useState("");
 
   // const [typeValue, setTypeValue] = useState(
@@ -176,6 +204,7 @@ function Step1({
   // );
   // const [typeInput, setTypeInput] = useState("");
   const [donationType, setDonationType] = useState(selectOptions.types[0]);
+  const [endDate, setEndDate] = useState("");
 
   return (
     <Box>
@@ -286,6 +315,15 @@ function Step1({
                   </MenuItem>
                 ))}
               </StyledSelect>
+              {donationType === "With End Date" ? (
+                <Box>
+                  <StyledLabel>End Date</StyledLabel>
+                  <StyledDatePicker
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                  />
+                </Box>
+              ) : null}
             </Box>
             <Button
               variant="contained"

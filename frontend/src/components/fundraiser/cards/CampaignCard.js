@@ -30,6 +30,8 @@ import { useNavigate } from "react-router-dom";
 import LinkDialogue from "../../dialogues/LinkDialogue";
 import DeleteCampaignDialogue from "../../dialogues/campaign/ConfirmDeleteCampaign";
 import StopCampaignDialogue from "../../dialogues/campaign/ComfirmStopCampaign";
+import { useGetAllCategoriesQuery, useGetCategoryQuery } from "../../../features/category/categoryApiSlice";
+import CircularLoader from "../../general/CircularLoader";
 
 const StyledLinearProgress = styled(LinearProgress).attrs((props) => ({}))`
   height: 10px !important;
@@ -72,8 +74,8 @@ function CampaignCard({
     story,
     amountNeeded,
     status,
-    bankName,
-    bankAccountNo,
+    amountCollected,
+    noOfDonations,
   },
 }) {
   const navigate = useNavigate();
@@ -83,6 +85,9 @@ function CampaignCard({
   const [openLinkDialogue, setOpenLinkDialogue] = useState(false);
   const [openDeleteDialogue, setOpenDeleteDialogue] = useState(false);
   const [openStopDialogue, setOpenStopDialogue] = useState(false);
+
+  // if (isLoading) return <CircularLoader />;
+  // if (error) return <p>error</p>;
 
   return (
     <Box
@@ -188,7 +193,7 @@ function CampaignCard({
             <Typography
               sx={{ color: "#4A90E2", fontSize: 14, fontWeight: 600 }}
             >
-              {`Raised: PKR ${raisedAmount.toFixed(2)}`}
+              {`Raised: PKR ${amountCollected.toFixed(2)}`}
             </Typography>
             <Typography
               sx={{
@@ -208,7 +213,7 @@ function CampaignCard({
               <Typography variant="caption">Donors:</Typography>
             </Grid>
             <Grid item xs={8}>
-              <Typography variant="caption">{donors}</Typography>
+              <Typography variant="caption">{noOfDonations}</Typography>
             </Grid>
           </Grid>
           <Grid container>
@@ -225,24 +230,6 @@ function CampaignCard({
             </Grid>
             <Grid item xs={8}>
               <Typography variant="caption">{status}</Typography>
-            </Grid>
-          </Grid>
-
-          <Grid container>
-            <Grid item xs={4}>
-              <Typography variant="caption">Bank Name:</Typography>
-            </Grid>
-            <Grid item xs={8}>
-              <Typography variant="caption">{bankName}</Typography>
-            </Grid>
-          </Grid>
-
-          <Grid container>
-            <Grid item xs={4}>
-              <Typography variant="caption">Account Number:</Typography>
-            </Grid>
-            <Grid item xs={8}>
-              <Typography variant="caption">{bankAccountNo}</Typography>
             </Grid>
           </Grid>
         </Box>
@@ -302,6 +289,7 @@ function CampaignCard({
               stopCampaignId = _id;
               setOpenStopDialogue(true);
             }}
+            // disabled={status == ''}
           >
             <SideButtonText color="#e65100">Stop</SideButtonText>
           </CampaignSideButton>

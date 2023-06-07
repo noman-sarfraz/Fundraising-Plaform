@@ -28,6 +28,8 @@ import {
 import PageHeader from "../../components/general/PageHeader";
 import StyledFileInput from "../../components/general/StyledFileInput";
 import { useUploadImageMutation } from "../../features/uploads/uploadsApiSlice";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../features/auth/authSlice";
 
 const StyledTextField = styled(TextField).attrs((props) => ({
   fullWidth: true,
@@ -94,9 +96,12 @@ const StyledHead = styled(Typography).attrs((props) => ({
 // }
 
 function ProfileSettings() {
+  const user = useSelector(selectCurrentUser);
+  const userId = user?.userId;
+  console.log("userId:", userId);
+
   const [uploadImage, { isLoading: isImageLoading }] = useUploadImageMutation();
   const [image, setImage] = useState(null);
-  
 
   const {
     register,
@@ -109,9 +114,12 @@ function ProfileSettings() {
   const [openPasswordDialogue, setOpenPasswordDialogue] = useState(false);
 
   let fundraiser = null;
- 
-  const { data: details, isLoading: areDetailsLoading } =
-    useGetFundraiserDetailsQuery();
+
+  const {
+    data: details,
+    isLoading: areDetailsLoading,
+    error: detailsError,
+  } = useGetFundraiserDetailsQuery(userId);
   const [updateFundraiserDetails, { isLoading }] =
     useUpdateFundraiserDetailsMutation();
 
@@ -121,16 +129,18 @@ function ProfileSettings() {
         ...data,
         image: image,
       }).unwrap();
-      if (res?.fundraiser) {
+      if (res?.user) {
         setOpenUpdateNotification(true);
+        console.log(res)
         // toast.success("Details saved successfully!");
         // console.log(res);
       } else {
         toast.error("Something went wrong!");
-        // console.log(res);
+        console.log(res);
       }
     } catch (error) {
       toast.error("Something went wrong!");
+      console.log(error);
     }
   };
 
@@ -143,15 +153,18 @@ function ProfileSettings() {
   };
 
   if (areDetailsLoading) return <CircularLoader />;
-  if (!areDetailsLoading && !details?.fundraiser) {
+  if (!areDetailsLoading && !details?.user) {
+    console.log(detailsError, details);
     return <Typography>Something went wrong!</Typography>;
   } else {
-    fundraiser = details.fundraiser;
+    fundraiser = details.user;
   }
 
   if (!image && fundraiser?.image) {
     setImage(fundraiser.image);
   }
+
+  console.log(fundraiser)
 
   const addProfilePicture = async (e) => {
     const formData = new FormData();
