@@ -59,34 +59,9 @@ const deleteCampaign = async (req, res) => {
   res.status(StatusCodes.OK).json({ success: true });
 };
 
-const changeIsStopped = async (req, res) => {
-  const {
-    user: { userId },
-    params: { id: campaignId },
-  } = req;
-
-  if (!req.body.isStopped) {
-    throw new BadRequestError(`isStopped required`);
-  }
-
-  const campaign = await Campaign.findOne({
-    _id: campaignId,
-    createdBy: userId,
-  });
-  if (!campaign) {
-    throw new NotFoundError(`No campaign found with id ${campaignId}`);
-  }
-
-  campaign.isStopped = req.body.isStopped;
-  await campaign.save();
-
-  res.status(StatusCodes.OK).json({ campaign });
-};
-
 module.exports = {
   getMyCampaigns,
   createCampaign,
   updateCampaign,
   deleteCampaign,
-  changeIsStopped,
 };

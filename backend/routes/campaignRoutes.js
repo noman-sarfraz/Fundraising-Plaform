@@ -27,6 +27,7 @@ const {
   getCampaign,
   getApproved,
   getFundraiserInfo,
+  changeIsStopped,
 } = require("../controllers/campaign/campaignGeneralController");
 
 router.route("/get-approved").get(getApproved);
@@ -39,7 +40,6 @@ const {
   createCampaign,
   updateCampaign,
   deleteCampaign,
-  changeIsStopped,
 } = require("../controllers/campaign/campaignCrudController");
 
 router
