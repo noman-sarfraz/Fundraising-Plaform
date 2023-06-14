@@ -52,6 +52,12 @@ const campaignSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    donations: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Donation",
+      },
+    ],
     createdBy: {
       type: mongoose.Types.ObjectId,
       ref: "User",

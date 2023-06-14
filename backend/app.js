@@ -22,6 +22,7 @@ const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const campaignRoutes = require("./routes/campaignRoutes");
+const donationRoutes = require("./routes/donationRoutes");
 const uploadsRoutes = require("./routes/uploadsRoutes");
 
 // error handlers
@@ -62,6 +63,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1/", authRoutes);
 app.use("/api/v1/users", authenticateUser, userRoutes);
 app.use("/api/v1/categories", authenticateUser, categoryRoutes);
+app.use("/api/v1/donations", authenticateUser, donationRoutes);
 app.use("/api/v1/uploads", authenticateUser, uploadsRoutes);
 app.use("/api/v1/campaigns", campaignRoutes);
 
