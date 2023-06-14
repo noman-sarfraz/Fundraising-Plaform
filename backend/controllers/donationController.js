@@ -2,22 +2,20 @@ const Donation = require("../models/Donation");
 const Campaign = require("../models/Campaign");
 
 const { StatusCodes } = require("http-status-codes");
-const { BadRequestError, NotFoundError } = require("../../errors");
+const { BadRequestError, NotFoundError } = require("../errors");
 
 const createDonation = async (req, res) => {
   // get userId and campaignId
   const {
     user: { userId },
-    params: { id: campaignId },
   } = req;
 
   req.body.donorId = userId;
-  req.body.campaignId = campaignId;
 
   // find campaign
-  const campaign = await Campaign.find({ _id: campaignId });
+  const campaign = await Campaign.findById(req.body.campaignId);
   if (!campaign) {
-    throw new NotFoundError("No campaign found with id ", campaignId);
+    throw new NotFoundError("No campaign found with id ", req.body.campaignId);
   }
 
   // create donation and update campaign

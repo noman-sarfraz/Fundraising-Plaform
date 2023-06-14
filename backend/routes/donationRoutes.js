@@ -19,3 +19,5 @@ router
 
 router.route("/get-donations/:id").get(getDonationsOfCampaign);
 router.route("/:id").get(getDonation);
+
+module.exports = router;
