@@ -6,20 +6,22 @@ import {
   Link,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import CampaignPic1 from "../../assets/images/Fundraise1.jpg";
 import OrganizerPic from "../../assets/images/OrganizerPic.jpg";
 import UnknownPersonPic from "../../assets/images/unknownPerson.jpg";
 import { AiOutlineLink } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useGetCampaignQuery } from "../../features/campaign/campaignApiSlice";
 import CircularLoader from "../../components/general/CircularLoader";
 import LayoutDeterminer from "../../layouts/layout-determiner/LayoutDeterminer";
 import { Payment } from "@mui/icons-material";
 import PaymentDialogue from "../../components/dialogues/fundraiser/PaymentDialogue";
 import AmountDialogue from "../../components/dialogues/fundraiser/AmountDialogue";
+import { useGetDetailsQuery } from "../../features/donor/donorApiSlice";
+import { selectCurrentUser } from "../../features/auth/authSlice";
 // import { useGetFundraiseQuery } from "../../features/temp/tempApiSlice";
 
 const StyledLinearProgress = styled(LinearProgress).attrs((props) => ({}))`
@@ -37,53 +39,86 @@ const Dot = () => {
   );
 };
 
-const campaign = {
-  image: CampaignPic1,
-  category: "Flood Relief",
-  startDate: "Dec 22, 2022",
-  title: "Flood Relief Fund",
-  story: `As my previous 4 fundraisings, this one will have a goal to achieve too. If you don't know Adrian, he used to be the vocalist of the Polish death metal band Decapitated and recorded the album Organic Hallucinosis with them in 2006.`,
-  raisedAmount: 1000,
-  goalAmount: 7000,
-  donors: 5,
-  status: "Active",
-  stripeAccount: "Not Connected",
-  paypalAccount: "Not Connected",
+// const campaign = {
+//   image: CampaignPic1,
+//   category: "Flood Relief",
+//   startDate: "Dec 22, 2022",
+//   title: "Flood Relief Fund",
+//   story: `As my previous 4 fundraisings, this one will have a goal to achieve too. If you don't know Adrian, he used to be the vocalist of the Polish death metal band Decapitated and recorded the album Organic Hallucinosis with them in 2006.`,
+//   raisedAmount: 1000,
+//   goalAmount: 7000,
+//   donors: 5,
+//   status: "Active",
+//   stripeAccount: "Not Connected",
+//   paypalAccount: "Not Connected",
+// };
+
+const fetchData = async (id) => {
+  const response = await fetch("http://localhost:5000/api/v1/users/" + id)
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data);
+      return data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  return response;
 };
 
 function Campaign() {
   const { id } = useParams();
+  const { userId } = useSelector(selectCurrentUser);
 
   const [openPaymentDialogue, setOpenPaymentDialogue] = useState(false);
   const [openAmountDialogue, setOpenAmountDialogue] = useState(false);
-  
 
-  const { data, isLoading, isError, isSuccess, error } =
-    useGetCampaignQuery(id);
+  const {
+    data,
+    isLoading,
+    isError,
+    isSuccess,
+    error,
+    isFulfilled: campaignFulfilled,
+  } = useGetCampaignQuery(id);
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const {
+    data: organizerData,
+    isLoading: organizerLoading,
+    error: organizerError,
+  } = useGetDetailsQuery(userId);
 
-  // const [getCampaign, { isLoading, error }] = useGetCampaignQuery();
+  // let campaign, organizer;
+  // if (isLoading || organizerLoading) {
+  //   return <CircularLoader />;
+  // }
+  // if (data?.campaign && organizerData?.user) {
+  //   campaign = data.campaign;
+  //   organizer = organizerData.user;
+  //   console.log(error);
+  // } else {
+  //   console.log(error, organizerError);
+  //   console.log(data, organizerData);
+  //   return <div>Something went wrong</div>;
+  // }
 
+  let campaign;
   if (isLoading) {
     return <CircularLoader />;
   }
-  if (isError || !data.campaign) {
-    console.log(error);
-    return <h1>Error</h1>;
-  }
-
-  let campaign;
-  // , fundraiser;
-  if (isSuccess) {
+  if (data?.campaign) {
     campaign = data.campaign;
-    // fundraiser = data.fundraiser;
+    // organizer = organizerData.user;
+    // console.log(error);
+  } else {
+    // console.log(error, organizerError);
+    // console.log(data, organizerData);
+    return <div>Something went wrong</div>;
   }
 
   const donateNowHandler = () => {
     setOpenPaymentDialogue(true);
-  }
+  };
 
   return (
     <>
@@ -100,10 +135,11 @@ function Campaign() {
           setOpen={setOpenPaymentDialogue}
           callback={setOpenAmountDialogue}
         />
-        
-        <AmountDialogue 
+
+        <AmountDialogue
           open={openAmountDialogue}
           setOpen={setOpenAmountDialogue}
+          params={{ campaignId: campaign._id, transactionId: "1238ffew8wf7" }}
         />
 
         <Typography
@@ -126,7 +162,7 @@ function Campaign() {
         <Box sx={{ mb: 10 }}>
           <Typography variant="body2" sx={{ textAlign: "center" }}>
             Fundraising campaign by
-            <b style={{ color: "#F71616" }}> {campaign.organizerName}</b>
+            <b style={{ color: "#F71616" }}> {campaign.createdBy}</b>
             <Dot />
             <b style={{ color: "#F71616" }}>
               {`${campaign.city}, ${campaign.country}`}
@@ -202,7 +238,7 @@ function Campaign() {
                       textAlign: "center",
                     }}
                   >
-                    PKR 00.00
+                    {campaign.amountCollected.toFixed(2)}
                   </Typography>
                   <Typography
                     sx={{
@@ -229,7 +265,10 @@ function Campaign() {
                     <Typography
                       sx={{ color: "#F51616", fontSize: 12, fontWeight: 700 }}
                     >
-                      {`${0}% Funded`}
+                      {`${(
+                        (campaign.amountCollected / campaign.amountNeeded) *
+                        100
+                      ).toFixed(2)}% Funded`}
                     </Typography>
                     <Typography
                       sx={{
@@ -239,7 +278,7 @@ function Campaign() {
                         fontWeight: 700,
                       }}
                     >
-                      {`${0} Donors`}
+                      {`${campaign.noOfDonations} Donations`}
                     </Typography>
                   </Box>
                   {/* <Box
@@ -337,14 +376,14 @@ function Campaign() {
                 >
                   <Avatar
                     alt="Organizer"
-                    src={null}
+                    src={organizerData?.user?.image}
                     sx={{ width: 60, height: 60, mr: 2 }}
                   />
                   <Box sx={{ display: "flex", alignItems: "center" }}>
                     <Typography
                       sx={{ fontSize: 16, fontWeight: 600, color: "#F7162C" }}
                     >
-                      {campaign.organizerName}
+                      {organizerData?.user?.name}
                     </Typography>
                   </Box>
                 </Box>
@@ -357,7 +396,7 @@ function Campaign() {
                   Donors
                 </Typography>
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
-                  <Typography
+                  {/* <Typography
                     sx={{
                       textTransform: "none",
                       fontSize: 14,
@@ -366,8 +405,8 @@ function Campaign() {
                     }}
                   >
                     No Donors Yet
-                  </Typography>
-                  {[].map((item) => (
+                  </Typography> */}
+                  {[1, 2, 3].map((item) => (
                     <Box
                       sx={{
                         display: "flex",
@@ -405,7 +444,7 @@ function Campaign() {
                             color: "#F51616",
                           }}
                         >
-                          $170.00
+                          PKR 2000.00
                         </Typography>
                       </Box>
                     </Box>

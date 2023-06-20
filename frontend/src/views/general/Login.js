@@ -134,6 +134,7 @@ function Login() {
           <Typography
             sx={{
               fontWeight: 300,
+              color: "#000",
               textAlign: "center",
               fontSize: "24px",
               textDecoration: "underline",
@@ -149,6 +150,7 @@ function Login() {
               textAlign: "center",
               mb: 2,
               fontSize: "20px",
+              color: "#000",
             }}
           >
             Login Now

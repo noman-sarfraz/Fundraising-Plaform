@@ -141,6 +141,7 @@ function Register() {
               textDecoration: "underline",
               textUnderlineOffset: "5px",
               mb: 5,
+              color: "#000",
             }}
           >
             FUND<b>RAISING</b>
@@ -151,6 +152,7 @@ function Register() {
               textAlign: "center",
               mb: 2,
               fontSize: "20px",
+              color: "#000",
             }}
           >
             Register Now

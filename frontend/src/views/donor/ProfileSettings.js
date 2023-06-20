@@ -27,6 +27,9 @@ import { RiSave2Fill } from "react-icons/ri";
 import { AiFillDelete } from "react-icons/ai";
 import { useUploadImageMutation } from "../../features/uploads/uploadsApiSlice";
 import StyledFileInput from "../../components/general/StyledFileInput";
+import { useGetFundraiserDetailsQuery } from "../../features/fundraiser/fundraiserApiSlice";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "./../../features/auth/authSlice";
 
 const StyledTextField = styled(TextField).attrs((props) => ({
   fullWidth: true,
@@ -108,13 +111,20 @@ function ProfileSettings() {
 
   let donor = null;
 
-  const { data: details, isLoading: areDetailsLoading } = useGetDetailsQuery();
+  const user = useSelector(selectCurrentUser);
+  const { name, userId, role } = user;
+  const {
+    data: details,
+    isLoading: areDetailsLoading,
+    error: detailsError,
+  } = useGetFundraiserDetailsQuery(userId);
+
   const [updateDetails, { isLoading }] = useUpdateDetailsMutation();
 
   const saveDetails = async (data) => {
     try {
       const res = await updateDetails({ ...data, image: image }).unwrap();
-      if (res?.donor) {
+      if (res?.user) {
         setOpenUpdateNotification(true);
         // toast.success("Details saved successfully!");
         // console.log(res);
@@ -136,12 +146,12 @@ function ProfileSettings() {
   };
 
   if (areDetailsLoading) return <CircularLoader />;
-  if (!areDetailsLoading && !details?.donor) {
+  if (!areDetailsLoading && !details?.user) {
     // console.log(details);
     // console.log(details);
     return <Typography>Something went wrong!</Typography>;
   } else {
-    donor = details.donor;
+    donor = details.user;
   }
 
   const uploadProfilePicture = async (e) => {

@@ -88,6 +88,7 @@ function ForgotPassword() {
                 fontSize: 22,
                 textDecoration: "underline",
                 textUnderlineOffset: "5px",
+                color: "#000",
               }}
             >
               Forgot Password

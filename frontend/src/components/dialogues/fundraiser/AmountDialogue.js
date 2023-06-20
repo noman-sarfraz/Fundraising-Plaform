@@ -20,7 +20,7 @@ import { useForm } from "react-hook-form";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { toast } from "react-toastify";
 import { useChangePasswordMutation } from "../../../features/donor/donorApiSlice";
-
+import { useCreateDonationMutation } from "../../../features/donations/donationsApiSlice";
 
 const StyledTextField = styled(TextField).attrs((props) => ({
   size: "small",
@@ -30,7 +30,6 @@ const StyledTextField = styled(TextField).attrs((props) => ({
       padding: "12px 12px 12px 12px",
     },
   },
-  required: true,
   sx: {
     "& .MuiOutlinedInput-root": {
       "&.Mui-focused fieldset": {
@@ -59,42 +58,56 @@ const StyledTextArea = styled(TextField).attrs((props) => ({
     },
   },
   type: "text",
-  required: true,
 }))`
   margin-bottom: 16px !important;
   width: 100% !important;
 `;
 
-
-
-export default function AmountDialogue({ open, setOpen, callback }) {
+export default function AmountDialogue({ open, setOpen, params }) {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const [paymentMethod, setPaymentMethod] = React.useState("Card Payment");
-
-  const [changePassword, { isLoading }] = useChangePasswordMutation();
+  const [createDonation, { isLoading }] = useCreateDonationMutation();
 
   const handleClose = () => {
     setOpen(false);
   };
 
   const onSubmit = async (formData) => {
-    console.log(formData);
+    try {
+      const data = await createDonation({
+        amount: formData.amount,
+        comment: formData.comment,
+        campaignId: params.campaignId,
+        transactionId: params.transactionId,
+      }).unwrap();
+      if (data?.donation) {
+        toast.success("Donation Successful!");
+        console.log(data);
+        handleClose();
+      } else {
+        console.log(data);
+        toast.error(data?.msg ? data.msg : "Donation Failed!");
+        handleClose();
+      }
+    } catch (er) {
+      console.log(er);
+      toast.error(er.data?.msg ? er.data.msg : "Donation Failed!");
+      handleClose();
+    }
     handleClose();
-    callback(true);
   };
-
+  
   return (
     <Dialog
       open={open}
       onClose={handleClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
-      
+
       // sx={{
       //   display: 'flex',
       //   justifyContent: 'center',
@@ -123,6 +136,7 @@ export default function AmountDialogue({ open, setOpen, callback }) {
             </Typography>
 
             <StyledTextField
+              required
               placeholder="Enter Amount"
               type="number"
               InputProps={{
@@ -135,9 +149,10 @@ export default function AmountDialogue({ open, setOpen, callback }) {
               {...register("amount", { required: true, min: 1 })}
               error={errors.amount ? true : false}
             />
-            <StyledTextArea {...register("comment")} />
-
-            
+            <StyledTextArea
+              placeholder="Enter Comment"
+              {...register("comment")}
+            />
 
             <LoadingButton
               variant="contained"
