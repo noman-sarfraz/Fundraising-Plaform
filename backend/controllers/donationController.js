@@ -1,15 +1,24 @@
 const Donation = require("../models/Donation");
 const Campaign = require("../models/Campaign");
 
+const {
+  addDonation,
+} = require("../controllers/campaign/campaignGeneralController");
+const { addBalance } = require("../controllers/accountController");
+
 const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, NotFoundError } = require("../errors");
 
 const createDonation = async (req, res) => {
+  // validate amount entered
+  if (req.body.amount <= 0) {
+    throw new BadRequestError(`Donation amount must be greater than 0`);
+  }
+
   // get userId and campaignId
   const {
     user: { userId },
   } = req;
-
   req.body.donorId = userId;
 
   // find campaign
@@ -18,16 +27,17 @@ const createDonation = async (req, res) => {
     throw new NotFoundError("No campaign found with id ", req.body.campaignId);
   }
 
-  // create donation and update campaign
+  // create donation
   const donation = await Donation.create(req.body);
+
+  // add donation in campaign
+  // and add balance in account
   if (donation) {
-    campaign.amountCollected += donation.amount;
-    campaign.noOfDonations++;
-    campaign.donations.push(donation._id);
-    await campaign.save();
+    await addDonation(req.body.campaignId, donation._id, donation.amount);
+    await addBalance(campaign.createdBy, donation.amount);
   }
 
-  res.status(StatusCodes.CREATED).json({ donation, campaign });
+  res.status(StatusCodes.CREATED).json({ donation });
 };
 
 const getDonation = async (req, res) => {

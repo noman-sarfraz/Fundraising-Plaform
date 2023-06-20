@@ -96,10 +96,20 @@ const changeIsStopped = async (req, res) => {
   res.status(StatusCodes.OK).json({ campaign });
 };
 
+const addDonation = async (campaignId, donationId, amount) => {
+  const campaign = await Campaign.findById(campaignId);
+  campaign.noOfDonations++;
+  campaign.amountCollected += amount;
+  campaign.donations.push(donationId);
+
+  await campaign.save();
+};
+
 module.exports = {
   addDonationAmount,
   getCampaign,
   getApproved,
   getFundraiserInfo,
   changeIsStopped,
+  addDonation,
 };

@@ -24,6 +24,8 @@ const categoryRoutes = require("./routes/categoryRoutes");
 const campaignRoutes = require("./routes/campaignRoutes");
 const donationRoutes = require("./routes/donationRoutes");
 const uploadsRoutes = require("./routes/uploadsRoutes");
+// const stripeRoutes = require("./routes/stripeRoutes");
+const accountRoutes = require("./routes/accountRoutes");
 
 // error handlers
 const notFoundMiddleware = require("./middleware/not-found");
@@ -35,7 +37,10 @@ const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 
 // authenticator
-const { authenticateUser } = require("./middleware/authenticate-user");
+const {
+  authenticateUser,
+  authorizePermissions,
+} = require("./middleware/authenticate-user");
 
 // MAIN WORK
 
@@ -65,7 +70,9 @@ app.use("/api/v1/users", authenticateUser, userRoutes);
 app.use("/api/v1/categories", authenticateUser, categoryRoutes);
 app.use("/api/v1/donations", authenticateUser, donationRoutes);
 app.use("/api/v1/uploads", authenticateUser, uploadsRoutes);
+// app.use("/api/v1/stripe", authenticateUser, stripeRoutes);
 app.use("/api/v1/campaigns", campaignRoutes);
+app.use("/api/v1/accounts", authenticateUser, accountRoutes);
 
 // using middlewares
 app.use(notFoundMiddleware);
