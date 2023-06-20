@@ -54,6 +54,7 @@ import { logOut, selectCurrentUser } from "../../../features/auth/authSlice";
 import jwtDecode from "jwt-decode";
 import { campaignApiSlice } from "../../../features/campaign/campaignApiSlice";
 import { useGetDetailsQuery } from "../../../features/donor/donorApiSlice";
+import { useGetFundraiserDetailsQuery } from "../../../features/fundraiser/fundraiserApiSlice";
 
 const drawerWidth = 250;
 
@@ -83,8 +84,8 @@ function AppbarComponent({ open, toggleDrawer }) {
   const dispatch = useDispatch();
 
   const user = useSelector(selectCurrentUser);
-  const { name, role } = user;
-  const { data, isLoading } = useGetDetailsQuery();
+  const { name, userId, role } = user;
+  const { data } = useGetFundraiserDetailsQuery(userId);
 
   const onLogout = () => {
     dispatch(campaignApiSlice.util.resetApiState());
@@ -151,7 +152,7 @@ function AppbarComponent({ open, toggleDrawer }) {
             <Avatar
               size="large"
               alt="Profile Picture"
-              src={data?.donor?.image}
+              src={data?.user?.image}
               sx={{
                 height: "24px",
                 width: "24px",
@@ -242,7 +243,7 @@ function AppbarComponent({ open, toggleDrawer }) {
                       <Avatar
                         // size="large"
                         alt="Profile Picture"
-                        src={data?.donor?.image}
+                        src={data?.user?.image}
                         sx={{
                           height: "80px",
                           width: "80px",

@@ -8,7 +8,6 @@ import {
 
 import FundraiserLayout from "../layouts/FundraiserLayout";
 import DonorLayout from "../layouts/DonorLayout";
-import Home from "../views/general/Home";
 import DefaultLayout from "../layouts/DefaultLayout";
 import AdminLayout from "../layouts/AdminLayout";
 import NotFound from "../views/general/NotFound";
@@ -24,7 +23,7 @@ import AdminProfileSettings from "../views/admin/ProfileSettings";
 import DonorFAQs from "../views/donor/FAQs";
 import DonorHowItWorks from "../views/donor/HowItWorks";
 import Campaigns from "../views/fundraiser/Campaigns";
-import Campaign from "../views/fundraiser/Campaign";
+// import Campaign from "../views/fundraiser/Campaign";
 import Publiccampaign from "../views/general/Campaign";
 import Newcampaign from "../views/fundraiser/NewCampaign";
 import FRDonationHistory from "../views/fundraiser/DonationHistory";
@@ -93,6 +92,7 @@ function MainRoutes() {
       </Route>
 
       <Route path="/" element={<DefaultLayout />}>
+        {/* <Route path="/" element={<Home />} /> */}
         <Route index element={<Navigate to="login" />} />
         <Route path="register" element={<Register />} />
         <Route path="login" element={<Login />} />

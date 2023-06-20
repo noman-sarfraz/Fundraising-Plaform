@@ -24,5 +24,5 @@ const donationSchema = mongoose.Schema(
   },
   { timestamps: true }
 );
-
+ 
 module.exports = mongoose.model("Donation", donationSchema);
