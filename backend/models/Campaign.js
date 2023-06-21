@@ -53,7 +53,7 @@ const campaignSchema = new mongoose.Schema(
       default: 0,
     },
     donations: {
-      type: [mongoose.Schema.Types.ObjectId],
+      type: [mongoose.Types.ObjectId],
       default: [],
     },
     createdBy: {

@@ -106,7 +106,7 @@ const addDonation = async (campaignId, donationId, amount) => {
   await campaign.save();
 };
 
-const getDonations = async (req, res) => {
+const getAllDonations = async (req, res) => {
   const {
     user: { userId },
   } = req;
@@ -128,6 +128,30 @@ const getDonations = async (req, res) => {
   }
   res.status(StatusCodes.OK).json({ allDonations, count: allDonations.length });
 };
+
+const getDonations = async (req, res) => {
+  const {
+    user: { userId },
+    params: { id: campaignId },
+  } = req;
+
+  const campaign = await Campaign.findOne({
+    _id: campaignId,
+    createdBy: userId,
+  });
+  if (!campaign) {
+    throw new NotFoundError(`No campaign found with id ${campaignId}`);
+  }
+
+  let allDonations = [];
+  for (const donation of campaign.donations) {
+    const d = await Donation.findById(donation);
+    allDonations.push(d);
+  }
+
+  res.status(StatusCodes.OK).json({ allDonations, count: allDonations.length });
+};
+
 module.exports = {
   addDonationAmount,
   getCampaign,
@@ -135,5 +159,6 @@ module.exports = {
   getFundraiserInfo,
   changeIsStopped,
   addDonation,
+  getAllDonations,
   getDonations,
 };

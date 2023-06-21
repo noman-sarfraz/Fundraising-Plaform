@@ -28,6 +28,7 @@ const {
   getApproved,
   getFundraiserInfo,
   changeIsStopped,
+  getAllDonations,
   getDonations,
 } = require("../controllers/campaign/campaignGeneralController");
 
@@ -36,8 +37,10 @@ router.route("/fundraiser-info/:id").get(getFundraiserInfo);
 router.route("/add-donation/:id").patch(authenticateUser, addDonationAmount);
 router
   .route("/donations/get-all")
+  .get(authenticateUser, authorizePermissions("Fundraiser"), getAllDonations);
+router
+  .route("/donations/:id")
   .get(authenticateUser, authorizePermissions("Fundraiser"), getDonations);
-
 // Campaign CRUD Controller Routes
 const {
   getMyCampaigns,
