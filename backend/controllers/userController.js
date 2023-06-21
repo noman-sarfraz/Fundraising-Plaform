@@ -108,7 +108,7 @@ const createAdmin = async (req, res) => {
   const user = await User.create({ ...req.body });
 
   // send verification email
-  const origin = "front end link";
+  const origin = "http://localhost:3000";
   await sendVerificationEmail({
     name: user.name,
     email: user.email,
