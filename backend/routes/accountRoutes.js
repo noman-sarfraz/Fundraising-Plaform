@@ -7,6 +7,7 @@ const {
   createAccount,
   getBalance,
   withdrawBalance,
+  getWithdraws,
 } = require("../controllers/accountController");
 
 router.route("/").post(createAccount);
@@ -17,4 +18,7 @@ router
   .route("/withdraw-balance")
   .post(authorizePermissions("Fundraiser"), withdrawBalance);
 
+router
+  .route("/get-withdraws")
+  .get(authorizePermissions("Fundraiser"), getWithdraws);
 module.exports = router;

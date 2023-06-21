@@ -4,6 +4,7 @@ const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, NotFoundError } = require("../errors");
 
 const { createWithdraw } = require("../controllers/withdrawController");
+const Withdraw = require("../models/Withdraw");
 
 const createAccount = async (req, res) => {
   // get user id
@@ -63,4 +64,24 @@ const withdrawBalance = async (req, res) => {
   res.status(StatusCodes.OK).json({ balance: account.balance });
 };
 
-module.exports = { createAccount, addBalance, getBalance, withdrawBalance };
+const getWithdraws = async (req, res) => {
+  const {
+    user: { userId },
+  } = req;
+
+  let allWithdraws = [];
+  const account = await Account.findOne({ userId });
+  for (const withdraw of account.withdraws) {
+    const w = await Withdraw.findById(withdraw);
+    allWithdraws.push(w);
+  }
+
+  res.status(StatusCodes.OK).json({ allWithdraws, count: allWithdraws.length });
+};
+module.exports = {
+  createAccount,
+  addBalance,
+  getBalance,
+  withdrawBalance,
+  getWithdraws,
+};
