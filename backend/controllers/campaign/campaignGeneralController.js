@@ -2,6 +2,7 @@ const Campaign = require("../../models/Campaign");
 const User = require("../../models/User");
 const { StatusCodes } = require("http-status-codes");
 const { NotFoundError, BadRequestError } = require("../../errors");
+const Donation = require("../../models/Donation");
 
 const addDonationAmount = async (req, res) => {
   const amount = req.body.amount;
@@ -105,6 +106,28 @@ const addDonation = async (campaignId, donationId, amount) => {
   await campaign.save();
 };
 
+const getDonations = async (req, res) => {
+  const {
+    user: { userId },
+  } = req;
+
+  // get all campaigns
+  const campaigns = await Campaign.find({ createdBy: userId });
+  if (!campaigns) {
+    throw new NotFoundError(`No campaigns found`);
+  }
+
+  let allDonations = [];
+  // loop through all campaigns
+  for (const campaign of campaigns) {
+    const donations = campaign.donations;
+    for (const donation of donations) {
+      const d = await Donation.findById(donation);
+      allDonations.push(d);
+    }
+  }
+  res.status(StatusCodes.OK).json({ allDonations, count: allDonations.length });
+};
 module.exports = {
   addDonationAmount,
   getCampaign,
@@ -112,4 +135,5 @@ module.exports = {
   getFundraiserInfo,
   changeIsStopped,
   addDonation,
+  getDonations,
 };
