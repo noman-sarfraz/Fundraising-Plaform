@@ -115,6 +115,7 @@ function DrawerComponent({ open, toggleDrawer }) {
   React.useEffect(() => {
     if (window.innerWidth > 900 && isMobile) {
       setIsMobile(false);
+      
     } else if (window.innerWidth < 900 && !isMobile) {
       setIsMobile(true);
     }
