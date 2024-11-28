@@ -238,7 +238,7 @@ function DrawerComponent({ open, toggleDrawer }) {
                       // color: "white",
                     },
                   }}
-                >
+                > 
                   {item.icon ? (
                     item.icon
                   ) : (
